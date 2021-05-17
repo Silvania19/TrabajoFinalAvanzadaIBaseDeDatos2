@@ -10,4 +10,9 @@ import javax.persistence.Entity;
 @Entity
 public class Employee extends Person{
 
+    @Override
+    public TypePerson typePersona() {
+        return TypePerson.EMPLOYEE;
+    }
+
 }

@@ -4,5 +4,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 
-public class FeesService{
+public class MeasuringService {
 }

@@ -17,4 +17,9 @@ public class Client extends Person{
     //4) consulta de facturas impagas por cliente y domicilio. Examinar todo.
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
     List<Address> addresses;
+
+    @Override
+    public TypePerson typePersona() {
+        return TypePerson.CLIENT;
+    }
 }

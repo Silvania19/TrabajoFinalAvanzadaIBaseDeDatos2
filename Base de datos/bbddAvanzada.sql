@@ -61,7 +61,7 @@ CREATE TABLE bills(
 	CONSTRAINT fk_id_client_bill FOREIGN KEY (id_client) REFERENCES clients(id_client)
 );
 
-CREATE TABLE address(
+CREATE TABLE addresses(
     id_address INT AUTO_INCREMENT,
     country VARCHAR(50),
     city VARCHAR (50),
@@ -73,7 +73,7 @@ CREATE TABLE address(
 
 CREATE TABLE meters(
 	id_meter INT AUTO_INCREMENT,
-        id_address INT,
+    id_address INT,
 	serial_number VARCHAR(50),
 	id_model INT,
 	password_meter VARCHAR(50),
@@ -81,10 +81,9 @@ CREATE TABLE meters(
 	CONSTRAINT unique_serial_number UNIQUE (serial_number),
 	CONSTRAINT pk_id_meter PRIMARY KEY (id_meter),
 	CONSTRAINT fk_id_model FOREIGN KEY (id_model) REFERENCES models(id_model),
-	CONSTRAINT fk_id_address FOREIGN KEY (id_address) REFERENCES address(id_address),
+	CONSTRAINT fk_id_address FOREIGN KEY (id_address) REFERENCES addresses(id_address),
 	CONSTRAINT fk_id_fee FOREIGN KEY (id_fee) REFERENCES fees(id_fee)
 );
-
 
 CREATE TABLE measurings(
 	id_measuring INT AUTO_INCREMENT,
