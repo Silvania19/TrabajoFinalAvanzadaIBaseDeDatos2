@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-
+@Table(name="meters")
 public class Meter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
