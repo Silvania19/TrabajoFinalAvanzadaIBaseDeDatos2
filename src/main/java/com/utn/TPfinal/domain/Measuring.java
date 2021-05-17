@@ -11,6 +11,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name="measurings")
 public class Measuring{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

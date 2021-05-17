@@ -9,6 +9,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Entity
+@Table(name="clients")
 public class Client extends Person{
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
