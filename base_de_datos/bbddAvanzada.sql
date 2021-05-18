@@ -95,5 +95,5 @@ CREATE TABLE measurings(
 	CONSTRAINT pk_id_measuring PRIMARY KEY (id_measuring),
 	CONSTRAINT fk_id_bill FOREIGN KEY (id_bill) REFERENCES bills(id_bill),
 	CONSTRAINT fk_id_meter FOREIGN KEY (id_meter) REFERENCES meters(id_meter)
-); 
+);
 
