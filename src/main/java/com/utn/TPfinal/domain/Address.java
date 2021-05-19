@@ -1,5 +1,6 @@
 package com.utn.TPfinal.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,9 +18,8 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id_address;
 
-    private String country;
-    private String city;
-    private String street;
+    private String name_address;
+    private String number_address;
 
     //fk with client
     @ManyToOne(fetch = FetchType.LAZY)

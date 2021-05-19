@@ -39,6 +39,7 @@ CREATE TABLE models(
 
 CREATE TABLE fees(
 	id_fee INT AUTO_INCREMENT,
+    type_fee VARCHAR(50),
 
 	CONSTRAINT pk_id_fee PRIMARY KEY (id_fee)
 );
@@ -53,8 +54,8 @@ CREATE TABLE clients(
 
 CREATE TABLE bills(
 	id_bill INT AUTO_INCREMENT,
-	monto FLOAT,
-	pago BOOLEAN,
+	amount FLOAT,
+	pay BOOLEAN,
 	id_client INT,
 
 	CONSTRAINT pk_id_bill PRIMARY KEY (id_bill),
@@ -63,9 +64,8 @@ CREATE TABLE bills(
 
 CREATE TABLE addresses(
     id_address INT AUTO_INCREMENT,
-    country VARCHAR(50),
-    city VARCHAR (50),
-    street VARCHAR (50),
+    name_address VARCHAR(50),
+    number_address VARCHAR (50),
     id_client INT,
     CONSTRAINT pk_id_address PRIMARY KEY (id_address),
     CONSTRAINT fk_id_client_address FOREIGN KEY (id_client) REFERENCES clients(id_client)
