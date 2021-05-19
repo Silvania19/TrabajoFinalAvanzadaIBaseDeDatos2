@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -30,8 +29,8 @@ public class Meter {
     private Address address;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="id_fees", nullable = false)
-    private Fees fees;
+    @JoinColumn(name="id_fee", nullable = false)
+    private Fee fees;
 
 
 
