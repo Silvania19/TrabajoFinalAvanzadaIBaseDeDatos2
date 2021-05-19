@@ -20,11 +20,11 @@ import javax.persistence.*;
 })
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 
 public abstract class Person {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO) // autogenera una tabla con un dato ?
     private Integer id_person;
     private String name;
     private String last_name;
