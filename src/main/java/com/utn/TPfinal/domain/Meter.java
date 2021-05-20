@@ -31,7 +31,7 @@ public class Meter {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="id_fee", nullable = false)
-    private Fees fees;
+    private Fee fee;
 
 
 
