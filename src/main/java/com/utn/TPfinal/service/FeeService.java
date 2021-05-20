@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 public class FeeService {
     @Autowired
     FeeDao feeDao;
-    public void add(Fee fee) {
+
+    public Fee add(Fee fee) {
+        return feeDao.save(fee);
     }
 }
