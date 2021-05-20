@@ -24,7 +24,7 @@ import javax.persistence.*;
 
 public abstract class Person {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) // autogenera una tabla con un dato ?
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id_person;
     private String name;
     private String last_name;
