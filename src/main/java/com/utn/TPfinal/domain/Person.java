@@ -27,7 +27,7 @@ public abstract class Person {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id_person;
     private String name;
-    private String last_name;
+    private String lastname;
 
     @AccessType(AccessType.Type.PROPERTY)
     public abstract TypePerson typePersona();
