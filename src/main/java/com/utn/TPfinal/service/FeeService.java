@@ -14,4 +14,11 @@ public class FeeService {
     public Fee add(Fee fee) {
         return feeDao.save(fee);
     }
+    public  Fee findById(Integer id)throws
+    {
+        return feeDao.findById(id);
+    }
+    public Fee updateFee(Fee fee) {
+
+    }
 }

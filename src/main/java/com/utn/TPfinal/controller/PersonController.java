@@ -13,10 +13,9 @@ public class PersonController {
     @Autowired
     private PersonService personService;
 
-    @PostMapping
+  /*  @PostMapping
     public void addPerson(@RequestBody Person person) {
          personService.add(person);
-    }
-
+    }*/
 
 }

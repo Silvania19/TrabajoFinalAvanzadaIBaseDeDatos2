@@ -39,8 +39,8 @@ CREATE TABLE models(
 
 CREATE TABLE fees(
 	id_fee INT AUTO_INCREMENT,
-    type_fee VARCHAR(50),
 
+        type_fee VARCHAR(50),
 	CONSTRAINT pk_id_fee PRIMARY KEY (id_fee)
 );
 

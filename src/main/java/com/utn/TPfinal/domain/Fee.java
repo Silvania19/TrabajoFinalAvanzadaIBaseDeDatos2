@@ -15,7 +15,8 @@ import java.util.List;
 public class Fee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_fees;
+    private Integer id_fee;
+
     private String type_fee;
 
     //lista de meter
