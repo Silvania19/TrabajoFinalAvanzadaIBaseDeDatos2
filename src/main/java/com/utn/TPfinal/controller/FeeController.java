@@ -12,7 +12,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/fee")
-public class FeesController {
+public class FeeController {
     @Autowired
     FeeService feeService;
 

@@ -20,22 +20,20 @@ public class MeterService {
     @Autowired
     AddressService addressService;
     @Autowired
-    ModelRepository modelDao;
+    ModelService modelService;
 
     public Meter add(Meter meter) {
 
        return meterDao.save(meter);
     }
 
-    public Meter addAddressModelFeeToMeter(Integer idMeter, Integer idAddress, Integer idModel, Integer idFee) {
+  /*  public Meter addAddressModelFeeToMeter(Integer idMeter, Integer idAddress, Integer idModel, Integer idFee) {
 
         Meter meterSearch= getByID(idMeter);
         if (meterDao.existsById(meterSearch.getId_meter())) {
             Address addressSearch = addressService.getByID(idAddress);
             Fee feeSearch= feeService.getByID(idFee);
-            Model modelSearch= modelDao.findById(idModel)
-                    .orElseThrow(()-> new HttpClientErrorException(HttpStatus.NOT_FOUND));
-
+            Model modelSearch= modelService.getByID(idModel);
             meterSearch.setAddress(addressSearch);
             meterSearch.setFee(feeSearch);
             meterSearch.setModel(modelSearch);
@@ -43,7 +41,7 @@ public class MeterService {
         } else {
             throw new FeeException("Error en addAddressModelFeeToMeter");
         }
-    }
+    }*/
     public Meter getByID(Integer id) {
         return meterDao.findById(id)
                 .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));

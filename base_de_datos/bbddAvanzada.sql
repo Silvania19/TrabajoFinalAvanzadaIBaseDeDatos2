@@ -98,3 +98,7 @@ CREATE TABLE measurings(
                            CONSTRAINT fk_id_meter FOREIGN KEY (id_meter) REFERENCES meters(id_meter)
 );
 
+INSERT INTO brands (description) VALUES("marca1");
+INSERT INTO brands (description) VALUES("marca2");
+INSERT INTO models (description, id_brand) VALUES("modelo1", 1);
+INSERT INTO models (description, id_brand) VALUES("modelo2", 2);
