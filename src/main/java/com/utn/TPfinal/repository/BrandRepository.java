@@ -1,9 +1,9 @@
-package com.utn.TPfinal.persistence;
+package com.utn.TPfinal.repository;
 
 import com.utn.TPfinal.domain.Brands;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BrandDao extends JpaRepository<Brands, Integer> {
+public interface BrandRepository extends JpaRepository<Brands, Integer> {
 }
