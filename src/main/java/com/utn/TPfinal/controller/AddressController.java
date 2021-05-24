@@ -1,7 +1,9 @@
 package com.utn.TPfinal.controller;
 
 import com.utn.TPfinal.domain.Address;
+import com.utn.TPfinal.domain.Fee;
 import com.utn.TPfinal.domain.Person;
+import com.utn.TPfinal.exception.AddressException;
 import com.utn.TPfinal.exception.FeeException;
 import com.utn.TPfinal.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,7 @@ public class AddressController {
     AddressService addressService;
 
     @PostMapping
-    public ResponseEntity newAddress(@RequestBody Address address) throws FeeException {
+    public ResponseEntity newAddress(@RequestBody Address address) throws AddressException {
         Address newAddress = addressService.newAddress(address);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -27,6 +29,25 @@ public class AddressController {
                 .buildAndExpand(newAddress.getId_address())
                 .toUri();
         return ResponseEntity.created(location).build();
+    }
+
+    // TODO: 24/5/2021 como devuelvo la url correcta ?, por ahora retorna "http://localhost:8080/address/1/1"
+    //  y deberia retornar  http://localhost:8080/address/1
+    @PutMapping("/{id}")
+    public ResponseEntity updateAddress(@PathVariable Integer id, @RequestBody Address address) throws AddressException {
+        Address newAddress= addressService.updateAddress(id, address);
+        URI location= ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(newAddress.getId_address())
+                .toUri();
+        return ResponseEntity.ok(location);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteFee(@PathVariable Integer id)
+    {
+        addressService.deleteFee(id);
     }
 
     @PutMapping("/{id}/client/{idClient}")
