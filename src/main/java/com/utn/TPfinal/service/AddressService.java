@@ -57,8 +57,6 @@ public class AddressService {
 
     public void deleteFee(Integer id) {
         if (addressDao.existsById(id) ){
-            /*Address addressDelete=getByID(id);
-            addressDao.delete(addressDelete);*/
             addressDao.deleteById(id);
         } else {
             throw new FeeException("Error, el id no existe");
