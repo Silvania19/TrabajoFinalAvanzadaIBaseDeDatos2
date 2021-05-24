@@ -27,14 +27,19 @@ public class FeesController {
         return ResponseEntity.created(location).build();
     }
     @PutMapping("/{id}")
-    public ResponseEntity updateFee(@PathVariable Integer id, @PathVariable Fee fee) throws FeeException {
-        Fee newFee= feeService.updateFee(fee);
+    public ResponseEntity updateFee(@PathVariable Integer id, @RequestBody Fee fee) throws FeeException {
+        Fee newFee= feeService.updateFee(id, fee);
         URI location= ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(newFee.getId_fee())
                 .toUri();
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.ok(location);
+    }
+    @DeleteMapping("/{id}")
+    public void deleteFee(@PathVariable Integer id)
+    {
+         feeService.deleteFee(id);
     }
 
 }
