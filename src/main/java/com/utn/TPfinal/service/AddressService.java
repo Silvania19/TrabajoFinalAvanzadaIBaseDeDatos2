@@ -4,8 +4,7 @@ import com.utn.TPfinal.domain.Address;
 import com.utn.TPfinal.domain.Client;
 import com.utn.TPfinal.domain.Person;
 import com.utn.TPfinal.exception.FeeException;
-import com.utn.TPfinal.persistence.AddressDao;
-import com.utn.TPfinal.persistence.PersonDao;
+import com.utn.TPfinal.repository.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,7 @@ import org.springframework.web.client.HttpClientErrorException;
 public class AddressService {
 
     @Autowired
-    AddressDao addressDao;
+    AddressRepository addressDao;
     @Autowired
     PersonService personService;
 

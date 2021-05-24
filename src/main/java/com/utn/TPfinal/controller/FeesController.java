@@ -37,9 +37,11 @@ public class FeesController {
         return ResponseEntity.ok(location);
     }
     @DeleteMapping("/{id}")
-    public void deleteFee(@PathVariable Integer id)
+    public ResponseEntity deleteFee(@PathVariable Integer id)
     {
          feeService.deleteFee(id);
+         return ResponseEntity.ok().build();
     }
+
 
 }

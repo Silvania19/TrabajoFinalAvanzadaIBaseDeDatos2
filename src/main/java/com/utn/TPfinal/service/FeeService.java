@@ -2,7 +2,7 @@ package com.utn.TPfinal.service;
 
 import com.utn.TPfinal.domain.Fee;
 import com.utn.TPfinal.exception.FeeException;
-import com.utn.TPfinal.persistence.FeeDao;
+import com.utn.TPfinal.repository.FeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 public class FeeService {
     @Autowired
-    FeeDao feeDao;
+    FeeRepository feeDao;
 
     public Fee add(Fee fee) throws FeeException {
         if (!feeDao.existsById(fee.getId_fee())) {
