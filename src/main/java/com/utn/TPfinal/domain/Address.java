@@ -23,7 +23,7 @@ public class Address {
 
     //fk with client
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="id_person", nullable = false)
+    @JoinColumn(name="id_client", nullable = false)
     private Client client;
 
     @OneToOne(mappedBy="address")

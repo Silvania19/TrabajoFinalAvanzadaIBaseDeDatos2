@@ -13,12 +13,13 @@ measurement - medida
 
 CREATE DATABASE adea;
 USE adea;
+
 CREATE TABLE employees(
-                          id_person INT AUTO_INCREMENT,
+                          id_employee INT AUTO_INCREMENT,
                           NAME VARCHAR(50),
                           lastname VARCHAR(50),
 
-                          CONSTRAINT pk_id_employee PRIMARY KEY (id_person)
+                          CONSTRAINT pk_id_employee PRIMARY KEY (id_employee)
 );
 
 CREATE TABLE brands(
@@ -37,39 +38,40 @@ CREATE TABLE models(
 );
 
 CREATE TABLE fees(
+                     id_fee INT AUTO_INCREMENT,
+                     type_fee VARCHAR(50),
+                     price_fee INT,
 
-	id_fee INT AUTO_INCREMENT,
-
-        type_fee VARCHAR(50),
-	CONSTRAINT pk_id_fee PRIMARY KEY (id_fee)
-
+                     CONSTRAINT pk_id_fee PRIMARY KEY (id_fee)
 );
 
 CREATE TABLE clients(
-                        id_person INT AUTO_INCREMENT,
+                        id_client INT AUTO_INCREMENT,
                         NAME VARCHAR(50),
                         lastname VARCHAR(50),
 
-                        CONSTRAINT pk_id_client PRIMARY KEY (id_person)
+                        CONSTRAINT pk_id_client PRIMARY KEY (id_client)
 );
 
 CREATE TABLE bills(
                       id_bill INT AUTO_INCREMENT,
                       amount FLOAT,
                       pay BOOLEAN,
-                      id_person INT,
+                      first_measurement DATE,
+                      last_measurement DATE,
+                      id_client INT,
 
                       CONSTRAINT pk_id_bill PRIMARY KEY (id_bill),
-                      CONSTRAINT fk_id_client_bill FOREIGN KEY (id_person) REFERENCES clients(id_person)
+                      CONSTRAINT fk_id_client_bill FOREIGN KEY (id_client) REFERENCES clients(id_client)
 );
 
 CREATE TABLE addresses(
                           id_address INT AUTO_INCREMENT,
                           name_address VARCHAR(50),
                           number_address VARCHAR (50),
-                          id_person INT,
+                          id_client INT,
                           CONSTRAINT pk_id_address PRIMARY KEY (id_address),
-                          CONSTRAINT fk_id_client_address FOREIGN KEY (id_person) REFERENCES clients(id_person)
+                          CONSTRAINT fk_id_client_address FOREIGN KEY (id_client) REFERENCES clients(id_client)
 );
 
 CREATE TABLE meters(
@@ -98,3 +100,31 @@ CREATE TABLE measurings(
                            CONSTRAINT fk_id_meter FOREIGN KEY (id_meter) REFERENCES meters(id_meter)
 );
 
+/*2) Consulta de facturas por rango de fechas.*/
+
+SELECT * FROM bills;
+
+INSERT INTO bills(amount, pay, first_measurement, last_measurement) VALUE (100, FALSE, '2020-03-26', '2020-03-27');
+INSERT INTO bills(amount, pay, first_measurement, last_measurement) VALUE (100, FALSE, '2020-03-22', '2020-03-23');
+INSERT INTO bills(amount, pay, first_measurement, last_measurement) VALUE (100, FALSE, '2020-03-22', '2020-03-23');
+INSERT INTO bills(amount, pay, first_measurement, last_measurement) VALUE (100, FALSE, '2020-04-22', '2020-06-23');
+
+SELECT * FROM bills b
+WHERE (b.first_measurement BETWEEN '2020-03-22' AND '2020-04-24') OR (b.last_measurement BETWEEN '2020-03-25' AND '2020-03-30');
+
+SELECT * FROM bills b
+WHERE (b.first_measurement BETWEEN '2020-03-22' AND '2020-04-24');
+
+/*3) Consulta de deuda (Facturas impagas)*/
+SELECT SUM(b.amount) FROM bills b
+WHERE b.pay = FALSE;
+
+/*5) Consulta de mediciones por rango de fechas*/
+
+SELECT * FROM measurings;
+DESC measurings;
+
+INSERT INTO measurings(measurement, TIME) VALUES (10, '2020-03-26'), (10, '2020-03-21'), (10, '2020-03-22');
+
+SELECT * FROM measurings m
+WHERE m.time BETWEEN '2020-03-22' AND '2020-04-24';
