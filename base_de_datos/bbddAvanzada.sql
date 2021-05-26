@@ -128,3 +128,8 @@ INSERT INTO measurings(measurement, TIME) VALUES (10, '2020-03-26'), (10, '2020-
 
 SELECT * FROM measurings m
 WHERE m.time BETWEEN '2020-03-22' AND '2020-04-24';
+
+INSERT INTO brands (description) VALUES("marca1");
+INSERT INTO brands (description) VALUES("marca2");
+INSERT INTO models (description, id_brand) VALUES("modelo1", 1);
+INSERT INTO models (description, id_brand) VALUES("modelo2", 2);
