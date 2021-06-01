@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -21,6 +22,9 @@ public class Bill {
     //this variable is use to decide when the bill is pay or not pay. True=pay False=Not pay
     private  Boolean pay;
     // para determinar si la factura esta paga o no. Consulta de deuda (Facturas impagas)
+
+    private Date firstMeasurement;
+    private Date lastMeasurement;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="id_client", nullable = false)

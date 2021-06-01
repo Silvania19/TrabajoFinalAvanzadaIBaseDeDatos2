@@ -27,10 +27,10 @@ public class MeterController {
                 .toUri();
         return ResponseEntity.created(location).build();
     }
-    @PutMapping("/{idMeter}/address/{idAddress}/model/{idModel}/fee/{idFee}")
+    /*@PutMapping("/{idMeter}/address/{idAddress}/model/{idModel}/fee/{idFee}")
     public void addAddressModelFeeToMeter(@PathVariable Integer idMeter, @PathVariable Integer idAddress, @PathVariable Integer idModel, @PathVariable Integer idFee){
         meterService.addAddressModelFeeToMeter(idMeter,idAddress, idModel, idFee);
-    }
+    }*/
     @PutMapping("/{idMeter}")
     public void updateMeter (@PathVariable Integer idMeter, @RequestBody Meter meter){
         meterService.updateMeter(idMeter, meter);

@@ -2,6 +2,7 @@ package com.utn.TPfinal.service;
 
 import com.utn.TPfinal.domain.Fee;
 import com.utn.TPfinal.exception.FeeException;
+import com.utn.TPfinal.exception.NotFoundException;
 import com.utn.TPfinal.repository.FeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,9 +35,9 @@ public class FeeService {
         }
 
     }
-    public Fee getByID(Integer id) {
+    public Fee getByID(Integer id) throws HttpClientErrorException{
         return feeDao.findById(id)
-                .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(""));
     }
 
     public void deleteFee(Integer id) throws FeeException   {

@@ -41,4 +41,16 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getHttpStatus());
     }
 
+    @ExceptionHandler({NotFoundException.class})
+    public ResponseEntity<Object> BadRequestException(NotFoundException ex, WebRequest request) {
+
+        List<String> errors = new ArrayList<>();
+
+        errors.add(ex.getMessage());
+
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getLocalizedMessage(), errors);
+
+        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getHttpStatus());
+    }
+
 }
