@@ -2,12 +2,14 @@ package com.utn.TPfinal.repository;
 
 import com.utn.TPfinal.domain.Bill;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BillRepository extends JpaRepository<Bill, Integer> {
@@ -23,4 +25,10 @@ public interface BillRepository extends JpaRepository<Bill, Integer> {
     @Query(value = "SELECT u FROM Bill u WHERE (u.firstMeasurement BETWEEN :firstDate AND :lastDate) AND " +
             "(u.lastMeasurement BETWEEN :firstDate AND :lastDate)")
     List<Bill> findAllBillsByDateBetween(Date firstDate, Date lastDate);
+
+   /* @Query( value= "SELECT * FROM  bills  WHERE  id_client = :idClient" , nativeQuery = true)*/
+   /* @Query(value = "select b from Bill b where (b.client = :idClient)")*/
+    List<Bill>findAllByClientId(Integer idClient);
+
+
 }

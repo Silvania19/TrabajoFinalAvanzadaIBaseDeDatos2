@@ -25,7 +25,7 @@ import javax.persistence.*;
 public abstract class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id_person;
+    private Integer id;
     private String name;
     private String lastname;
 

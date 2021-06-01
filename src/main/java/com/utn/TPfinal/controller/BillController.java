@@ -10,6 +10,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.Date;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -38,5 +43,20 @@ public class BillController {
                                              @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date endDate)
     {
         return billService.getBillsByRangeOfDates(beginDate, endDate);
+    }
+
+
+    /*@GetMapping("/from/{initialDate}/to/{endDate}")
+    public ResponseEntity filterBillByRangeOfDate(@PathVariable(required = false) Date initialDate, @PathVariable(required = false) Date endDate){
+        billService.filterBillByRangeOfDate(initialDate, endDate);
+
+    }*/
+
+    /**Consulta de facturas impagas por cliente y domicilio.**/
+    @GetMapping("/client/{idClient}")
+    public List<Bill>getBills(@PathVariable Integer idClient){
+        List<Bill> bills= billService.getAllBillsByIdClient(idClient);
+        System.out.print(bills);
+        return  billService.getAllBillsByIdClient(idClient);
     }
 }

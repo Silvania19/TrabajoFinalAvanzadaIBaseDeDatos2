@@ -23,8 +23,13 @@ public class MeterService {
     ModelService modelService;
 
     public Meter add(Meter meter) {
+        if (!meterDao.existsById(meter.getId_meter())) {
+            return meterDao.save(meter);
+        }
+        else {
+            throw new FeeException("Error en agergar. Datos no correctos");
+        }
 
-       return meterDao.save(meter);
     }
 
   /*  public Meter addAddressModelFeeToMeter(Integer idMeter, Integer idAddress, Integer idModel, Integer idFee) {

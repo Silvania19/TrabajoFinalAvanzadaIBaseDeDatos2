@@ -133,3 +133,42 @@ INSERT INTO brands (description) VALUES("marca1");
 INSERT INTO brands (description) VALUES("marca2");
 INSERT INTO models (description, id_brand) VALUES("modelo1", 1);
 INSERT INTO models (description, id_brand) VALUES("modelo2", 2);
+
+
+DROP PROCEDURE  IF EXISTS generedBill
+DELIMITER //
+CREATE PROCEDURE generedBill( IN amount FLOAT,
+                              IN pay BOOLEAN,
+                              IN first_measurement  DATE,
+                              IN last_measurement DATE,
+                              IN id_client INT)
+BEGIN
+
+INSERT INTO bills(amount, pay, first_measurement, last_measurement, id_client) VALUE (amount, pay, first_measurement, last_measurement, id_client);
+
+END //
+
+
+/*2) La facturación se realizará por un proceso automático en la base de datos. Se
+debe programar este proceso para el primer día de cada mes y debe generar una
+factura por medidor y debe tomar en cuenta todas las mediciones no facturadas
+para cada uno de los medidores, sin tener en cuenta su fecha. La fecha de vencimiento de
+esta factura será estipulado a 15 días.*/
+
+/* despues de activar esta variable funciona*/
+
+SET GLOBAL event_scheduler = ON;
+
+/* Me crea el evento que sera automatico, le especifico el nombre, y a partir desde cuando y cada cuanto*/
+CREATE EVENT generetedBill
+ON SCHEDULE EVERY 1 MINUTE STARTS NOW()
+DO CALL generedBill(4, FALSE, '2020-03-26', '2020-03-27', 1);
+
+/* para eliminar un evento*/
+DROP EVENT IF EXISTS generetedBill
+
+/* Veo los eventos que estan en lista*/
+SHOW EVENTS;
+ /* para ver lo que se esta trabajanndo*/
+
+SHOW WARNINGS
