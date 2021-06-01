@@ -23,4 +23,6 @@ public interface BillRepository extends JpaRepository<Bill, Integer> {
     @Query(value = "SELECT u FROM Bill u WHERE (u.firstMeasurement BETWEEN :firstDate AND :lastDate) AND " +
             "(u.lastMeasurement BETWEEN :firstDate AND :lastDate)")
     List<Bill> findAllBillsByDateBetween(Date firstDate, Date lastDate);
+
+    //List<Bill> findAllByClient
 }
