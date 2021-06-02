@@ -16,9 +16,7 @@ public class Fee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id_fee;
-
     private String type_fee;
     private Integer price_fee;
-
     //lista de meter
 }
