@@ -4,6 +4,7 @@ import com.utn.TPfinal.domain.Fee;
 import com.utn.TPfinal.exception.FeeException;
 import com.utn.TPfinal.service.FeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -22,7 +23,7 @@ public class FeeController {
         URI location= ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(newFee.getId_fee())
+                .buildAndExpand(newFee.getIdFee())
                 .toUri();
         return ResponseEntity.created(location).build();
     }
@@ -32,7 +33,7 @@ public class FeeController {
         URI location= ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(newFee.getId_fee())
+                .buildAndExpand(newFee.getIdFee())
                 .toUri();
         return ResponseEntity.ok(location);
     }
@@ -40,7 +41,7 @@ public class FeeController {
     public ResponseEntity deleteFee(@PathVariable Integer id)
     {
          feeService.deleteFee(id);
-         return ResponseEntity.ok().build();
+         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 

@@ -40,4 +40,12 @@ public class BillController {
                 header("X-Total-Pages", Long.toString(page.getTotalPages())).
                 body(page.getContent());
     }
+
+    /**Consulta de facturas impagas por cliente y domicilio.**/
+    @GetMapping("/client/{idClient}")
+    public List<Bill>getBills(@PathVariable Integer idClient){
+        List<Bill> bills= billService.getAllBillsByIdClient(idClient);
+        System.out.print(bills);
+        return  billService.getAllBillsByIdClient(idClient);
+    }
 }

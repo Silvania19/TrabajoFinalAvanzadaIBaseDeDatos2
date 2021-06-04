@@ -2,8 +2,7 @@ package com.utn.TPfinal.service;
 
 import com.utn.TPfinal.domain.Address;
 import com.utn.TPfinal.domain.Client;
-import com.utn.TPfinal.domain.Fee;
-import com.utn.TPfinal.domain.Person;
+import com.utn.TPfinal.domain.User;
 import com.utn.TPfinal.exception.AddressException;
 import com.utn.TPfinal.exception.FeeException;
 import com.utn.TPfinal.repository.AddressRepository;
@@ -18,7 +17,7 @@ public class AddressService {
     @Autowired
     AddressRepository addressDao;
     @Autowired
-    PersonService personService;
+    UserService userService;
 
     public Address newAddress(Address address) throws FeeException {
 
@@ -27,8 +26,8 @@ public class AddressService {
 
     public Address addClientToAddress(Integer id, Integer idClient) throws AddressException {
         Address addressSearch = getByID(id);
-        if (addressDao.existsById(addressSearch.getId_address())) {
-            Person client = personService.getByID(idClient); // nullpointerexception en client
+        if (addressDao.existsById(addressSearch.getIdAddress())) {
+            User client = userService.getByID(idClient); // nullpointerexception en client
             addressSearch.setClient((Client)client);
             return addressDao.save(addressSearch);
         } else {
@@ -44,8 +43,8 @@ public class AddressService {
     public Address updateAddress(Integer id, Address address) throws AddressException {
         if (addressDao.existsById(id)) {
             Address oldAddress = getByID(id);
-            oldAddress.setName_address(address.getName_address());
-            oldAddress.setNumber_address(address.getNumber_address());
+            oldAddress.setNameAddress(address.getNameAddress());
+            oldAddress.setNumberAddress(address.getNumberAddress());
 
             Address actualAddress = addressDao.save(oldAddress);
             return actualAddress;

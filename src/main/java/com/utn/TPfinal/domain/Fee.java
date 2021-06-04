@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
+
 
 @Data
 @NoArgsConstructor
@@ -15,10 +15,8 @@ import java.util.List;
 public class Fee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_fee;
-
-    private String type_fee;
-    private Integer price_fee;
-
+    private Integer idFee;
+    private String typeFee;
+    private Integer priceFee;
     //lista de meter
 }

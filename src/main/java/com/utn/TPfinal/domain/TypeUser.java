@@ -1,24 +1,24 @@
 package com.utn.TPfinal.domain;
 
-public enum TypePerson {
+public enum TypeUser {
 
     CLIENT("client"),
     EMPLOYEE("employee");
 
     private String description;
 
-    TypePerson(String description)
+    TypeUser(String description)
     {
         this.description = description;
     }
 
-    public static TypePerson find(final String value) {
-        for (TypePerson v : values()) {
+    public static TypeUser find(final String value) {
+        for (TypeUser v : values()) {
             if (v.toString().equalsIgnoreCase(value)) {
                 return v;
             }
         }
-        throw new IllegalArgumentException(String.format("Invalid TypePerson: %s", value));
+        throw new IllegalArgumentException(String.format("Invalid TypeUser: %s", value));
     }
 
     public String getDescription() {

@@ -15,7 +15,7 @@ import java.util.Date;
 public class Measuring{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_measuring;
+    private Integer idMeasuring;
     private Integer measurement;
     private Date time;
     // fk with bill

@@ -1,5 +1,6 @@
 package com.utn.TPfinal.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.AllArgsConstructor;
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "typePerson", visible = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "typeUser", visible = true)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = Client.class, name = "CLIENT"),
         @JsonSubTypes.Type(value = Employee.class, name = "EMPLOYEE")
@@ -22,15 +23,16 @@ import javax.persistence.*;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 
-public abstract class Person {
+public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id_person;
+    private Integer id;
     private String name;
     private String lastname;
-
+    @JsonIgnore
+    private String password;
     @AccessType(AccessType.Type.PROPERTY)
-    public abstract TypePerson typePersona();
+    public abstract TypeUser typeUser();
 
 
 }

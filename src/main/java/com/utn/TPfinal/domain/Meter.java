@@ -6,18 +6,18 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 @Table(name="meters")
 public class Meter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_meter;
+    private Integer idMeter;
 
-    private String serial_number;
-    private String password_meter;
+    private String serialNumber;
+    private String passwordMeter;
     //fk with model
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="id_model", nullable = false)
