@@ -10,11 +10,11 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Entity
 @Table(name="employees")
-public class Employee extends Person{
+public class Employee extends User{
 
     @Override
-    public TypePerson typePersona() {
-        return TypePerson.EMPLOYEE;
+    public TypeUser typeUser() {
+        return TypeUser.EMPLOYEE;
     }
 
 }

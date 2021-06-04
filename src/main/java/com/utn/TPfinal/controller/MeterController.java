@@ -23,7 +23,7 @@ public class MeterController {
         URI location= ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(newMeter.getId_meter())
+                .buildAndExpand(newMeter.getIdMeter())
                 .toUri();
         return ResponseEntity.created(location).build();
     }

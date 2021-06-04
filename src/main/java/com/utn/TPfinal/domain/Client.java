@@ -10,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name="clients")
-public class Client extends Person{
+public class Client extends User{
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
     List<Bill>bills;
@@ -20,7 +20,7 @@ public class Client extends Person{
     List<Address> addresses;
 
     @Override
-    public TypePerson typePersona() {
-        return TypePerson.CLIENT;
+    public TypeUser typeUser() {
+        return TypeUser.CLIENT;
     }
 }

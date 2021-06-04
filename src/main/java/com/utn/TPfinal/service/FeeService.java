@@ -16,7 +16,7 @@ public class FeeService {
     FeeRepository feeDao;
 
     public Fee add(Fee fee) throws FeeException {
-        if (!feeDao.existsById(fee.getId_fee())) {
+        if (!feeDao.existsById(fee.getIdFee())) {
             return feeDao.save(fee);
         } else {
             throw new FeeException("Error");
@@ -27,7 +27,7 @@ public class FeeService {
 
         if (feeDao.existsById(id)) {
             Fee feeOld=getByID(id);
-            feeOld.setType_fee(fee.getType_fee());
+            feeOld.setTypeFee(fee.getTypeFee());
             Fee feeAct=feeDao.save(feeOld);
             return feeAct;
         } else {

@@ -23,7 +23,7 @@ public class MeterService {
     ModelService modelService;
 
     public Meter add(Meter meter) {
-        if (!meterDao.existsById(meter.getId_meter())) {
+        if (!meterDao.existsById(meter.getIdMeter())) {
             return meterDao.save(meter);
         }
         else {
@@ -55,8 +55,8 @@ public class MeterService {
     public Meter updateMeter(Integer idMeter, Meter meter) {
         if (meterDao.existsById(idMeter)) {
             Meter meterOld=getByID(idMeter);
-            meterOld.setSerial_number(meter.getSerial_number());
-            meterOld.setPassword_meter(meter.getPassword_meter());
+            meterOld.setSerialNumber(meter.getSerialNumber());
+            meterOld.setPasswordMeter(meter.getPasswordMeter());
             Meter meterActual=meterDao.save(meterOld);
             return meterActual;
         } else {

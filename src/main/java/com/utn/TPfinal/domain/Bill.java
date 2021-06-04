@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
+
 
 @Data
 @NoArgsConstructor
@@ -16,7 +16,7 @@ import java.util.List;
 public class Bill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_bill;
+    private Integer idBill;
 
     private Double amount;
     //this variable is use to decide when the bill is pay or not pay. True=pay False=Not pay

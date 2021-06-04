@@ -1,8 +1,6 @@
 package com.utn.TPfinal.controller;
 
 import com.utn.TPfinal.domain.Address;
-import com.utn.TPfinal.domain.Fee;
-import com.utn.TPfinal.domain.Person;
 import com.utn.TPfinal.exception.AddressException;
 import com.utn.TPfinal.exception.FeeException;
 import com.utn.TPfinal.service.AddressService;
@@ -26,7 +24,7 @@ public class AddressController {
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(newAddress.getId_address())
+                .buildAndExpand(newAddress.getIdAddress())
                 .toUri();
         return ResponseEntity.created(location).build();
     }
@@ -39,7 +37,7 @@ public class AddressController {
         URI location= ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(newAddress.getId_address())
+                .buildAndExpand(newAddress.getIdAddress())
                 .toUri();
         return ResponseEntity.ok(location);
     }

@@ -26,13 +26,8 @@ public interface BillRepository extends JpaRepository<Bill, Integer> {
             "(u.lastMeasurement BETWEEN :firstDate AND :lastDate)")
     List<Bill> findAllBillsByDateBetween(Date firstDate, Date lastDate);
 
-<<<<<<< HEAD
    /* @Query( value= "SELECT * FROM  bills  WHERE  id_client = :idClient" , nativeQuery = true)*/
    /* @Query(value = "select b from Bill b where (b.client = :idClient)")*/
     List<Bill>findAllByClientId(Integer idClient);
 
-
-=======
-    //List<Bill> findAllByClient
->>>>>>> c9af0d185f72c722b4cdd060bd2f0e0bb8b3a487
 }
