@@ -2,6 +2,7 @@ package com.utn.TPfinal.repository;
 
 import com.utn.TPfinal.domain.Bill;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -19,10 +20,8 @@ public interface BillRepository extends JpaRepository<Bill, Integer> {
     List<Bill> findAllBillsByDateBetween(Date beginDate, Date endDate);*/
 
     //2) Consulta de facturas por rango de fechas.
-    //TODO implementar page
+
     @Query(value = "SELECT u FROM Bill u WHERE (u.firstMeasurement BETWEEN :firstDate AND :lastDate) AND " +
             "(u.lastMeasurement BETWEEN :firstDate AND :lastDate)")
-    List<Bill> findAllBillsByDateBetween(Date firstDate, Date lastDate);
-
-    //List<Bill> findAllByClient
+    Page<Bill> findAllBillsByDateBetween(Date firstDate, Date lastDate, Pageable pageable);
 }
