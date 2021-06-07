@@ -9,10 +9,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-
-import java.net.URI;
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +20,8 @@ public class BillController {
     BillService billService;
 
     //2) Consulta de facturas por rango de fechas.
+    //client/1/fecha.
+    //backoffice/clients/1/rangodefecha portal del usuario
     @GetMapping()
     public ResponseEntity<List<Bill>> getBillsByRangeOfDates(@RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date beginDate,
                                                              @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date endDate,
