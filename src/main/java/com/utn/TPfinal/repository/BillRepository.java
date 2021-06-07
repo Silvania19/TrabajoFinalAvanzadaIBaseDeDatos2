@@ -20,11 +20,11 @@ public interface BillRepository extends JpaRepository<Bill, Integer> {
             , nativeQuery = true)
     List<Bill> findAllBillsByDateBetween(Date beginDate, Date endDate);*/
 
-    //2) Consulta de facturas por rango de fechas.
+    //2) Consulta de facturas por rango de fechas. -- agregar filtro por user
 
-    @Query(value = "SELECT u FROM Bill u WHERE (u.firstMeasurement BETWEEN :firstDate AND :lastDate) AND " +
+    @Query(value = "SELECT u FROM Bill u WHERE (u.client.id = :idClient AND u.firstMeasurement BETWEEN :firstDate AND :lastDate) AND " +
             "(u.lastMeasurement BETWEEN :firstDate AND :lastDate)")
-    Page<Bill> findAllBillsByDateBetween(Date firstDate, Date lastDate, Pageable pageable);
+    Page<Bill> findAllBillsByUserAndDateBetween(Integer idClient, Date firstDate, Date lastDate, Pageable pageable);
 
    /* @Query( value= "SELECT * FROM  bills  WHERE  id_client = :idClient" , nativeQuery = true)*/
    /* @Query(value = "select b from Bill b where (b.client = :idClient)")*/

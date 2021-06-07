@@ -1,19 +1,24 @@
 package com.utn.TPfinal.controller;
 
 import com.utn.TPfinal.domain.Bill;
+import com.utn.TPfinal.domain.Client;
+import com.utn.TPfinal.domain.dto.UserDto;
 import com.utn.TPfinal.service.BillService;
+import com.utn.TPfinal.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/bill")
+@RequestMapping("/")
 public class BillController {
 
     BillService billService;
@@ -26,12 +31,20 @@ public class BillController {
     //2) Consulta de facturas por rango de fechas.
     //client/1/fecha.
     //backoffice/clients/1/rangodefecha portal del usuario
-    @GetMapping()
-    public ResponseEntity<List<Bill>> getBillsByRangeOfDates(@RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date beginDate,
-                                                             @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date endDate,
-                                                             Pageable pageable){
-        Page pageOfBills = billService.getBillsByRangeOfDates(beginDate, endDate, pageable);
-        return response(pageOfBills);
+    @PreAuthorize(value = "hasAuthority('CLIENT')")
+    @GetMapping("clientApi/client/{idClient}")
+    public ResponseEntity<List<Bill>>getBillsByRangeOfDatesByUser(Authentication authentication,
+                                                                  @PathVariable Integer idClient,
+                                                                  @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date beginDate,
+                                                                  @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date endDate,
+                                                                  Pageable pageable){
+        UserDto userDto = (UserDto) authentication.getPrincipal();
+        if(userDto.getId() == idClient){
+            Page pageOfBills = billService.getBillsByUserAndDateBetween(idClient, beginDate, endDate, pageable);
+            return response(pageOfBills);
+        }else{
+            return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 
     private ResponseEntity response(Page page) {

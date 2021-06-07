@@ -15,11 +15,11 @@ CREATE DATABASE adea;
 USE adea;
 
 CREATE TABLE employees(
-                          id_employee INT AUTO_INCREMENT,
+                          id INT AUTO_INCREMENT,
                           NAME VARCHAR(50),
                           lastname VARCHAR(50),
                           PASSWORD VARCHAR(50),
-                          CONSTRAINT pk_id_employee PRIMARY KEY (id_employee)
+                          CONSTRAINT pk_id_employee PRIMARY KEY (id)
 );
 
 CREATE TABLE brands(
@@ -46,23 +46,23 @@ CREATE TABLE fees(
 );
 
 CREATE TABLE clients(
-                        id_client INT AUTO_INCREMENT,
+                        id INT AUTO_INCREMENT,
                         NAME VARCHAR(50),
                         lastname VARCHAR(50),
                         PASSWORD VARCHAR(50),
-                        CONSTRAINT pk_id_client PRIMARY KEY (id_client)
+                        CONSTRAINT pk_id_client PRIMARY KEY (id)
 );
 
 CREATE TABLE bills(
                       id_bill INT AUTO_INCREMENT,
                       amount FLOAT,
                       pay BOOLEAN,
-                      first_measurement DATE,
-                      last_measurement DATE,
+                      first_measurement DATETIME,
+                      last_measurement DATETIME,
                       id_client INT,
 
                       CONSTRAINT pk_id_bill PRIMARY KEY (id_bill),
-                      CONSTRAINT fk_id_client_bill FOREIGN KEY (id_client) REFERENCES clients(id_client)
+                      CONSTRAINT fk_id_client_bill FOREIGN KEY (id_client) REFERENCES clients(id)
 );
 
 CREATE TABLE addresses(
@@ -71,7 +71,7 @@ CREATE TABLE addresses(
                           number_address VARCHAR (50),
                           id_client INT,
                           CONSTRAINT pk_id_address PRIMARY KEY (id_address),
-                          CONSTRAINT fk_id_client_address FOREIGN KEY (id_client) REFERENCES clients(id_client)
+                          CONSTRAINT fk_id_client_address FOREIGN KEY (id_client) REFERENCES clients(id)
 );
 
 CREATE TABLE meters(
@@ -91,7 +91,7 @@ CREATE TABLE meters(
 CREATE TABLE measurings(
                            id_measuring INT AUTO_INCREMENT,
                            measurement INT,
-                           TIME DATE,
+                           TIME DATETIME,
                            id_bill INT,
                            id_meter INT,
 
