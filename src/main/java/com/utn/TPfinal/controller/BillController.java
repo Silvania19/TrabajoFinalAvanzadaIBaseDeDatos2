@@ -16,8 +16,12 @@ import java.util.List;
 @RequestMapping("/bill")
 public class BillController {
 
-    @Autowired
     BillService billService;
+
+    @Autowired
+    public BillController(BillService billService){
+        this.billService = billService;
+    }
 
     //2) Consulta de facturas por rango de fechas.
     //client/1/fecha.
