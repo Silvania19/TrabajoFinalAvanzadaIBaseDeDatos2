@@ -45,7 +45,7 @@ public class UserController {
     @PostMapping("login")
     public ResponseEntity<ResponseLoginDto> login(@RequestBody RequestLoginDto requestLoginDto) {
         log.info(requestLoginDto.toString());
-        User user = userService.login(requestLoginDto.getName(), requestLoginDto.getPassword());
+        User user = userService.findByNameAndPassword(requestLoginDto.getName(), requestLoginDto.getPassword());
         if (user!=null){
             UserDto userDto = modelMapper.map(user, UserDto.class);
             return ResponseEntity.ok(ResponseLoginDto.builder().token(this.generateToken(userDto, user.typeUser())).build());

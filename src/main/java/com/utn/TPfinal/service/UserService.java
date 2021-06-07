@@ -22,7 +22,7 @@ public class UserService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
     }
-    public User login(String name, String password) {
+    public User findByNameAndPassword(String name, String password) {
         return userRepository.findByNameAndPassword(name, password);
     }
 

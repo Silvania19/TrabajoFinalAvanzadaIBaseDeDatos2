@@ -30,8 +30,8 @@ public class BillService {
     @Autowired
     BillRepository billRepository;
 
-    public Page<Bill> getBillsByRangeOfDates(Date beginDate, Date endDate, Pageable pageable) {
-        return billRepository.findAllBillsByDateBetween(beginDate, endDate, pageable);
+    public Page<Bill> getBillsByUserAndDateBetween(Integer idClient, Date beginDate, Date endDate, Pageable pageable) {
+        return billRepository.findAllBillsByUserAndDateBetween(idClient, beginDate, endDate, pageable);
     }
 
     public List<Bill> getAllBillsByIdClient(Integer idClient) {
