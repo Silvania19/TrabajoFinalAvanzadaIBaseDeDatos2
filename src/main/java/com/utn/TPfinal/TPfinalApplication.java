@@ -22,10 +22,10 @@ public class TPfinalApplication {
 	/* para decir a mi app que todos los request necesitan verificar la autorizacion, y autenticacion.
 	 *    atravez de los filtors que estan en JWTAothorizationFilter. Excet el endopoint de /login, el cual entrara
 	 *     sin autorizacion*/
-	//@EnableWebSecurity
-	//@Configuration
-	/*probable solucion  para algo*/
-	/*@EnableGlobalMethodSecurity(prePostEnabled = true)
+	@EnableWebSecurity
+	@Configuration
+	/*para habilitar las anotaciones previas y posteriores en Spring Security*/
+	@EnableGlobalMethodSecurity(prePostEnabled = true)
 	class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		@Override
@@ -36,5 +36,5 @@ public class TPfinalApplication {
 					.antMatchers(HttpMethod.POST, "/login").permitAll()
 					.anyRequest().authenticated();
 		}
-	}*/
+	}
 }

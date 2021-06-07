@@ -1,5 +1,6 @@
 package com.utn.TPfinal.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.utn.TPfinal.domain.TypeUser;
 import com.utn.TPfinal.domain.User;
 import com.utn.TPfinal.domain.dto.RequestLoginDto;
 import com.utn.TPfinal.domain.dto.ResponseLoginDto;
@@ -46,16 +47,26 @@ public class UserController {
         log.info(requestLoginDto.toString());
         User user = userService.login(requestLoginDto.getName(), requestLoginDto.getPassword());
         if (user!=null){
-            UserDto dto = modelMapper.map(user, UserDto.class);
-            return ResponseEntity.ok(ResponseLoginDto.builder().token(this.generateToken(dto)).build());
+            UserDto userDto = modelMapper.map(user, UserDto.class);
+            return ResponseEntity.ok(ResponseLoginDto.builder().token(this.generateToken(userDto, user.typeUser())).build());
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 
-    private String generateToken(UserDto userDto) {
+    private String generateToken(UserDto userDto, TypeUser typeUser) {
+        String authority;
+
+        if(typeUser.getDescription().equals("client"))
+        {
+            authority="CLIENT";
+        }
+        else
+        {
+            authority="BACKOFFICE";
+        }
         try {
-            List<GrantedAuthority> grantedAuthorities = AuthorityUtils.commaSeparatedStringToAuthorityList("DEFAULT_USER");
+            List<GrantedAuthority> grantedAuthorities = AuthorityUtils.commaSeparatedStringToAuthorityList(authority);
             String token = Jwts
                     .builder()
                     .setId("JWT")
