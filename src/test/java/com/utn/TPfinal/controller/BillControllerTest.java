@@ -14,10 +14,8 @@ import org.springframework.http.ResponseEntity;
 import com.utn.TPfinal.service.BillService;
 import org.springframework.security.core.Authentication;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
