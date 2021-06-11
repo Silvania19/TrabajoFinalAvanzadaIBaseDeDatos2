@@ -25,6 +25,6 @@ public class Measuring{
     //fk with meter
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="id_meter", nullable = false)
+    @JoinColumn(name="serial_number", nullable = false)
     private Meter meter;
 }

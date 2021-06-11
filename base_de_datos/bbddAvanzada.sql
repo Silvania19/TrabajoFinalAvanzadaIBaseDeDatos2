@@ -93,11 +93,11 @@ CREATE TABLE measurings(
                            measurement INT,
                            TIME DATETIME,
                            id_bill INT,
-                           id_meter INT,
+                           serial_number INT,
 
                            CONSTRAINT pk_id_measuring PRIMARY KEY (id_measuring),
                            CONSTRAINT fk_id_bill FOREIGN KEY (id_bill) REFERENCES bills(id_bill),
-                           CONSTRAINT fk_id_meter FOREIGN KEY (id_meter) REFERENCES meters(id_meter)
+                           CONSTRAINT fk_serial_number FOREIGN KEY (serial_number) REFERENCES meters(serial_number)
 );
 
 /*2) Consulta de facturas por rango de fechas.*/

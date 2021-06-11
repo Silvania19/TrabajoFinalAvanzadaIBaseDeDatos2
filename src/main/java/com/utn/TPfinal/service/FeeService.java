@@ -5,15 +5,17 @@ import com.utn.TPfinal.exception.FeeException;
 import com.utn.TPfinal.exception.NotFoundException;
 import com.utn.TPfinal.repository.FeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 
 @Service
-
 public class FeeService {
-    @Autowired
+
     FeeRepository feeDao;
+
+    @Autowired
+    public  FeeService(FeeRepository feeDao){
+        this.feeDao = feeDao;
+    }
 
     public Fee add(Fee fee) throws FeeException {
         if (!feeDao.existsById(fee.getIdFee())) {
@@ -28,6 +30,7 @@ public class FeeService {
         if (feeDao.existsById(id)) {
             Fee feeOld=getByID(id);
             feeOld.setTypeFee(fee.getTypeFee());
+            feeOld.setPriceFee(fee.getPriceFee());
             Fee feeAct=feeDao.save(feeOld);
             return feeAct;
         } else {
@@ -35,7 +38,7 @@ public class FeeService {
         }
 
     }
-    public Fee getByID(Integer id) throws HttpClientErrorException{
+    public Fee getByID(Integer id) throws NotFoundException{
         return feeDao.findById(id)
                 .orElseThrow(() -> new NotFoundException(""));
     }

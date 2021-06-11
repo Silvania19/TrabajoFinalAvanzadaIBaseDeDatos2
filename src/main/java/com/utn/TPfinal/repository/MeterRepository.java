@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MeterRepository extends JpaRepository<Meter, Integer> {
+    Meter findBySerialNumberAndPasswordMeter(String serialNumber, String password);
 }

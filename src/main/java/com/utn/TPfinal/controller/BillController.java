@@ -1,10 +1,8 @@
 package com.utn.TPfinal.controller;
 
 import com.utn.TPfinal.domain.Bill;
-import com.utn.TPfinal.domain.Client;
 import com.utn.TPfinal.domain.dto.UserDto;
 import com.utn.TPfinal.service.BillService;
-import com.utn.TPfinal.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

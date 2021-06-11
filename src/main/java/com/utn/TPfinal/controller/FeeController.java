@@ -3,6 +3,7 @@ import com.utn.TPfinal.domain.Fee;
 import com.utn.TPfinal.domain.User;
 import com.utn.TPfinal.domain.dto.UserDto;
 import com.utn.TPfinal.exception.FeeException;
+import com.utn.TPfinal.exception.NotFoundException;
 import com.utn.TPfinal.service.BillService;
 import com.utn.TPfinal.service.FeeService;
 import com.utn.TPfinal.util.EntityURLBuilder;
@@ -11,13 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import java.net.URI;
-
-import static com.utn.TPfinal.util.EntityURLBuilder.buildURL;
 
 @Slf4j
 @RestController
@@ -48,7 +44,7 @@ public class FeeController {
     }
     @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
     @PutMapping("/{id}")
-    public ResponseEntity updateFee(@PathVariable Integer id, @RequestBody Fee fee) throws FeeException {
+    public ResponseEntity updateFee(@PathVariable Integer id, @RequestBody Fee fee) throws NotFoundException {
         Fee newFee= feeService.updateFee(id, fee);
         URI location= EntityURLBuilder.buildURL("fee", newFee.getIdFee());
         return ResponseEntity.ok(location);

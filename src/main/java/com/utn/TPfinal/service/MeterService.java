@@ -3,7 +3,6 @@ package com.utn.TPfinal.service;
 import com.utn.TPfinal.domain.*;
 import com.utn.TPfinal.exception.FeeException;
 import com.utn.TPfinal.repository.MeterRepository;
-import com.utn.TPfinal.repository.ModelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,6 +20,7 @@ public class MeterService {
     AddressService addressService;
     @Autowired
     ModelService modelService;
+
 
     public Meter add(Meter meter) {
         if (!meterDao.existsById(meter.getIdMeter())) {
@@ -75,4 +75,10 @@ public class MeterService {
         }
 
     }
+
+    public Meter findBySerialNumberAndPasswordMeter(String serialNumber, String password) {
+        Meter meter= meterDao.findBySerialNumberAndPasswordMeter(serialNumber,password);
+        return meter;
+    }
+
 }
