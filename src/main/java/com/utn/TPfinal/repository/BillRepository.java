@@ -26,6 +26,7 @@ public interface BillRepository extends JpaRepository<Bill, Integer> {
             "(u.lastMeasurement BETWEEN :firstDate AND :lastDate)")
     Page<Bill> findAllBillsByUserAndDateBetween(Integer idClient, Date firstDate, Date lastDate, Pageable pageable);
 
+    /** backoffice 4) Consulta de facturas impagas por cliente y domicilio.**/
    /* @Query( value= "SELECT * FROM  bills  WHERE  id_client = :idClient" , nativeQuery = true)*/
    /* @Query(value = "select b from Bill b where (b.client = :idClient)")*/
     List<Bill>findAllByClientId(Integer idClient);

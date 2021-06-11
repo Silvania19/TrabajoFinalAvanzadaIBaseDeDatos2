@@ -45,18 +45,13 @@ class BillControllerTest {
         //given
         Pageable pageable = PageRequest.of(1, 10);
 
-        String pattern = "dd-MM-yyyy";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
         Date date1 = simpleDateFormat.parse("03-26-2020");
         Date date2 = simpleDateFormat.parse("03-27-2020");
-        Date date3 = simpleDateFormat.parse("04-27-2020");
-        Date date4 = simpleDateFormat.parse("04-27-2020");
         Integer idClient = 1;
 
-
-        List<Bill> billList2 = List.of(Bill.builder().firstMeasurement(date1).lastMeasurement(date2).build(),
-                Bill.builder().firstMeasurement(date3).lastMeasurement(date4).build());
+        List<Bill> billList2 = List.of(Bill.builder().firstMeasurement(date1).lastMeasurement(date2).build());
 
         Page<Bill> mockedPage = mock(Page.class);
         Date beginDate = mock(Date.class);
@@ -64,7 +59,6 @@ class BillControllerTest {
         Authentication authentication = mock(Authentication.class);
 
         when(authentication.getPrincipal()).thenReturn(UserDto.builder().id(1).build());
-        //
 
         when(mockedPage.getTotalElements()).thenReturn(10L);
         when(mockedPage.getTotalPages()).thenReturn(1);
@@ -81,24 +75,27 @@ class BillControllerTest {
         assertEquals(billList2, response.getBody());
     }
 
-    /*@Test
+    @Test
     public void testGetBillsByRangeOfDatesNoContent(){
 
         //given
         Pageable pageable = PageRequest.of(50, 10);
+        Integer idClient = 1;
 
         Page<Bill> mockedPage = mock(Page.class);
         Date beginDate = mock(Date.class);
         Date endDate = mock(Date.class);
+        Authentication authentication = mock(Authentication.class);
 
+        when(authentication.getPrincipal()).thenReturn(UserDto.builder().id(1).build());
         when(mockedPage.getContent()).thenReturn(Collections.emptyList());
-        when(billService.getBillsByRangeOfDates(beginDate, endDate, pageable)).thenReturn(mockedPage);
+        when(billService.getBillsByUserAndDateBetween(idClient, beginDate, endDate, pageable)).thenReturn(mockedPage);
 
         //then
-        ResponseEntity<List<Bill>> response = billController.getBillsByRangeOfDates(beginDate, endDate, pageable);
+        ResponseEntity<List<Bill>> response = billController.getBillsByRangeOfDatesByUser(authentication, idClient, beginDate, endDate, pageable);
 
         //assert
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         assertEquals(0, response.getBody().size());
-    }*/
+    }
 }
