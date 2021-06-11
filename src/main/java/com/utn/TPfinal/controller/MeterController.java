@@ -23,20 +23,20 @@ public class MeterController {
         URI location= ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(newMeter.getIdMeter())
+                .buildAndExpand(newMeter.getSerialNumber())
                 .toUri();
         return ResponseEntity.created(location).build();
     }
 
     @PutMapping("/{idMeter}")
-    public void updateMeter (@PathVariable Integer idMeter, @RequestBody Meter meter){
-        meterService.updateMeter(idMeter, meter);
+    public void updateMeter (@PathVariable String serialNumber, @RequestBody Meter meter){
+        meterService.updateMeter(serialNumber, meter);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity deleteMeter(@PathVariable Integer id)
+    @DeleteMapping("/{serialNumber}")
+    public ResponseEntity deleteMeter(@PathVariable String serialNumber)
     {
-         meterService.deleteMeter(id);
+         meterService.deleteMeter(serialNumber);
         return ResponseEntity.ok().build();
     }
 }

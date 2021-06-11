@@ -4,9 +4,7 @@ import com.utn.TPfinal.domain.*;
 import com.utn.TPfinal.exception.FeeException;
 import com.utn.TPfinal.repository.MeterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 
 @Service
 
@@ -23,7 +21,7 @@ public class MeterService {
 
 
     public Meter add(Meter meter) {
-        if (!meterDao.existsById(meter.getIdMeter())) {
+        if (meterDao.findBySerialNumber(meter.getSerialNumber()) != null) {
             return meterDao.save(meter);
         }
         else {
@@ -47,14 +45,13 @@ public class MeterService {
             throw new FeeException("Error en addAddressModelFeeToMeter");
         }
     }*/
-    public Meter getByID(Integer id) {
-        return meterDao.findById(id)
-                .orElseThrow(() -> new HttpClientErrorException(HttpStatus.NOT_FOUND));
+    public Meter getSerialNumber(String serialNumber) {
+        return meterDao.findBySerialNumber(serialNumber);
     }
 
-    public Meter updateMeter(Integer idMeter, Meter meter) {
-        if (meterDao.existsById(idMeter)) {
-            Meter meterOld=getByID(idMeter);
+    public Meter updateMeter(String serialNumber, Meter meter) {
+        if (meterDao.findBySerialNumber(serialNumber)!= null) {
+            Meter meterOld=meterDao.findBySerialNumber(serialNumber);
             meterOld.setSerialNumber(meter.getSerialNumber());
             meterOld.setPasswordMeter(meter.getPasswordMeter());
             Meter meterActual=meterDao.save(meterOld);
@@ -65,10 +62,10 @@ public class MeterService {
 
     }
 
-    public void deleteMeter(Integer id) {
-        if(meterDao.existsById(id)){
+    public void deleteMeter(String serialNumber) {
+        if(meterDao.findBySerialNumber(serialNumber) !=null){
 
-            meterDao.deleteById(id);
+            meterDao.deleteBySerialNumber(serialNumber);
         }
         else {
             throw  new FeeException("error el id no existe");

@@ -1,7 +1,10 @@
 package com.utn.TPfinal.controller;
 
+import com.utn.TPfinal.domain.Measuring;
 import com.utn.TPfinal.domain.Meter;
 import com.utn.TPfinal.domain.dto.MeasuringDto;
+import com.utn.TPfinal.repository.MeasuringRepository;
+import com.utn.TPfinal.service.MeasuringService;
 import com.utn.TPfinal.service.MeterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,18 +20,23 @@ public class MeasurementSenderController {
 
     MeasuringController measuringController;
     MeterService meterService;
+    MeasuringRepository measuringRepository;
     @Autowired
-    public MeasurementSenderController(MeasuringController measuringController, MeterService meterService){
+    public MeasurementSenderController(MeasuringController measuringController, MeterService meterService, MeasuringRepository measuringRepository){
         this.measuringController=measuringController;
         this.meterService=meterService;
+        this.measuringRepository=measuringRepository;
     }
-    @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
+
     @PostMapping
     public void addMeasurement(@RequestBody MeasuringDto measuringDto){
+        System.out.printf("hola");
           if (measuringDto !=null){
               Meter meter = meterService.findBySerialNumberAndPasswordMeter(measuringDto.getSerialNumber(), measuringDto.getPassword());
                if(meter != null ){
-                  measuringController.addMeasuring(measuringDto);
+                   measuringController.addMeasuring(measuringDto);
+
+
                }
           }
     }

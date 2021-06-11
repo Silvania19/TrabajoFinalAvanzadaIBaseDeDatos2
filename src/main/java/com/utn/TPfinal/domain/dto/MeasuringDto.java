@@ -10,6 +10,6 @@ public class MeasuringDto {
 
     String serialNumber;
     float value;
-    String date;
-    String password;
+    String date;//date tipo
+    String password;//no lo tiene el measurig
 }

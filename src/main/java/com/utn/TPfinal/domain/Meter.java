@@ -13,9 +13,6 @@ import javax.persistence.*;
 @Table(name="meters")
 public class Meter {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idMeter;
-
     private String serialNumber;
     private String passwordMeter;
     //fk with model
