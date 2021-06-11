@@ -27,8 +27,13 @@ import java.util.List;
 
 public class BillService {
 
-    @Autowired
     BillRepository billRepository;
+
+    @Autowired
+    public BillService(BillRepository billRepository){
+        this.billRepository = billRepository;
+    }
+
 
     public Page<Bill> getBillsByUserAndDateBetween(Integer idClient, Date beginDate, Date endDate, Pageable pageable) {
         return billRepository.findAllBillsByUserAndDateBetween(idClient, beginDate, endDate, pageable);
