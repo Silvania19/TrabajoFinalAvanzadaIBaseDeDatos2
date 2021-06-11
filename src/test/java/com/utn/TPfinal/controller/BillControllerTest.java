@@ -27,6 +27,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 class BillControllerTest {
 
+    @Mock
     private BillService billService;
 
     private BillController billController;

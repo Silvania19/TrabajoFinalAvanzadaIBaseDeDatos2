@@ -1,5 +1,6 @@
 package com.utn.TPfinal.domain;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

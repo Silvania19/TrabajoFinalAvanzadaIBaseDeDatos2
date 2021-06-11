@@ -28,7 +28,7 @@ public class BillController {
         this.billService = billService;
     }
 
-    //2) Consulta de facturas por rango de fechas.
+    //android - 2) Consulta de facturas por rango de fechas.
     //client/1/fecha.
     //backoffice/clients/1/rangodefecha portal del usuario
     @PreAuthorize(value = "hasAuthority('CLIENT')")
@@ -56,9 +56,11 @@ public class BillController {
                 body(page.getContent());
     }
 
-    /**Consulta de facturas impagas por cliente y domicilio.**/
-    @GetMapping("/client/{idClient}")
+    /** backoffice 4) Consulta de facturas impagas por cliente y domicilio.**/
+    @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
+    @GetMapping("client/{idClient}")
     public List<Bill>getBills(@PathVariable Integer idClient){
+        System.out.print("holaaa");
         List<Bill> bills= billService.getAllBillsByIdClient(idClient);
         System.out.print(bills);
         return  billService.getAllBillsByIdClient(idClient);
