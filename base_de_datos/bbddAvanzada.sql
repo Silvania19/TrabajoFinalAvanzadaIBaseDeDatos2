@@ -11,9 +11,22 @@ employees - empleados
 measurement - medida
 */
 
+/*significados
+measurings - mediciones
+meter - medidores
+bills - facturas
+fees - tarifas
+models - modelos
+brands - marcas
+clients - clientes
+employees - empleados
+
+measurement - medida
+*/
+
 CREATE DATABASE adea;
 USE adea;
-
+DROP DATABASE adea;
 CREATE TABLE employees(
                           id INT AUTO_INCREMENT,
                           NAME VARCHAR(50),
@@ -73,16 +86,15 @@ CREATE TABLE addresses(
                           CONSTRAINT pk_id_address PRIMARY KEY (id_address),
                           CONSTRAINT fk_id_client_address FOREIGN KEY (id_client) REFERENCES clients(id)
 );
-
 CREATE TABLE meters(
-                       id_meter INT AUTO_INCREMENT,
+
                        id_address INT,
                        serial_number VARCHAR(50),
                        id_model INT,
                        password_meter VARCHAR(50),
                        id_fee INT,
                        CONSTRAINT unique_serial_number UNIQUE (serial_number),
-                       CONSTRAINT pk_id_meter PRIMARY KEY (id_meter),
+                       CONSTRAINT pk_id_serial_number PRIMARY KEY (serial_number),
                        CONSTRAINT fk_id_model FOREIGN KEY (id_model) REFERENCES models(id_model),
                        CONSTRAINT fk_id_address FOREIGN KEY (id_address) REFERENCES addresses(id_address),
                        CONSTRAINT fk_id_fee FOREIGN KEY (id_fee) REFERENCES fees(id_fee)
@@ -90,10 +102,10 @@ CREATE TABLE meters(
 
 CREATE TABLE measurings(
                            id_measuring INT AUTO_INCREMENT,
-                           measurement INT,
-                           TIME DATETIME,
+                           VALUE FLOAT,
+                           DATE DATETIME,
                            id_bill INT,
-                           serial_number INT,
+                           serial_number VARCHAR(50),
 
                            CONSTRAINT pk_id_measuring PRIMARY KEY (id_measuring),
                            CONSTRAINT fk_id_bill FOREIGN KEY (id_bill) REFERENCES bills(id_bill),
