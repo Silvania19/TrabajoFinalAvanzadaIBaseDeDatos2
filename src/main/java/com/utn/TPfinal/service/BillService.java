@@ -39,8 +39,8 @@ public class BillService {
         return billRepository.findAllBillsByUserAndDateBetween(idClient, beginDate, endDate, pageable);
     }
 
-    public List<Bill> getAllBillsByIdClient(Integer idClient) {
-        return billRepository.findAllByClientId(idClient);
+    public List<Bill> getAllBillsByIdClient(Integer idClient, Integer idDomicilio) {
+        return billRepository.findAllByClientId(idClient, idDomicilio);
 
     }
 }

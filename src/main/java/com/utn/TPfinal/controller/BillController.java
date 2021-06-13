@@ -58,11 +58,8 @@ public class BillController {
 
     /** backoffice 4) Consulta de facturas impagas por cliente y domicilio.**/
     @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
-    @GetMapping("client/{idClient}")
-    public List<Bill>getBills(@PathVariable Integer idClient){
-        System.out.print("holaaa");
-        List<Bill> bills= billService.getAllBillsByIdClient(idClient);
-        System.out.print(bills);
-        return  billService.getAllBillsByIdClient(idClient);
+    @GetMapping("client/{idClient}/{idDomicilio}")
+    public List<Bill>getBills(@PathVariable Integer idClient, @PathVariable Integer idDomicilio){
+        return billService.getAllBillsByIdClient(idClient, idDomicilio);
     }
 }
