@@ -33,8 +33,11 @@ public class TPfinalApplication {
 			http.csrf().disable()
 					.addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
 					.authorizeRequests()
-					.antMatchers(HttpMethod.POST, "/login").permitAll()
+					.antMatchers(HttpMethod.POST, "/client/login").permitAll()
+					.antMatchers(HttpMethod.POST, "/backoffice/login").permitAll()
 					.antMatchers(HttpMethod.POST, "/measurements").permitAll()
+					/*.antMatchers("/backoffice/**").hasAuthority("BACKOFFICE")
+					.antMatchers("/client/**").hasAnyAuthority("BACKOFFICE","CLIENT")*/
 					.anyRequest().authenticated();
 		}
 	}

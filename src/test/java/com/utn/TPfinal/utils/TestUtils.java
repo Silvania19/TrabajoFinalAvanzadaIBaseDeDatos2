@@ -1,9 +1,10 @@
 package com.utn.TPfinal.utils;
 
-import com.utn.TPfinal.domain.Bill;
-import com.utn.TPfinal.domain.Client;
-import com.utn.TPfinal.domain.Fee;
-import com.utn.TPfinal.domain.User;
+import com.utn.TPfinal.domain.*;
+import com.utn.TPfinal.domain.dto.RequestLoginDto;
+import com.utn.TPfinal.domain.dto.ResponseLoginDto;
+import com.utn.TPfinal.domain.dto.UserDto;
+import com.utn.TPfinal.service.EmployeeService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
@@ -55,8 +56,77 @@ public class TestUtils {
                .build();
        return bill;
     }
-
+    public static Meter aMeter(){
+        Meter meter= Meter.builder()
+                .serialNumber("12345")
+                .passwordMeter("123")
+                .fee(aFee())
+                .address(aAdrress())
+                .model(aModel())
+                .build();
+        return  meter;
+    }
+    public  static Address aAdrress(){
+        Address address= Address.builder()
+                .idAddress(1)
+                .nameAddress("address1")
+                .numberAddress("1234")
+                .build();
+        return  address;
+    }
+    public static Model aModel(){
+    Model model = Model.builder()
+            .idModel(1)
+            .description("model1")
+            .brands(aBrand())
+            .build();
+    return  model;
+    }
+    public  static  Brands aBrand(){
+        Brands brand= Brands.builder()
+                .idBrand(1)
+                .description("brand1")
+                .build();
+        return brand;
+    }
     public static Page<Bill> aPageBills() throws ParseException {
         return new PageImpl<>(List.of(aBill()));
+    }
+
+    public static RequestLoginDto aRequestLogin(){
+        RequestLoginDto requestLoginDto= RequestLoginDto.builder()
+                .name("silvania")
+                .password("12334")
+                .build();
+        return  requestLoginDto;
+    }
+    public static ResponseLoginDto aResponseLogin(){
+        ResponseLoginDto responseLoginDto= ResponseLoginDto.builder()
+                .token("1223456uhgsdfghjkmnbvcsg")
+                .build();
+        return  responseLoginDto;
+    }
+    public  static UserDto aUserDto(){
+        UserDto userDto= UserDto.builder()
+                        .id(1)
+                        .lastname("ortega")
+                        .name("silvania")
+                        .build();
+        return  userDto;
+    }
+    public static Employee aEnployee(){
+        Employee employee= new Employee();
+        employee.setId(1);
+        employee.setName("silvania");
+        employee.setLastname("ortega");
+        employee.setPassword("1234");
+        return  employee;
+    }
+    public static Client aClient2(){
+        Client client = new Client();
+        client.setId(1);
+        client.setName("silvania");
+        client.setLastname("ortega");
+        return client;
     }
 }

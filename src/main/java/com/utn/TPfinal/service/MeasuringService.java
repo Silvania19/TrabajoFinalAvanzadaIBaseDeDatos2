@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 public class MeasuringService {
     MeasuringRepository measuringRepository;
+
     @Autowired
     public  MeasuringService(MeasuringRepository measuringRepository){
         this.measuringRepository=measuringRepository;

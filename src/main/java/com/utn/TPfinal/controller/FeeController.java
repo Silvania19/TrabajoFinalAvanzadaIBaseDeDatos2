@@ -1,10 +1,8 @@
 package com.utn.TPfinal.controller;
 import com.utn.TPfinal.domain.Fee;
-import com.utn.TPfinal.domain.User;
-import com.utn.TPfinal.domain.dto.UserDto;
 import com.utn.TPfinal.exception.FeeException;
 import com.utn.TPfinal.exception.NotFoundException;
-import com.utn.TPfinal.service.BillService;
+
 import com.utn.TPfinal.service.FeeService;
 import com.utn.TPfinal.util.EntityURLBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -49,7 +47,9 @@ public class FeeController {
         URI location= EntityURLBuilder.buildURL("fee", newFee.getIdFee());
         return ResponseEntity.ok(location);
     }
+    @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
     @DeleteMapping("/{id}")
+
     public ResponseEntity deleteFee(@PathVariable Integer id)
     {
          feeService.deleteFee(id);

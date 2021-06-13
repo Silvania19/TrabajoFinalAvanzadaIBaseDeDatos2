@@ -4,7 +4,6 @@ import com.utn.TPfinal.domain.Fee;
 import com.utn.TPfinal.exception.FeeException;
 
 import com.utn.TPfinal.repository.FeeRepository;
-import com.utn.TPfinal.service.FeeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.Optional;
@@ -12,7 +11,7 @@ import static com.utn.TPfinal.utils.TestUtils.aFee;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 public class FeeServiceTest {
-/*
+
     FeeRepository feeRepository;
     FeeException feeException;
     FeeService feeService;
@@ -34,23 +33,24 @@ public class FeeServiceTest {
         //then
         assertEquals(feeR.getTypeFee(), fee.getTypeFee());
     }
-    @Test
+    /*@Test
     public void addSadPath(){
         //given
 
         Fee fee= aFee();
-        when(feeRepository.existsById(fee.getIdFee())).thenReturn(true);
+        when(feeRepository.existsById()).thenReturn(true);
 
         //then
         assertThrows(FeeException.class, ()-> {
             feeService.add(fee);
         });
     }
-/*
+*/
      @Test
     public void updateFeeHappyPath(){
           //given
-         when(feeRepository.findById(1)).thenReturn(Optional.of(aFee()));
+         /* when(feeRepository.existsById(1)).thenReturn(true);
+         when(feeService.getByID(aFee().getIdFee())).thenReturn(aFee());
          Fee nfee= aFee();
          nfee.setTypeFee("updFee");
          try {
@@ -60,20 +60,57 @@ public class FeeServiceTest {
              verify(feeRepository, times(1)).save(nfee);
          }catch (FeeException no){
             fail();
-         }
-        /* when(feeRepository.existsById(id)).thenReturn(true);
-         when(feeService.getByID(nfee.getIdFee())).thenReturn(nfee);
+         }*/
+         when(feeRepository.findById(aFee().getIdFee())).thenReturn(Optional.of(aFee()));
+         Fee nfee= aFee();
+         nfee.setTypeFee("updFee");
+
+         when(feeRepository.save(nfee)).thenReturn(nfee);
          //when
-         Fee feeN= feeRepository.save(nfee);
+         Fee feeN= feeService.updateFee(aFee().getIdFee(), nfee);
          //then
          assertEquals(feeN.getTypeFee(), nfee.getTypeFee());
-     }*/
+     }
+    @Test
+    public void updateFeeExceptionTest(){
+
+        try {
+            when(feeRepository.findById(2)).thenReturn(Optional.of(aFee()));
+            Fee nfee= aFee();
+            nfee.setTypeFee("updFee");
+            when(feeRepository.save(nfee)).thenReturn(nfee);
+            //when
+            Fee feeN= feeService.updateFee(aFee().getIdFee(), nfee);
+        }catch (FeeException fe){
+
+        }
+    }
 
 
-    /*@Test
+    @Test
     public void deleteFeeHappyTest(){
+        Fee fee= aFee();
+        when(feeRepository.findById(fee.getIdFee())).thenReturn(Optional.of(fee));
+        // then
+        feeService.deleteFee(fee.getIdFee());
 
-     }*/
+        verify(feeRepository, times(1)).delete(fee);
+     }
+    @Test
+    public void deleteFeeExceptionTest(){
+        Fee fee= aFee();
+        try {
+            when(feeRepository.findById(2)).thenReturn(Optional.of(fee));
+            // then
+            feeService.deleteFee(fee.getIdFee());
+
+            verify(feeRepository, times(1)).delete(fee);
+
+        }catch (FeeException e){
+
+        }
+
+    }
 
 
 }

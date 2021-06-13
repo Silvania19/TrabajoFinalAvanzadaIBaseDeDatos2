@@ -15,20 +15,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/measurements")
+@RequestMapping("/")
 public class MeasurementSenderController {
 
     MeasuringController measuringController;
     MeterService meterService;
-    MeasuringRepository measuringRepository;
     @Autowired
-    public MeasurementSenderController(MeasuringController measuringController, MeterService meterService, MeasuringRepository measuringRepository){
+    public MeasurementSenderController(MeasuringController measuringController, MeterService meterService){
         this.measuringController=measuringController;
         this.meterService=meterService;
-        this.measuringRepository=measuringRepository;
     }
 
-    @PostMapping
+    @PostMapping("measurements")
     public void addMeasurement(@RequestBody MeasuringDto measuringDto){
         System.out.printf("hola");
           if (measuringDto !=null){

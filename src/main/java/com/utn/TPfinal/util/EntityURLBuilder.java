@@ -15,5 +15,14 @@ public class EntityURLBuilder{
                 .toUri();
 
     }
+    public static URI buildURLString(String entity, String serialNumber)
+    {
+        return ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path(("/{entity}/{serialNumber}"))
+                .buildAndExpand(entity, serialNumber)
+                .toUri();
+
+    }
 
 }

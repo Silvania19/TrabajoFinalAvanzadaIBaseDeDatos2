@@ -17,7 +17,7 @@ public class AddressService {
     @Autowired
     AddressRepository addressDao;
     @Autowired
-    UserService userService;
+    ClientService clientService;
 
     public Address newAddress(Address address) throws FeeException {
 
@@ -27,7 +27,7 @@ public class AddressService {
     public Address addClientToAddress(Integer id, Integer idClient) throws AddressException {
         Address addressSearch = getByID(id);
         if (addressDao.existsById(addressSearch.getIdAddress())) {
-            User client = userService.getByID(idClient); // nullpointerexception en client
+            User client = clientService.getByID(idClient); // nullpointerexception en client
             addressSearch.setClient((Client)client);
             return addressDao.save(addressSearch);
         } else {

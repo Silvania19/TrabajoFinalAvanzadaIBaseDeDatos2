@@ -1,25 +1,26 @@
 package com.utn.TPfinal.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.utn.TPfinal.domain.Client;
+import com.utn.TPfinal.domain.Employee;
 import com.utn.TPfinal.domain.TypeUser;
-import com.utn.TPfinal.domain.User;
 import com.utn.TPfinal.domain.dto.RequestLoginDto;
 import com.utn.TPfinal.domain.dto.ResponseLoginDto;
 import com.utn.TPfinal.domain.dto.UserDto;
-import com.utn.TPfinal.service.UserService;
+import com.utn.TPfinal.service.ClientService;
+
+import com.utn.TPfinal.service.EmployeeService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
@@ -33,23 +34,38 @@ Creates private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getL
 @RequestMapping("/")
 public class UserController {
 
-    private UserService userService;
+    private ClientService clientService;
+    private EmployeeService employeeService;
     private ObjectMapper objectMapper;
     private ModelMapper modelMapper;
     @Autowired
-    public UserController(UserService userService, ObjectMapper objectMapper, ModelMapper modelMapper) {
-        this.userService = userService;
+    public UserController(ClientService clientService, ObjectMapper objectMapper, ModelMapper modelMapper, EmployeeService employeeService) {
+        this.clientService = clientService;
+        this.employeeService = employeeService;
         this.objectMapper = objectMapper;
         this.modelMapper = modelMapper;
     }
 
-    @PostMapping("login")
-    public ResponseEntity<ResponseLoginDto> login(@RequestBody RequestLoginDto requestLoginDto) {
+
+    @PostMapping("client/login")
+    public ResponseEntity<ResponseLoginDto> loginClient(@RequestBody RequestLoginDto requestLoginDto) {
         log.info(requestLoginDto.toString());
-        User user = userService.findByNameAndPassword(requestLoginDto.getName(), requestLoginDto.getPassword());
-        if (user!=null){
-            UserDto userDto = modelMapper.map(user, UserDto.class);
-            return ResponseEntity.ok(ResponseLoginDto.builder().token(this.generateToken(userDto, user.typeUser())).build());
+        Client client = clientService.findByNameAndPassword(requestLoginDto.getName(), requestLoginDto.getPassword());
+        if (client!=null){
+            UserDto userDto = modelMapper.map(client, UserDto.class);
+            return ResponseEntity.ok(ResponseLoginDto.builder().token(this.generateToken(userDto, client.typeUser())).build());
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
+    @PostMapping("backoffice/login")
+    public ResponseEntity<ResponseLoginDto> loginBackoffice(@RequestBody RequestLoginDto requestLoginDto) {
+        log.info(requestLoginDto.toString());
+        Employee employee = employeeService.findByNameAndPassword(requestLoginDto.getName(), requestLoginDto.getPassword());
+        if (employee!=null){
+            UserDto userDto = modelMapper.map(employee, UserDto.class);
+            return ResponseEntity.ok(ResponseLoginDto.builder().token(this.generateToken(userDto, employee.typeUser())).build());
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -75,7 +91,7 @@ public class UserController {
                     .claim("user", objectMapper.writeValueAsString(userDto))
                     .claim("authorities",grantedAuthorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                     .setIssuedAt(new Date(System.currentTimeMillis()))
-                    .setExpiration(new Date(System.currentTimeMillis() + 1000000))
+                    .setExpiration(new Date(System.currentTimeMillis() +  36000000))
                     .signWith(SignatureAlgorithm.HS512, JWT_SECRET.getBytes()).compact();
             return  token;
         } catch(Exception e) {
@@ -89,8 +105,8 @@ public class UserController {
 
     @PreAuthorize(value = "hasAuthority('CLIENT')")
     @PostMapping
-    public void addUser(@RequestBody User user) {
-         userService.add(user);
+    public void addUser(@RequestBody Client user) {
+        clientService.add(user);
     }
 
 }
