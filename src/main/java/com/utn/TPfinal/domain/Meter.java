@@ -1,21 +1,20 @@
 package com.utn.TPfinal.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="meters")
 public class Meter {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idMeter;
-
     private String serialNumber;
     private String passwordMeter;
     //fk with model

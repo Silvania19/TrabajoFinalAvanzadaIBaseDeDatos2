@@ -4,44 +4,51 @@ package com.utn.TPfinal.controller;
 import com.utn.TPfinal.domain.Meter;
 import com.utn.TPfinal.exception.FeeException;
 import com.utn.TPfinal.service.MeterService;
+import com.utn.TPfinal.util.EntityURLBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.security.PublicKey;
 
 @RestController
 @RequestMapping("/meter")
 public class MeterController {
-    @Autowired
-    MeterService meterService;
 
+    MeterService meterService;
+    @Autowired
+    public MeterController(MeterService meterService){
+        this.meterService=meterService;
+    }
+    @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
     @PostMapping
     public ResponseEntity addMeter(@RequestBody Meter meter) throws FeeException {
         Meter newMeter= meterService.add(meter);
-        URI location= ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(newMeter.getIdMeter())
-                .toUri();
+        URI location= EntityURLBuilder.buildURLString("meter", newMeter.getSerialNumber());
         return ResponseEntity.created(location).build();
     }
-
-    /*@PutMapping("/{idMeter}/address/{idAddress}/model/{idModel}/fee/{idFee}")
-
-    public void addAddressModelFeeToMeter(@PathVariable Integer idMeter, @PathVariable Integer idAddress, @PathVariable Integer idModel, @PathVariable Integer idFee){
-        meterService.addAddressModelFeeToMeter(idMeter,idAddress, idModel, idFee);
-    }*/
-    @PutMapping("/{idMeter}")
-    public void updateMeter (@PathVariable Integer idMeter, @RequestBody Meter meter){
-        meterService.updateMeter(idMeter, meter);
+    @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
+    @PutMapping("/{serialNumber}")
+    public ResponseEntity updateMeter (@PathVariable String serialNumber, @RequestBody Meter meter){
+        Meter meter1 =meterService.updateMeter(serialNumber, meter);
+        URI location = EntityURLBuilder.buildURLString("meter", meter1.getSerialNumber());
+        return  ResponseEntity.ok(location);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity deleteMeter(@PathVariable Integer id)
+    @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
+    @DeleteMapping("/{serialNumber}")
+    public ResponseEntity deleteMeter(@PathVariable String serialNumber)
     {
-         meterService.deleteMeter(id);
-        return ResponseEntity.ok().build();
+        try {
+            meterService.deleteMeter(serialNumber);
+            return ResponseEntity.ok().build();
+        }
+       catch (Exception e){
+            return ResponseEntity.notFound().build();
+       }
+
     }
 }

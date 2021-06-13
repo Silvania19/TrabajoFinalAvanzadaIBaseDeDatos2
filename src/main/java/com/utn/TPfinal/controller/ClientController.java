@@ -14,22 +14,13 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/backoffice")
-public class BackOfficeController {
+@RequestMapping("/apiClient")
+public class ClientController {
 
     ClientService clientService;
-
     @Autowired
-    public BackOfficeController(ClientService clientService){
-        this.clientService=clientService;
-    }
-    @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
-    @GetMapping("/clients")
-    public List<Client> moreConsumersOfDateRange(
-            @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date beginDate,
-            @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") Date endDate){
-        List<Client> userList= clientService.tenMoreConsumers(beginDate, endDate);
-        return  userList;
+    public ClientController(ClientService clientService){
+        this.clientService= clientService;
     }
 
 

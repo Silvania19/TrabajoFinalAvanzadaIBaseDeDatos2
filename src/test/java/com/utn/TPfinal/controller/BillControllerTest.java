@@ -2,7 +2,6 @@ package com.utn.TPfinal.controller;
 
 import com.utn.TPfinal.domain.Bill;
 import com.utn.TPfinal.domain.dto.UserDto;
-import com.utn.TPfinal.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

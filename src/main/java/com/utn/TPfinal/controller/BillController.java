@@ -1,10 +1,8 @@
 package com.utn.TPfinal.controller;
 
 import com.utn.TPfinal.domain.Bill;
-import com.utn.TPfinal.domain.Client;
 import com.utn.TPfinal.domain.dto.UserDto;
 import com.utn.TPfinal.service.BillService;
-import com.utn.TPfinal.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/bills")
 public class BillController {
 
     BillService billService;
@@ -31,6 +29,8 @@ public class BillController {
     //android - 2) Consulta de facturas por rango de fechas.
     //client/1/fecha.
     //backoffice/clients/1/rangodefecha portal del usuario
+    /*@PreAuthorize(value= "hasAuthority('BACKOFFICE') or authentication.principal.id.equals(#id)")*/
+
     @PreAuthorize(value = "hasAuthority('CLIENT')")
     @GetMapping("clientApi/client/{idClient}")
     public ResponseEntity<List<Bill>>getBillsByRangeOfDatesByUser(Authentication authentication,
