@@ -34,13 +34,11 @@ public class BillService {
         this.billRepository = billRepository;
     }
 
-
     public Page<Bill> getBillsByUserAndDateBetween(Integer idClient, Date beginDate, Date endDate, Pageable pageable) {
         return billRepository.findAllBillsByUserAndDateBetween(idClient, beginDate, endDate, pageable);
     }
 
-    public List<Bill> getAllBillsByIdClient(Integer idClient, Integer idDomicilio) {
-        return billRepository.findAllByClientId(idClient, idDomicilio);
-
+     public List<Bill> findUnpaidBillsByClientIdAndAddressId(Integer idClient, Integer idAddress) {
+        return billRepository.findUnpaidBillsByClientIdAndAddressId(idClient, idAddress);
     }
 }

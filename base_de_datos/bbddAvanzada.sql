@@ -11,22 +11,10 @@ employees - empleados
 measurement - medida
 */
 
-/*significados
-measurings - mediciones
-meter - medidores
-bills - facturas
-fees - tarifas
-models - modelos
-brands - marcas
-clients - clientes
-employees - empleados
-
-measurement - medida
-*/
-
 CREATE DATABASE adea;
 USE adea;
 DROP DATABASE adea;
+
 CREATE TABLE employees(
                           id INT AUTO_INCREMENT,
                           NAME VARCHAR(50),
@@ -66,17 +54,6 @@ CREATE TABLE clients(
                         CONSTRAINT pk_id_client PRIMARY KEY (id)
 );
 
-CREATE TABLE bills(
-                      id_bill INT AUTO_INCREMENT,
-                      amount FLOAT,
-                      pay BOOLEAN,
-                      first_measurement DATETIME,
-                      last_measurement DATETIME,
-                      id_client INT,
-
-                      CONSTRAINT pk_id_bill PRIMARY KEY (id_bill),
-                      CONSTRAINT fk_id_client_bill FOREIGN KEY (id_client) REFERENCES clients(id)
-);
 
 CREATE TABLE addresses(
                           id_address INT AUTO_INCREMENT,
@@ -86,6 +63,21 @@ CREATE TABLE addresses(
                           CONSTRAINT pk_id_address PRIMARY KEY (id_address),
                           CONSTRAINT fk_id_client_address FOREIGN KEY (id_client) REFERENCES clients(id)
 );
+
+CREATE TABLE bills(
+                      id_bill INT AUTO_INCREMENT,
+                      amount FLOAT,
+                      pay BOOLEAN,
+                      first_measurement DATETIME,
+                      last_measurement DATETIME,
+                      id_client INT,
+                      id_address INT,
+
+                      CONSTRAINT pk_id_bill PRIMARY KEY (id_bill),
+                      CONSTRAINT fk_id_client_bill FOREIGN KEY (id_client) REFERENCES clients(id),
+                      CONSTRAINT fk_id_address_bill FOREIGN KEY (id_address) REFERENCES addresses(id_address)
+);
+
 CREATE TABLE meters(
 
                        id_address INT,
