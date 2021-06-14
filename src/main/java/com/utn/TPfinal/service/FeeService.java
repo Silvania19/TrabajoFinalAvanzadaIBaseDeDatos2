@@ -18,7 +18,6 @@ public class FeeService {
 
     public Fee add(Fee fee) throws FeeException {
             return feeDao.save(fee);
-
     }
 
     public Fee updateFee(Integer id, Fee fee)throws FeeException {

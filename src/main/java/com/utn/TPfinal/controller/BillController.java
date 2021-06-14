@@ -65,4 +65,10 @@ public class BillController {
         System.out.print(bills);
         return  billService.getAllBillsByIdClient(idClient);
     }
+    //3) client Consulta de deuda (Facturas impagas)
+
+    public List<Bill>getBillsNotPay(Integer idClient){
+        List<Bill> bills= billService.getBillsByIdClientNotPay(idClient);
+        return  bills;
+    }
 }

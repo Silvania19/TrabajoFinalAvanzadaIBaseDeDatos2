@@ -20,6 +20,7 @@ public class Measuring{
     private Integer idMeasuring;
     private float value;
     private Date date;
+    private double priceMeasuring;
     // fk with bill
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="id_bill", nullable = false)

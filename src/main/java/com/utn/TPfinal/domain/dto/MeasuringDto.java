@@ -2,6 +2,8 @@ package com.utn.TPfinal.domain.dto;
 
 import lombok.*;
 
+import java.sql.Date;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -10,6 +12,6 @@ public class MeasuringDto {
 
     String serialNumber;
     float value;
-    String date;//date tipo
+    Date date;//date tipo
     String password;//no lo tiene el measurig
 }

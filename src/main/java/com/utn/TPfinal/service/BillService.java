@@ -38,4 +38,8 @@ public class BillService {
         return billRepository.findAllByClientId(idClient);
 
     }
+
+    public List<Bill> getBillsByIdClientNotPay(Integer idClient) {
+        return billRepository.findByClientIdNotPay(idClient);
+    }
 }
