@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MeterRepository extends JpaRepository<Meter, Integer> {
+public interface MeterRepository extends JpaRepository<Meter, String> {
     Meter findBySerialNumberAndPasswordMeter(String serialNumber, String password);
 
     Meter findBySerialNumber(String serialNumber);

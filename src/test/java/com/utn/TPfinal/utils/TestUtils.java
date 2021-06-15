@@ -4,6 +4,7 @@ import com.utn.TPfinal.domain.*;
 import com.utn.TPfinal.domain.dto.RequestLoginDto;
 import com.utn.TPfinal.domain.dto.ResponseLoginDto;
 import com.utn.TPfinal.domain.dto.UserDto;
+import com.utn.TPfinal.projecciones.Consumption;
 import com.utn.TPfinal.service.EmployeeService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -58,7 +59,7 @@ public class TestUtils {
                 .passwordMeter("123")
                 .fee(aFee())
                 .address(aAdrress())
-                .model(aModel())
+                //.model(aModel())
                 .build();
         return  meter;
     }
@@ -85,7 +86,7 @@ public class TestUtils {
                 .build();
         return brand;
     }
-    public static Page<Bill> aPageBills() throws ParseException {
+    public static Page<Bill> aPageBills(){
         return new PageImpl<>(List.of(aBill()));
     }
 
@@ -121,8 +122,27 @@ public class TestUtils {
     public static Client aClient2(){
         Client client = new Client();
         client.setId(1);
-        client.setName("silvania");
+        client.setName("lucas");
         client.setLastname("ortega");
+        client.setPassword("1234");
         return client;
     }
+    public  static  Measuring newMeasuring(){
+        Measuring measuring=Measuring.builder()
+                .idMeasuring(1)
+                //.meter(aMeter())
+                .value(100)
+                .priceMeasuring(200)
+                .build();
+        return measuring;
+    }
+    public static Page<Measuring> aPageMeasuring() {
+        return new PageImpl<>(List.of(newMeasuring()));
+    }
+
+   /* public static Consumption newConsumption(){
+        Consumption consumption= new () {
+
+        }
+    }*/
 }

@@ -1,7 +1,7 @@
 package com.utn.TPfinal.service;
 
 import com.utn.TPfinal.domain.Measuring;
-import com.utn.TPfinal.domain.dto.ConsuptionDto;
+import com.utn.TPfinal.domain.dto.MeasuringDtoQuery;
 import com.utn.TPfinal.projecciones.Consumption;
 import com.utn.TPfinal.repository.MeasuringRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +25,9 @@ public class MeasuringService {
 
     public Consumption consumption(Integer id, Date beginDate, Date lastDate) {
         return  measuringRepository.consumption(id, beginDate, lastDate);
-    }
+    }/*poner en el test los metodos de la interfaz*/
 
-    public Page<Measuring> measuringRangeDateByAddress(Integer idAddress, Date beginDate, Date endDate, Pageable pageable) {
+    public Page<MeasuringDtoQuery> measuringRangeDateByAddress(Integer idAddress, Date beginDate, Date endDate, Pageable pageable) {
         return measuringRepository.getMeasuringByAddressAndRangeDate(idAddress, beginDate, endDate, pageable);
     }
 }
