@@ -20,16 +20,22 @@ public interface BillRepository extends JpaRepository<Bill, Integer> {
             , nativeQuery = true)
     List<Bill> findAllBillsByDateBetween(Date beginDate, Date endDate);*/
 
-    //2) Consulta de facturas por rango de fechas. -- agregar filtro por user
+    //2) client - Consulta de facturas por rango de fechas.
 
     @Query(value = "SELECT u FROM Bill u WHERE (u.client.id = :idClient AND u.firstMeasurement BETWEEN :firstDate AND :lastDate) AND " +
             "(u.lastMeasurement BETWEEN :firstDate AND :lastDate)")
     Page<Bill> findAllBillsByUserAndDateBetween(Integer idClient, Date firstDate, Date lastDate, Pageable pageable);
 
-    /** backoffice 4) Consulta de facturas impagas por cliente y domicilio.**/
-   /* @Query( value= "SELECT * FROM  bills  WHERE  id_client = :idClient" , nativeQuery = true)*/
-   /* @Query(value = "select b from Bill b where (b.client = :idClient)")*/
-    List<Bill>findAllByClientId(Integer idClient);
      @Query( value= "SELECT * FROM  bills  WHERE  id_client = :idClient and pay=false" , nativeQuery = true)
     List<Bill> findByClientIdNotPay(Integer idClient);
+
+    /** backoffice 4) Consulta de facturas impagas por cliente y domicilio.**/
+
+    @Query(value= "SELECT * FROM addresses a\n" +
+            "INNER JOIN clients c ON c.id = a.id_client\n" +
+            "INNER JOIN bills b ON b.id_client = c.id\n" +
+            "WHERE b.pay = FALSE AND c.id = :idClient AND a.id_address = :idAddress AND b.id_address = a.id_address\n" +
+            "GROUP BY b.id_bill;", nativeQuery = true)
+    List<Bill>findUnpaidBillsByClientIdAndAddressId(Integer idClient, Integer idAddress);
+
 }

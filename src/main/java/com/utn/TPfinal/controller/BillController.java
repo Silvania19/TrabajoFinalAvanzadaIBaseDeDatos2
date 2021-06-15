@@ -56,19 +56,18 @@ public class BillController {
                 body(page.getContent());
     }
 
-    /** backoffice 4) Consulta de facturas impagas por cliente y domicilio.**/
+    /* backoffice 4) Consulta de facturas impagas por cliente y domicilio.*/
     @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
-    @GetMapping("client/{idClient}")
-    public List<Bill>getBills(@PathVariable Integer idClient){
-        System.out.print("holaaa");
-        List<Bill> bills= billService.getAllBillsByIdClient(idClient);
-        System.out.print(bills);
-        return  billService.getAllBillsByIdClient(idClient);
+    @GetMapping("client/idClient/{idClient}/idAddress/{idAddress}")
+    public List<Bill>getUnpaidBillsByClientAndAddress(@PathVariable Integer idClient, @PathVariable Integer idAddress){
+        return billService.findUnpaidBillsByClientIdAndAddressId(idClient, idAddress);
     }
+
     //3) client Consulta de deuda (Facturas impagas)
 
     public List<Bill>getBillsNotPay(Integer idClient){
         List<Bill> bills= billService.getBillsByIdClientNotPay(idClient);
         return  bills;
     }
+
 }

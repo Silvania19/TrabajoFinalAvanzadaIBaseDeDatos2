@@ -36,23 +36,19 @@ public class TestUtils {
        return fee;
     }
 
-    /*public static Client aClient(){
-        User client = User.builder().id(1)
-                .name("pepe")
-                .lastname("fulanito")
-                .password("1234")
-                .build();
-        return (Client)client;
-    }*/
+    public static Client aClient(){
+        Client client = new Client();
+        client.setId(1);
+        client.setName("carlos");
+        return client;
+    }
 
-    public static Bill aBill() throws ParseException{
+    public static Bill aBill() {
        Bill bill= Bill.builder()
                .idBill(1)
                .amount(100.00)
                .pay(false)
-               .firstMeasurement(aDate1())
-               .lastMeasurement(aDate2())
-               //.client(aClient())
+               .client(aClient())
                .build();
        return bill;
     }

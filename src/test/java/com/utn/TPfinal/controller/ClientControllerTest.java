@@ -38,7 +38,7 @@ public class ClientControllerTest {
        clientController= new ClientController(clientService, modelMapper, billController);
    }
    @Test
-    public void billsNotPayOk() throws ParseException {
+    public void billsNotPayOk() {
        Authentication authentication= mock(Authentication.class);
        List<Bill> bills= List.of(aBill());
        when(modelMapper.map(authentication.getPrincipal(), Client.class)).thenReturn(aClient2());

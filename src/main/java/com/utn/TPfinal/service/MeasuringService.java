@@ -1,9 +1,14 @@
 package com.utn.TPfinal.service;
 
 import com.utn.TPfinal.domain.Measuring;
+import com.utn.TPfinal.domain.dto.ConsuptionDto;
+import com.utn.TPfinal.projecciones.Consumption;
 import com.utn.TPfinal.repository.MeasuringRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
+import java.util.Date;
 
 @Service
 
@@ -16,5 +21,13 @@ public class MeasuringService {
     }
     public Measuring add(Measuring measuring) {
         return measuringRepository.save(measuring);
+    }
+
+    public Consumption consumption(Integer id, Date beginDate, Date lastDate) {
+        return  measuringRepository.consumption(id, beginDate, lastDate);
+    }
+
+    public Page<Measuring> measuringRangeDateByAddress(Integer idAddress, Date beginDate, Date endDate, Pageable pageable) {
+        return measuringRepository.getMeasuringByAddressAndRangeDate(idAddress, beginDate, endDate, pageable);
     }
 }
