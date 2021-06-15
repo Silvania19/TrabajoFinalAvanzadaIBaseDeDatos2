@@ -14,9 +14,12 @@ import java.util.List;
     @Service
 
     public class ClientService {
+        ClientRepository clientRepository;
 
         @Autowired
-        ClientRepository clientRepository;
+        public ClientService(ClientRepository clientRepository){
+            this.clientRepository= clientRepository;
+        }
 
         public void add(Client user) {
             clientRepository.save(user);

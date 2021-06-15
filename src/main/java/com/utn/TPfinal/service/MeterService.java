@@ -23,7 +23,7 @@ public class MeterService {
             return meterDao.save(meter);
         }
         else {
-            throw new FeeException("Error en agergar. Datos no correctos");
+            throw new FeeException("Error en agregar. Datos no correctos");
         }
 
     }

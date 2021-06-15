@@ -29,8 +29,12 @@ public class BackOfficeController {
             @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date beginDate,
             @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") Date endDate){
         List<Client> userList= clientService.tenMoreConsumers(beginDate, endDate);
+        
         return  userList;
+        //   /  return residenceRepository.findAll(pageable).map(residence -> modelMapper.map(residence, ResidenceDto.class));
     }
+
+
 
 
 }

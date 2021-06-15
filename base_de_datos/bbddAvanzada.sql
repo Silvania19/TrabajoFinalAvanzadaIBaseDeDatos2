@@ -98,7 +98,7 @@ CREATE TABLE measurings(
                            DATE DATETIME,
                            id_bill INT,
                            serial_number VARCHAR(50),
-
+                           price_measuring double,
                            CONSTRAINT pk_id_measuring PRIMARY KEY (id_measuring),
                            CONSTRAINT fk_id_bill FOREIGN KEY (id_bill) REFERENCES bills(id_bill),
                            CONSTRAINT fk_serial_number FOREIGN KEY (serial_number) REFERENCES meters(serial_number)

@@ -18,7 +18,7 @@ public class Meter {
     private String serialNumber;
     private String passwordMeter;
     //fk with model
-    @ManyToOne(fetch = FetchType.LAZY)
+   @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="id_model", nullable = false)
     private Model model;
 

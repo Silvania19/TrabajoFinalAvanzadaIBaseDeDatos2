@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
+
 
 @Repository
 public interface BillRepository extends JpaRepository<Bill, Integer> {
@@ -25,6 +25,9 @@ public interface BillRepository extends JpaRepository<Bill, Integer> {
     @Query(value = "SELECT u FROM Bill u WHERE (u.client.id = :idClient AND u.firstMeasurement BETWEEN :firstDate AND :lastDate) AND " +
             "(u.lastMeasurement BETWEEN :firstDate AND :lastDate)")
     Page<Bill> findAllBillsByUserAndDateBetween(Integer idClient, Date firstDate, Date lastDate, Pageable pageable);
+
+     @Query( value= "SELECT * FROM  bills  WHERE  id_client = :idClient and pay=false" , nativeQuery = true)
+    List<Bill> findByClientIdNotPay(Integer idClient);
 
     /** backoffice 4) Consulta de facturas impagas por cliente y domicilio.**/
 

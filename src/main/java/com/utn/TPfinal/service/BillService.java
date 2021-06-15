@@ -41,4 +41,8 @@ public class BillService {
      public List<Bill> findUnpaidBillsByClientIdAndAddressId(Integer idClient, Integer idAddress) {
         return billRepository.findUnpaidBillsByClientIdAndAddressId(idClient, idAddress);
     }
+
+    public List<Bill> getBillsByIdClientNotPay(Integer idClient) {
+        return billRepository.findByClientIdNotPay(idClient);
+    }
 }
