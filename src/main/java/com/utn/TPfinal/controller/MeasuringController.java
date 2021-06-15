@@ -11,7 +11,10 @@ import com.utn.TPfinal.service.MeterService;
 import com.utn.TPfinal.util.EntityURLBuilder;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -50,9 +53,22 @@ public class MeasuringController {
 
     @PreAuthorize(value = "hasAnyAuthority('CLIENT')")
     @GetMapping("client/measuringByRangeOfDates")
-    public List<Bill> getMeasuringsByRangeOfDates(Authentication authentication,
+    public ResponseEntity<List<Measuring>>getMeasuringsByRangeOfDates(Authentication authentication,
                                                   @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date beginDate,
-                                                  @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date endDate){
-        return null;
+                                                  @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date endDate,
+                                                  Pageable pageable){
+        UserDto userDto = (UserDto) authentication.getPrincipal();
+        Page pageOfMeasurings = measuringService.findMeasuringsByRangeOfDatesAndClient(userDto.getId(), beginDate, endDate, pageable);
+
+        return response(pageOfMeasurings);
+    }
+
+    private ResponseEntity response(Page page) {
+        HttpStatus httpStatus = page.getContent().isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK;
+        return ResponseEntity.
+                status(httpStatus).
+                header("X-Total-Count", Long.toString(page.getTotalElements())).
+                header("X-Total-Pages", Long.toString(page.getTotalPages())).
+                body(page.getContent());
     }
 }
