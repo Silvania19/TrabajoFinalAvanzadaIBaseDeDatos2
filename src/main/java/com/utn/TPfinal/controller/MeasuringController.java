@@ -75,7 +75,6 @@ public class MeasuringController {
         }else {
           return ResponseEntity.noContent().build();
         }
-
     }
 
     /**BACKOFFICE**/
