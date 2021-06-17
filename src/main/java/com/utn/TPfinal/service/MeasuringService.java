@@ -1,7 +1,7 @@
 package com.utn.TPfinal.service;
 
 import com.utn.TPfinal.domain.Measuring;
-import com.utn.TPfinal.domain.dto.MeasuringDtoQuery;
+import com.utn.TPfinal.projecciones.MeasuringDtoQuery;
 import com.utn.TPfinal.projecciones.Consumption;
 import com.utn.TPfinal.repository.MeasuringRepository;
 import org.springframework.beans.factory.annotation.Autowired;

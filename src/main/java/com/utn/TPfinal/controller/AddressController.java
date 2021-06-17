@@ -6,6 +6,7 @@ import com.utn.TPfinal.exception.FeeException;
 import com.utn.TPfinal.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -19,6 +20,7 @@ public class AddressController {
     AddressService addressService;
 
     @PostMapping
+    @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
     public ResponseEntity newAddress(@RequestBody Address address) throws AddressException {
         Address newAddress = addressService.newAddress(address);
         URI location = ServletUriComponentsBuilder

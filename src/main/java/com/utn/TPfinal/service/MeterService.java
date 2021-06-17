@@ -47,7 +47,7 @@ public class MeterService {
     public void deleteMeter(String serialNumber) {
         if(meterDao.findBySerialNumber(serialNumber) !=null){
             meterDao.removeBySerialNumber(serialNumber);
-          //  meterDao.BySerialNumber(serialNumber);
+          // meterDao.BySerialNumber(serialNumber);
         }
         else {
             throw  new FeeException("error el id no existe");
