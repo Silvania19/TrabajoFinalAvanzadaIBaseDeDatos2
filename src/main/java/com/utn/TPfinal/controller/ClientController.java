@@ -34,6 +34,7 @@ public class ClientController {
         this.modelMapper = modelMapper;
         this.billController = billController;
     }
+
     @PreAuthorize(value = "hasAuthority('CLIENT')")
     @GetMapping("/unpaid")
     public ResponseEntity<List<Bill>> billsNotPay(Authentication authentication) {

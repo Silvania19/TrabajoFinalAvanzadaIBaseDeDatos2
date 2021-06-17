@@ -4,8 +4,12 @@ import com.utn.TPfinal.domain.Address;
 import com.utn.TPfinal.exception.AddressException;
 import com.utn.TPfinal.exception.FeeException;
 import com.utn.TPfinal.service.AddressService;
+import com.utn.TPfinal.util.EntityURLBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -18,14 +22,13 @@ public class AddressController {
     @Autowired
     AddressService addressService;
 
+    @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
     @PostMapping
     public ResponseEntity newAddress(@RequestBody Address address) throws AddressException {
+        System.out.println("holaaaaaaaaaaaaa");
         Address newAddress = addressService.newAddress(address);
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(newAddress.getIdAddress())
-                .toUri();
+
+        URI location = EntityURLBuilder.buildURL("address", newAddress.getIdAddress());
         return ResponseEntity.created(location).build();
     }
 
@@ -33,12 +36,15 @@ public class AddressController {
     //  y deberia retornar  http://localhost:8080/address/1
     @PutMapping("/{id}")
     public ResponseEntity updateAddress(@PathVariable Integer id, @RequestBody Address address) throws AddressException {
-        Address newAddress= addressService.updateAddress(id, address);
-        URI location= ServletUriComponentsBuilder
+        Address newAddress = addressService.updateAddress(id, address);
+        URI location = EntityURLBuilder.buildURL("address", id);
+
+
+        /*URI location= ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(newAddress.getIdAddress())
-                .toUri();
+                .toUri();*/
         return ResponseEntity.ok(location);
     }
 
@@ -53,27 +59,3 @@ public class AddressController {
         addressService.addClientToAddress(id, idClient);
     }
 }
-
-/*
-
-[17:28, 19/5/2021] Silvania: @PostMapping(consumes = "application/json")
-    public ResponseEntity newCountry(@RequestBody Country country) throws CountryExistsException {
-        Country newCountry = countryService.newCountry(country);
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(newCountry.getCode())
-                .toUri();
-        return ResponseEntity.created(location).build();
-    }
-
-[17:29, 19/5/2021] Silvania: public Country newCountry(Country country) throws CountryExistsException {
-        if (!countryRepository.existsById(country.getCode())) {
-            return countryRepository.save(country);
-        } else {
-            throw new CountryExistsException();
-        }
-    }
-
-
-*/

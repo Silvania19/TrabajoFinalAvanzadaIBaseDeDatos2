@@ -17,9 +17,13 @@ public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_address")
     private Integer idAddress;
 
+    @Column(name = "name_address")
     private String nameAddress;
+
+    @Column(name = "number_address")
     private String numberAddress;
 
     //fk with client

@@ -18,6 +18,7 @@ public class MeterService {
     public MeterService(MeterRepository meterRepository){
         this.meterDao=meterRepository;
     }
+
     public Meter add(Meter meter) {
         if (meterDao.findBySerialNumber(meter.getSerialNumber()) == null) {
             return meterDao.save(meter);

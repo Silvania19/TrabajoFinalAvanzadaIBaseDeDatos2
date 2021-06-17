@@ -15,6 +15,7 @@ public class EntityURLBuilder{
                 .toUri();
 
     }
+
     public static URI buildURLString(String entity, String serialNumber)
     {
         return ServletUriComponentsBuilder

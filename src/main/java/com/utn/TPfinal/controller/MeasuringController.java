@@ -88,7 +88,7 @@ public class MeasuringController {
                                                        @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date endDate,
                                                        Pageable pageable){
 
-        Page pageMeasuring= measuringService.measuringRangeDateByAddress(idAddress, beginDate, endDate, pageable);
+        Page pageMeasuring = measuringService.measuringRangeDateByAddress(idAddress, beginDate, endDate, pageable);
 
         return response(pageMeasuring);
     }

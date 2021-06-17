@@ -19,10 +19,12 @@ import java.security.PublicKey;
 public class MeterController {
 
     MeterService meterService;
+
     @Autowired
     public MeterController(MeterService meterService){
         this.meterService=meterService;
     }
+
     @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
     @PostMapping
     public ResponseEntity addMeter(@RequestBody Meter meter) throws FeeException {
@@ -30,6 +32,7 @@ public class MeterController {
         URI location= EntityURLBuilder.buildURLString("meter", newMeter.getSerialNumber());
         return ResponseEntity.created(location).build();
     }
+
     @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
     @PutMapping("/{serialNumber}")
     public ResponseEntity updateMeter (@PathVariable String serialNumber, @RequestBody Meter meter){

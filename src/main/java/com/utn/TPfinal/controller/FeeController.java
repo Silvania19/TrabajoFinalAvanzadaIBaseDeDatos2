@@ -24,6 +24,7 @@ public class FeeController {
     public FeeController(FeeService feeService){
         this.feeService = feeService;
     }
+
     @PostMapping
     /* con esta anotacion se determina quien esta autorizado a realizar el metodo*/
     @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
@@ -40,6 +41,7 @@ public class FeeController {
                }*/
 
     }
+
     @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
     @PutMapping("/{id}")
     public ResponseEntity updateFee(@PathVariable Integer id, @RequestBody Fee fee) throws NotFoundException {
@@ -47,9 +49,9 @@ public class FeeController {
         URI location= EntityURLBuilder.buildURL("fee", newFee.getIdFee());
         return ResponseEntity.ok(location);
     }
+
     @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
     @DeleteMapping("/{id}")
-
     public ResponseEntity deleteFee(@PathVariable Integer id)
     {
          feeService.deleteFee(id);
