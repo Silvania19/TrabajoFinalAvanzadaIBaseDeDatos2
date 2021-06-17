@@ -4,7 +4,7 @@ import com.utn.TPfinal.domain.Measuring;
 import com.utn.TPfinal.domain.Meter;
 import com.utn.TPfinal.domain.dto.MeasuringDto;
 import com.utn.TPfinal.domain.dto.UserDto;
-import com.utn.TPfinal.projecciones.Consumption;
+import com.utn.TPfinal.projections.Consumption;
 import com.utn.TPfinal.service.MeasuringService;
 import com.utn.TPfinal.service.MeterService;
 import org.modelmapper.ModelMapper;

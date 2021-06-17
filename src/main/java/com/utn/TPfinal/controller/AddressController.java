@@ -22,10 +22,9 @@ public class AddressController {
     @Autowired
     AddressService addressService;
 
-    @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
     @PostMapping
+    @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
     public ResponseEntity newAddress(@RequestBody Address address) throws AddressException {
-        System.out.println("holaaaaaaaaaaaaa");
         Address newAddress = addressService.newAddress(address);
 
         URI location = EntityURLBuilder.buildURL("address", newAddress.getIdAddress());
@@ -37,25 +36,19 @@ public class AddressController {
     @PutMapping("/{id}")
     public ResponseEntity updateAddress(@PathVariable Integer id, @RequestBody Address address) throws AddressException {
         Address newAddress = addressService.updateAddress(id, address);
-        URI location = EntityURLBuilder.buildURL("address", id);
+        URI location = EntityURLBuilder.buildURL("address", newAddress.getIdAddress());
 
-
-        /*URI location= ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(newAddress.getIdAddress())
-                .toUri();*/
         return ResponseEntity.ok(location);
     }
-
+ // devolver response
     @DeleteMapping("/{id}")
     public void deleteFee(@PathVariable Integer id)
     {
         addressService.deleteFee(id);
     }
-
-    @PutMapping("/{id}/client/{idClient}")
+    // devolver response
+    /*@PutMapping("/{id}/client/{idClient}")
     public void addClientToAddress(@PathVariable Integer id, @PathVariable Integer idClient){
         addressService.addClientToAddress(id, idClient);
-    }
+    }*/
 }

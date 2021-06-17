@@ -157,13 +157,13 @@ BEGIN
       DECLARE vFinished INTEGER DEFAULT 0; /*variable para controlar los erorres, para cortar el cursor*/
 
       /* variables que voy a necesitar, para obtener el resto de los datos*/
-      DECLARE vid_meter INT ;
+      DECLARE vserial_number VARCHAR(50) ;
       DECLARE vid_address INT;
       DECLARE vid_fee INT;
 
      /*declare el cursor*/
       DECLARE cur_billing CURSOR FOR
-      SELECT id_meter, id_address, id_fee
+      SELECT serial_number, id_address, id_fee
       FROM meters ;
 
       /* declaro un handler para maejar las execpciones dentro, con CONTINUE para que siga la ejecucion en caso de una excepcion.
@@ -172,25 +172,25 @@ BEGIN
 
 
 	    OPEN cur_billing;
-		    FETCH cur_billing INTO vid_meter, vid_address, vid_fee;
+		    FETCH cur_billing INTO vserial_number, vid_address, vid_fee;
 		    WHILE (vFinished=0) DO
 
 		        SET id_clientR= ( SELECT id_client FROM addresses
 		        WHERE  id_address = vid_address);
 
 
-			SET amountR = (SELECT SUM(measurement) FROM measurings
-				WHERE id_bill IS NULL AND id_meter = vid_meter
-				GROUP BY id_meter)* (SELECT price_fee FROM fees WHERE id_fee = vid_fee);
+			SET amountR = (SELECT SUM(VALUE) FROM measurings
+				WHERE id_bill IS NULL AND serial_number = vserial_number
+				GROUP BY serial_number)* (SELECT price_fee FROM fees WHERE id_fee = vid_fee);
 
-			SET last_measurementR = (  SELECT MAX(TIME)
+			SET last_measurementR = (  SELECT MAX(DATE)
 							 FROM measurings
-							 WHERE id_meter = vid_meter AND id_bill IS NULL
-							 GROUP BY id_bill);
-		       SET first_measurementR = (  SELECT MIN(TIME)
+							 WHERE serial_number = vserial_number AND id_bill IS NULL
+							 GROUP BY serial_number);
+		       SET first_measurementR = (  SELECT MIN(DATE)
 							 FROM measurings
-							 WHERE id_meter = vid_meter AND id_bill IS NULL
-							 GROUP BY id_bill);
+							 WHERE serial_number = vserial_number AND id_bill IS NULL
+							 GROUP BY serial_number);
 
 		        /*INSERTO LA BILL, CON PARCIALMENTE LOS DATOS*/
 		         INSERT INTO bills(amount, pay, first_measurement, last_measurement, id_client)
@@ -198,9 +198,9 @@ BEGIN
 
 			/*Actualizar las measuring */
 			UPDATE measurings SET id_bill = LAST_INSERT_ID()
-			WHERE id_meter = vid_meter AND id_bill IS NULL;
+			WHERE serial_number = vserial_number AND id_bill IS NULL;
 
-		       FETCH cur_billing INTO vid_meter, vid_address, vid_fee;
+		       FETCH cur_billing INTO vserial_number, vid_address, vid_fee;
 		    END WHILE;
 	    CLOSE cur_billing;
 
@@ -225,6 +225,26 @@ SHOW EVENTS;
 
 SHOW WARNINGS
 
+/*
+3) Generar las estructuras necesarias para el cálculo de precio de cada medición y las
+inserción de la misma. Se debe tener en cuenta que una modificación en la tarifa debe
+modificar el precio de cada una de estas mediciones en la base de datos y generar una
+factura de ajuste a la nueva medición de cada una de las mediciones involucradas con esta
+tarifa.
 
+*/
 
+DROP TRIGGER IF EXISTS TIA_MEASURINGS_CALC_PRECIO;
+ DELIMITER //
+ CREATE TRIGGER TIB_MEASURINGS_CALC_PRECIO BEFORE INSERT ON measurings FOR EACH ROW
+ BEGIN
+                DECLARE price FLOAT DEFAULT 0;
+
+                SELECT fe.price_fee INTO price
+                FROM fees fe
+		        INNER JOIN meters met ON fe.id_fee = met.id_fee
+		        WHERE met.serial_number = new.serial_number;
+
+                SET new.price_measuring = price * new.value;
+ END;//
 

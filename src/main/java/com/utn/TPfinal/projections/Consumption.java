@@ -1,4 +1,4 @@
-package com.utn.TPfinal.projecciones;
+package com.utn.TPfinal.projections;
 
 public interface Consumption {
 

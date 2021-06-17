@@ -38,8 +38,8 @@ public class BillService {
         return billRepository.findAllBillsByUserAndDateBetween(idClient, beginDate, endDate, pageable);
     }
 
-     public List<Bill> findUnpaidBillsByClientIdAndAddressId(Integer idClient, Integer idAddress) {
-        return billRepository.findUnpaidBillsByClientIdAndAddressId(idClient, idAddress);
+     public Page<Bill> getUnpaidBillsByClientIdAndAddressId(Integer idClient, Integer idAddress, Pageable pageable) {
+        return billRepository.findUnpaidBillsByClientIdAndAddressId(idClient, idAddress, pageable);
     }
 
     public List<Bill> getBillsByIdClientNotPay(Integer idClient) {

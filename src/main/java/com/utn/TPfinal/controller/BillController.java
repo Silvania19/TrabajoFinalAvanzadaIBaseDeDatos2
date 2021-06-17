@@ -3,6 +3,7 @@ package com.utn.TPfinal.controller;
 import com.utn.TPfinal.domain.Bill;
 import com.utn.TPfinal.domain.dto.UserDto;
 import com.utn.TPfinal.service.BillService;
+import com.utn.TPfinal.util.ResponseEntityList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,26 +42,20 @@ public class BillController {
         UserDto userDto = (UserDto) authentication.getPrincipal();
         if(userDto.getId() == idClient){
             Page pageOfBills = billService.getBillsByUserAndDateBetween(idClient, beginDate, endDate, pageable);
-            return response(pageOfBills);
+            return ResponseEntityList.response(pageOfBills);
         }else{
             return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 
-    private ResponseEntity response(Page page) {
-        HttpStatus httpStatus = page.getContent().isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK;
-        return ResponseEntity.
-                status(httpStatus).
-                header("X-Total-Count", Long.toString(page.getTotalElements())).
-                header("X-Total-Pages", Long.toString(page.getTotalPages())).
-                body(page.getContent());
-    }
-
     /* backoffice 4) Consulta de facturas impagas por cliente y domicilio.*/
     @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
     @GetMapping("client/idClient/{idClient}/idAddress/{idAddress}")
-    public List<Bill>getUnpaidBillsByClientAndAddress(@PathVariable Integer idClient, @PathVariable Integer idAddress){
-        return billService.findUnpaidBillsByClientIdAndAddressId(idClient, idAddress);
+    public ResponseEntity<List<Bill>>getUnpaidBillsByClientAndAddress(@PathVariable Integer idClient,
+                                                                      @PathVariable Integer idAddress,
+                                                                      Pageable pageable){
+        Page pageOfBills = billService.getUnpaidBillsByClientIdAndAddressId(idClient, idAddress, pageable);
+        return ResponseEntityList.response(pageOfBills);
     }
 
     //3) client Consulta de deuda (Facturas impagas)
@@ -69,5 +64,7 @@ public class BillController {
         List<Bill> bills= billService.getBillsByIdClientNotPay(idClient);
         return  bills;
     }
+
+
 
 }

@@ -4,15 +4,11 @@ import com.utn.TPfinal.domain.*;
 import com.utn.TPfinal.domain.dto.RequestLoginDto;
 import com.utn.TPfinal.domain.dto.ResponseLoginDto;
 import com.utn.TPfinal.domain.dto.UserDto;
-import com.utn.TPfinal.projecciones.Consumption;
-import com.utn.TPfinal.service.EmployeeService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 

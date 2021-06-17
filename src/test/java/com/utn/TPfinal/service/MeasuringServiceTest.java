@@ -1,23 +1,13 @@
 package com.utn.TPfinal.service;
 
 import com.utn.TPfinal.domain.Measuring;
-import com.utn.TPfinal.projecciones.Consumption;
 import com.utn.TPfinal.repository.MeasuringRepository;
-import com.utn.TPfinal.utils.TestUtils;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-
-import org.springframework.data.domain.Pageable;
-
-import java.text.ParseException;
 
 import static com.utn.TPfinal.utils.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 public class MeasuringServiceTest {

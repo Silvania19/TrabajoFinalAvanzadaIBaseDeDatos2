@@ -2,9 +2,8 @@ package com.utn.TPfinal.repository;
 
 import com.utn.TPfinal.domain.Measuring;
 
-import com.utn.TPfinal.domain.Meter;
-import com.utn.TPfinal.domain.dto.MeasuringDtoQuery;
-import com.utn.TPfinal.projecciones.Consumption;
+import com.utn.TPfinal.projections.MeasuringDtoQuery;
+import com.utn.TPfinal.projections.Consumption;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
