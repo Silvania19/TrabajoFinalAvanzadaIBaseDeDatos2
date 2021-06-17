@@ -86,6 +86,7 @@ CREATE TABLE meters(
                        password_meter VARCHAR(50),
                        id_fee INT,
                        CONSTRAINT unique_serial_number UNIQUE (serial_number),
+                       CONSTRAINT unique_id_address UNIQUE (id_address),
                        CONSTRAINT pk_id_serial_number PRIMARY KEY (serial_number),
                        CONSTRAINT fk_id_model FOREIGN KEY (id_model) REFERENCES models(id_model),
                        CONSTRAINT fk_id_address FOREIGN KEY (id_address) REFERENCES addresses(id_address),
@@ -98,45 +99,11 @@ CREATE TABLE measurings(
                            DATE DATETIME,
                            id_bill INT,
                            serial_number VARCHAR(50),
-                           price_measuring double,
+                           price_measuring DOUBLE,
                            CONSTRAINT pk_id_measuring PRIMARY KEY (id_measuring),
                            CONSTRAINT fk_id_bill FOREIGN KEY (id_bill) REFERENCES bills(id_bill),
                            CONSTRAINT fk_serial_number FOREIGN KEY (serial_number) REFERENCES meters(serial_number)
 );
-
-/*2) Consulta de facturas por rango de fechas.*/
-
-SELECT * FROM bills;
-
-INSERT INTO bills(amount, pay, first_measurement, last_measurement) VALUE (100, FALSE, '2020-03-26', '2020-03-27');
-INSERT INTO bills(amount, pay, first_measurement, last_measurement) VALUE (100, FALSE, '2020-03-22', '2020-03-23');
-INSERT INTO bills(amount, pay, first_measurement, last_measurement) VALUE (100, FALSE, '2020-03-22', '2020-03-23');
-INSERT INTO bills(amount, pay, first_measurement, last_measurement) VALUE (100, FALSE, '2020-04-22', '2020-06-23');
-
-SELECT * FROM bills b
-WHERE (b.first_measurement BETWEEN '2020-03-22' AND '2020-04-24') OR (b.last_measurement BETWEEN '2020-03-25' AND '2020-03-30');
-
-SELECT * FROM bills b
-WHERE (b.first_measurement BETWEEN '2020-03-22' AND '2020-04-24');
-
-/*3) Consulta de deuda (Facturas impagas)*/
-SELECT SUM(b.amount) FROM bills b
-WHERE b.pay = FALSE;
-
-/*5) Consulta de mediciones por rango de fechas*/
-
-SELECT * FROM measurings;
-DESC measurings;
-
-INSERT INTO measurings(measurement, TIME) VALUES (10, '2020-03-26'), (10, '2020-03-21'), (10, '2020-03-22');
-
-SELECT * FROM measurings m
-WHERE m.time BETWEEN '2020-03-22' AND '2020-04-24';
-
-INSERT INTO brands (description) VALUES("marca1");
-INSERT INTO brands (description) VALUES("marca2");
-INSERT INTO models (description, id_brand) VALUES("modelo1", 1);
-INSERT INTO models (description, id_brand) VALUES("modelo2", 2);
 
 
 /*2) La facturación se realizará por un proceso automático en la base de datos. Se
@@ -161,10 +128,12 @@ BEGIN
       DECLARE vid_address INT;
       DECLARE vid_fee INT;
 
+
+
      /*declare el cursor*/
       DECLARE cur_billing CURSOR FOR
       SELECT serial_number, id_address, id_fee
-      FROM meters ;
+      FROM meters;
 
       /* declaro un handler para maejar las execpciones dentro, con CONTINUE para que siga la ejecucion en caso de una excepcion.
          Modifico vFinished=1*/
@@ -172,6 +141,9 @@ BEGIN
 
 
 	    OPEN cur_billing;
+	   /*comienzo una transaction, ya que una vez tomados los datos los que ingresen despues no los tendre en cuenta, de esta manera creo una unidad unica de trabajo*/
+
+	    START TRANSACTION;
 		    FETCH cur_billing INTO vserial_number, vid_address, vid_fee;
 		    WHILE (vFinished=0) DO
 
@@ -193,8 +165,8 @@ BEGIN
 							 GROUP BY serial_number);
 
 		        /*INSERTO LA BILL, CON PARCIALMENTE LOS DATOS*/
-		         INSERT INTO bills(amount, pay, first_measurement, last_measurement, id_client)
-		          VALUE (amountR, FALSE , first_measurementR, last_measurementR,  id_clientR);
+		         INSERT INTO bills(amount, pay, first_measurement, last_measurement, id_client, id_address)
+		          VALUE (amountR, FALSE , first_measurementR, last_measurementR,  id_clientR, vid_address);
 
 			/*Actualizar las measuring */
 			UPDATE measurings SET id_bill = LAST_INSERT_ID()
@@ -203,8 +175,8 @@ BEGIN
 		       FETCH cur_billing INTO vserial_number, vid_address, vid_fee;
 		    END WHILE;
 	    CLOSE cur_billing;
-
-
+/*cierro la transaccicion*/
+    COMMIT;
 END //
 SELECT * FROM fees
 /* despues de activar esta variable funciona*/
@@ -233,8 +205,8 @@ factura de ajuste a la nueva medición de cada una de las mediciones involucrada
 tarifa.
 
 */
-
-DROP TRIGGER IF EXISTS TIA_MEASURINGS_CALC_PRECIO;
+/*para fla que toca*/
+ DROP TRIGGER IF EXISTS TIA_MEASURINGS_CALC_PRECIO;
  DELIMITER //
  CREATE TRIGGER TIB_MEASURINGS_CALC_PRECIO BEFORE INSERT ON measurings FOR EACH ROW
  BEGIN
@@ -242,9 +214,72 @@ DROP TRIGGER IF EXISTS TIA_MEASURINGS_CALC_PRECIO;
 
                 SELECT fe.price_fee INTO price
                 FROM fees fe
-		        INNER JOIN meters met ON fe.id_fee = met.id_fee
-		        WHERE met.serial_number = new.serial_number;
+		INNER JOIN meters met ON fe.id_fee = met.id_fee
+		WHERE met.serial_number = new.serial_number;
 
                 SET new.price_measuring = price * new.value;
  END;//
+ /*
+3) Generar las estructuras necesarias para el cálculo de precio de cada medición y las
+inserción de la misma. Se debe tener en cuenta que una modificación en la tarifa debe
+modificar el precio de cada una de estas mediciones en la base de datos y generar una
+factura de ajuste a la nueva medición de cada una de las mediciones involucradas con esta
+tarifa.
 
+*/
+ DROP TRIGGER IF EXISTS TIB_UPDATE_FEE;
+ DELIMITER //
+ CREATE TRIGGER TIB_UPDATE_FEE BEFORE UPDATE ON fees FOR EACH ROW
+ BEGIN
+
+      DECLARE amountR INT;
+      DECLARE last_measurementR DATETIME;
+      DECLARE first_measurementR DATETIME;
+
+      DECLARE vid_client INT;
+      DECLARE vserial_number VARCHAR(50);
+      DECLARE vid_address INT;
+
+       DECLARE vFinished INTEGER DEFAULT 0;
+
+      DECLARE cur_adjustment CURSOR FOR
+
+      SELECT ad.id_client, met.serial_number, ad.id_address
+      FROM addresses ad
+      INNER JOIN meters met ON ad.id_address = met.id_address
+      WHERE met.id_fee = new.id_fee;
+
+           DECLARE CONTINUE HANDLER FOR NOT FOUND SET vFinished = 1;
+           OPEN cur_adjustment;
+
+              FETCH cur_adjustment INTO vid_client, vserial_number, vid_address;
+              WHILE (vFinished=0) DO
+
+                  UPDATE measurings  SET price_measuring = VALUE * new.price_fee
+                  WHERE serial_number= vserial_number;
+
+                   SELECT SUM(price_measuring) INTO amountR
+                   FROM measurings
+                   WHERE serial_number= vserial_number
+                   GROUP BY serial_number;
+
+                   SELECT MAX(DATE) INTO last_measurementR
+	           FROM measurings
+		   WHERE serial_number = vserial_number
+		   GROUP BY serial_number;
+
+		    SELECT MIN(DATE) INTO first_measurementR
+		    FROM measurings
+		    WHERE serial_number = vserial_number
+	            GROUP BY serial_number;
+
+
+		   INSERT INTO bills(amount, pay, first_measurement, last_measurement, id_client)
+		   VALUE (amountR, FALSE , first_measurementR, last_measurementR,  vid_client);
+
+		   FETCH cur_adjustment INTO vid_client, vserial_number;
+		  END WHILE;
+
+	    CLOSE cur_adjustment;
+
+ END;//
