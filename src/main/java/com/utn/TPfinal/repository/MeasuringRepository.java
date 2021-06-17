@@ -17,12 +17,13 @@ public interface MeasuringRepository extends JpaRepository<Measuring, Integer> {
 
 
     /* client 5) Consulta de mediciones por rango de fecha */
-    @Query(value= "SELECT * FROM measurings mea\n" +
+    @Query(value= "SELECT mea.value, mea.date, mea.price_measuring as priceMeasuring " +
+            "FROM measurings mea\n" +
             "INNER JOIN meters met ON mea.serial_number = met.serial_number\n" +
             "INNER JOIN addresses a ON a.id_address = met.id_address\n" +
             "INNER JOIN clients c ON c.id = a.id_client\n" +
-            "WHERE mea.date BETWEEN :beginDate AND :endDate AND c.id = :idClient;", nativeQuery = true)
-    Page<Measuring> findMeasuringsByRangeOfDatesAndClient(Integer idClient, Date beginDate, Date endDate, Pageable pageable);
+            "WHERE mea.date BETWEEN :beginDate AND :endDate AND c.id = :idClient", nativeQuery = true)
+    Page<MeasuringDtoQuery> findMeasuringsByRangeOfDatesAndClient(Integer idClient, Date beginDate, Date endDate, Pageable pageable);
 
     /* client 4) Consulta de consumo por rango de fechas (el usuario va a ingresar un rango
     de fechas y quiere saber cuánto consumió en ese periodo en Kwh y dinero) */

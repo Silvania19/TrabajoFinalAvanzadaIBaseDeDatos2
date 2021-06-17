@@ -6,6 +6,7 @@ import com.utn.TPfinal.domain.Meter;
 import com.utn.TPfinal.domain.dto.MeasuringDto;
 import com.utn.TPfinal.domain.dto.UserDto;
 import com.utn.TPfinal.projections.Consumption;
+import com.utn.TPfinal.projections.MeasuringDtoQuery;
 import com.utn.TPfinal.service.MeasuringService;
 import com.utn.TPfinal.service.MeterService;
 import org.modelmapper.ModelMapper;
@@ -51,10 +52,10 @@ public class MeasuringController {
 
     @PreAuthorize(value = "hasAnyAuthority('CLIENT')")
     @GetMapping("client/measuringByRangeOfDates")
-    public ResponseEntity<List<Measuring>>getMeasuringsByRangeOfDates(Authentication authentication,
-                                                  @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date beginDate,
-                                                  @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date endDate,
-                                                  Pageable pageable){
+    public ResponseEntity<List<MeasuringDtoQuery>>getMeasuringsByRangeOfDates(Authentication authentication,
+                                                                              @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date beginDate,
+                                                                              @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date endDate,
+                                                                              Pageable pageable){
         UserDto client = modelMapper.map(authentication.getPrincipal(), UserDto.class);
         if(client != null) {
             Page pageOfMeasurings = measuringService.findMeasuringsByRangeOfDatesAndClient(client.getId(), beginDate, endDate, pageable);
