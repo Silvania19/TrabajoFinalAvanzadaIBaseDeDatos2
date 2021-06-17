@@ -37,43 +37,5 @@ public class ClientControllerTest {
        this.clientService= mock(ClientService.class);
        clientController= new ClientController(clientService, modelMapper, billController);
    }
-   @Test
-    public void billsNotPayOk() {
-       Authentication authentication= mock(Authentication.class);
-       List<Bill> bills= List.of(aBill());
-       when(modelMapper.map(authentication.getPrincipal(), Client.class)).thenReturn(aClient2());
-       when(billController.getBillsNotPay(aClient2().getId())).thenReturn(bills);
 
-       ResponseEntity response= clientController.billsNotPay(authentication);
-
-       assertEquals(HttpStatus.OK, response.getStatusCode());
-       assertEquals(bills, response.getBody());
-
-   }
-    @Test
-    public void billsNotPayNoContent(){
-        Authentication authentication= mock(Authentication.class);
-        List<Bill> bills= new ArrayList<>();
-        when(modelMapper.map(authentication.getPrincipal(), Client.class)).thenReturn(aClient2());
-        when(billController.getBillsNotPay(aClient2().getId())).thenReturn(bills);
-
-        ResponseEntity response= clientController.billsNotPay(authentication);
-
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-
-
-    }
-    @Test
-    public void billsNotPayNotFound() {
-        Authentication authentication= mock(Authentication.class);
-        List<Bill> bills= new ArrayList<>();
-        when(modelMapper.map(authentication.getPrincipal(), Client.class)).thenReturn(null);
-        when(billController.getBillsNotPay(aClient2().getId())).thenReturn(bills);
-
-        ResponseEntity response= clientController.billsNotPay(authentication);
-
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-
-
-    }
 }

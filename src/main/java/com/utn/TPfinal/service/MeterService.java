@@ -2,6 +2,8 @@ package com.utn.TPfinal.service;
 
 import com.utn.TPfinal.domain.*;
 import com.utn.TPfinal.exception.FeeException;
+import com.utn.TPfinal.exception.MeterException;
+import com.utn.TPfinal.exception.MeterWithMeasurings;
 import com.utn.TPfinal.exception.NotFoundException;
 import com.utn.TPfinal.repository.MeterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +20,19 @@ public class MeterService {
     public MeterService(MeterRepository meterRepository){
         this.meterDao=meterRepository;
     }
+
     public Meter add(Meter meter) {
-        if (meterDao.findBySerialNumber(meter.getSerialNumber()) == null) {
-            return meterDao.save(meter);
+        try {
+            if (meterDao.findBySerialNumber(meter.getSerialNumber()) == null) {
+                return meterDao.save(meter);
+            }
+            else {
+                throw new FeeException("Error en agregar. Datos no correctos");
+            }
+        }catch (Exception e){
+            throw  new MeterException("Error al cargar revisa la direccion");
         }
-        else {
-            throw new FeeException("Error en agregar. Datos no correctos");
-        }
+
 
     }
 
@@ -44,14 +52,12 @@ public class MeterService {
 
     }
 
-    public void deleteMeter(String serialNumber) {
-        if(meterDao.findBySerialNumber(serialNumber) !=null){
-            meterDao.removeBySerialNumber(serialNumber);
-          // meterDao.BySerialNumber(serialNumber);
-        }
-        else {
-            throw  new FeeException("error el id no existe");
-        }
+    public void deleteMeter(String serialNumber) throws MeterWithMeasurings {
+           try{
+               meterDao.deleteBySerialNumber(serialNumber);
+              }catch (Exception e){
+               throw  new MeterWithMeasurings("Este meter tiene measurings");
+           }
 
     }
 

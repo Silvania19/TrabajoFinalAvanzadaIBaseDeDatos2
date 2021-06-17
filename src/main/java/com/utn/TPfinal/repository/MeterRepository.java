@@ -12,7 +12,7 @@ public interface MeterRepository extends JpaRepository<Meter, String> {
     Meter findBySerialNumber(String serialNumber);
 
    //@Query(value = "delete from meters where serial_number= ?serialNumber", nativeQuery = true)
-    void deleteBySerialNumber(String serialNumber);
+    //void deleteBySerialNumber(String serialNumber);
 
-    void removeBySerialNumber(String serialNumber);
+    void deleteBySerialNumber(String serialNumber);
 }

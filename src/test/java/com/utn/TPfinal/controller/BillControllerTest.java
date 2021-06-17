@@ -1,10 +1,14 @@
 package com.utn.TPfinal.controller;
 
 import com.utn.TPfinal.domain.Bill;
+import com.utn.TPfinal.domain.Client;
 import com.utn.TPfinal.domain.dto.UserDto;
+import com.utn.TPfinal.service.MeterService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,28 +19,32 @@ import org.springframework.security.core.Authentication;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import static com.utn.TPfinal.utils.TestUtils.aBill;
+import static com.utn.TPfinal.utils.TestUtils.aClient2;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
+
 
 class BillControllerTest {
 
-    @Mock
     private BillService billService;
 
     private BillController billController;
+    private ModelMapper modelMapper;
 
     //private static List<Bill> BILL_LIST =  List.of(Bill.builder().firstMeasurement("03-26-2020").lastMeasurement("03-27-2020").build());
 
     @BeforeEach
     public void setUp() {
-        initMocks(this);
-        billController = new BillController(billService);
+        this.modelMapper = Mockito.mock(ModelMapper.class);
+        this.billService = Mockito.mock(BillService.class);
+        billController = new BillController(billService, modelMapper);
     }
 
     @Test
@@ -97,5 +105,46 @@ class BillControllerTest {
         //assert
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         assertEquals(0, response.getBody().size());
+    }
+
+
+    @Test
+    public void billsNotPayOk() {
+        Authentication authentication= mock(Authentication.class);
+        List<Bill> bills= List.of(aBill());
+        when(modelMapper.map(authentication.getPrincipal(), Client.class)).thenReturn(aClient2());
+        when(billService.getBillsByIdClientNotPay(aClient2().getId())).thenReturn(bills);
+
+        ResponseEntity response= billController.billsNotPay(authentication);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(bills, response.getBody());
+
+    }
+    @Test
+    public void billsNotPayNoContent(){
+        Authentication authentication= mock(Authentication.class);
+        List<Bill> bills= new ArrayList<>();
+        when(modelMapper.map(authentication.getPrincipal(), Client.class)).thenReturn(aClient2());
+        when(billService.getBillsByIdClientNotPay(aClient2().getId())).thenReturn(bills);
+
+        ResponseEntity response= billController.billsNotPay(authentication);
+
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+
+
+    }
+    @Test
+    public void billsNotPayNotFound() {
+        Authentication authentication= mock(Authentication.class);
+        List<Bill> bills= new ArrayList<>();
+        when(modelMapper.map(authentication.getPrincipal(), Client.class)).thenReturn(null);
+        when(billService.getBillsByIdClientNotPay(aClient2().getId())).thenReturn(bills);
+
+        ResponseEntity response= billController.billsNotPay(authentication);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
+
     }
 }
