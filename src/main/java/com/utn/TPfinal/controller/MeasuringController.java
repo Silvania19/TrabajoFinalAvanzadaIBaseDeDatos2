@@ -38,7 +38,7 @@ public class MeasuringController {
     public Measuring addMeasuring(@RequestBody MeasuringDto measuringDto){
         Measuring measuring = modelMapper.map(measuringDto, Measuring.class);
         Meter meter = meterService.findBySerialNumberAndPasswordMeter(measuringDto.getSerialNumber(), measuringDto.getPassword());
-        //measuring.setMeter(meter);
+        measuring.setMeter(meter);
         Measuring newMeasuring= measuringService.add(measuring);
        // URI location = EntityURLBuilder.buildURL("fee", newMeasuring.getIdMeasuring());
         return newMeasuring;
