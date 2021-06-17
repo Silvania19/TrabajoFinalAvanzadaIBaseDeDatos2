@@ -60,11 +60,11 @@ public class MeterControllerTest {
         assertEquals(EntityURLBuilder.buildURLString(ENTITY, meter.getSerialNumber()),
                 response.getBody());
     }
-    @Test
+   /* @Test
     public void deleteMeter() {
 
         ResponseEntity response= meterController.deleteMeter(aMeter().getSerialNumber());
         verify(meterService, times(1)).deleteMeter(aMeter().getSerialNumber());
 
-    }
+    }*/
 }

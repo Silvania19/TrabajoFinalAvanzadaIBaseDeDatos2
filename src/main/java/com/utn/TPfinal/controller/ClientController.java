@@ -37,20 +37,6 @@ public class ClientController {
         this.billController = billController;
     }
 
-    @PreAuthorize(value = "hasAuthority('CLIENT')")
-    @GetMapping("apiClient/unpaid")
-    public ResponseEntity<List<Bill>> billsNotPay(Authentication authentication) {
-        Client client = modelMapper.map(authentication.getPrincipal(), Client.class);
-        if (client != null) {
-            List<Bill> bills = billController.getBillsNotPay(client.getId());
-            HttpStatus httpStatus = bills.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK;
-            return ResponseEntity.status(httpStatus).body(bills);
-
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
     // agregar responseentity
     @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
     @GetMapping("backoffice/clients")
@@ -58,10 +44,10 @@ public class ClientController {
             @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date beginDate,
             @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") Date endDate){
 
-
         List<UserDto> userList = clientService.tenMoreConsumers(beginDate, endDate).
                 stream().map(o -> modelMapper.map(o, UserDto.class)).collect(Collectors.toList());
         return userList;
     }
+
 
 }

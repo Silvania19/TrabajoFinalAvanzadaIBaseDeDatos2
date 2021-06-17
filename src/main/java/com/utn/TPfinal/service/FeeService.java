@@ -40,7 +40,5 @@ public class FeeService {
         } else {
             throw new FeeException("Error, el id no existe");
         }
-
-
     }
 }

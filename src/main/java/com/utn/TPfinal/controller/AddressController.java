@@ -2,16 +2,13 @@ package com.utn.TPfinal.controller;
 
 import com.utn.TPfinal.domain.Address;
 import com.utn.TPfinal.exception.AddressException;
-import com.utn.TPfinal.exception.FeeException;
 import com.utn.TPfinal.service.AddressService;
 import com.utn.TPfinal.util.EntityURLBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
@@ -31,8 +28,7 @@ public class AddressController {
         return ResponseEntity.created(location).build();
     }
 
-    // TODO: 24/5/2021 como devuelvo la url correcta ?, por ahora retorna "http://localhost:8080/address/1/1"
-    //  y deberia retornar  http://localhost:8080/address/1
+    @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
     @PutMapping("/{id}")
     public ResponseEntity updateAddress(@PathVariable Integer id, @RequestBody Address address) throws AddressException {
         Address newAddress = addressService.updateAddress(id, address);
@@ -40,12 +36,18 @@ public class AddressController {
 
         return ResponseEntity.ok(location);
     }
- // devolver response
+
+    @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
     @DeleteMapping("/{id}")
-    public void deleteFee(@PathVariable Integer id)
+    public ResponseEntity deleteAddress(@PathVariable Integer id)
     {
-        addressService.deleteFee(id);
+        addressService.deleteAddress(id);
+
+        return ResponseEntity.ok().build();
+        //return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        // devuelvo no content porque:El request se ha procesado correctamente, pero no devuelve ningún contenido.
     }
+
     // devolver response
     /*@PutMapping("/{id}/client/{idClient}")
     public void addClientToAddress(@PathVariable Integer id, @PathVariable Integer idClient){

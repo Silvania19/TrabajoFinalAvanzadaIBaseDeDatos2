@@ -18,12 +18,13 @@ public class Meter {
     private String serialNumber;
     private String passwordMeter;
     //fk with model
-   @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="id_model", nullable = false)
     private Model model;
 
     // fk with address
-    @OneToOne
+    // es no eliminar address cuando elimino un meter
+    @OneToOne (cascade = CascadeType.DETACH)
     @JoinColumn(name="id_address")
     private Address address;
 
