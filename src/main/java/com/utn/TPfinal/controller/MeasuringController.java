@@ -1,5 +1,6 @@
 package com.utn.TPfinal.controller;
 
+import com.utn.TPfinal.domain.Client;
 import com.utn.TPfinal.domain.Measuring;
 import com.utn.TPfinal.domain.Meter;
 import com.utn.TPfinal.domain.dto.MeasuringDto;
@@ -54,10 +55,13 @@ public class MeasuringController {
                                                   @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date beginDate,
                                                   @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date endDate,
                                                   Pageable pageable){
-        UserDto userDto = (UserDto) authentication.getPrincipal();
-        Page pageOfMeasurings = measuringService.findMeasuringsByRangeOfDatesAndClient(userDto.getId(), beginDate, endDate, pageable);
-
-        return response(pageOfMeasurings);
+        UserDto client = modelMapper.map(authentication.getPrincipal(), UserDto.class);
+        if(client != null) {
+            Page pageOfMeasurings = measuringService.findMeasuringsByRangeOfDatesAndClient(client.getId(), beginDate, endDate, pageable);
+            return response(pageOfMeasurings);
+        }else{
+            return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 
     /*4) Consulta de consumo por rango de fechas (el usuario va a ingresar un rango
@@ -78,7 +82,6 @@ public class MeasuringController {
     }
 
     /**BACKOFFICE**/
-
 
     /*6) Consulta de mediciones de un domicilio por rango de fechas*/
     @PreAuthorize(value = "hasAnyAuthority('BACKOFFICE')")

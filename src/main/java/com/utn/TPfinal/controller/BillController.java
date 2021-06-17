@@ -38,15 +38,14 @@ public class BillController {
     /**Client Api**/
     //android - 2) Consulta de facturas por rango de fechas.
     @PreAuthorize(value = "hasAuthority('CLIENT')")
-    @GetMapping("clientApi/client/{idClient}")
+    @GetMapping("clientApi/client")
     public ResponseEntity<List<Bill>>getBillsByRangeOfDatesByUser(Authentication authentication,
-                                                                  @PathVariable Integer idClient,
                                                                   @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date beginDate,
                                                                   @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date endDate,
                                                                   Pageable pageable){
-        UserDto userDto = (UserDto) authentication.getPrincipal();
-        if(userDto.getId() == idClient){
-            Page pageOfBills = billService.getBillsByUserAndDateBetween(idClient, beginDate, endDate, pageable);
+        UserDto client = modelMapper.map(authentication.getPrincipal(), UserDto.class);
+        if(client != null){
+            Page pageOfBills = billService.getBillsByUserAndDateBetween(client.getId(), beginDate, endDate, pageable);
             return ResponseEntityList.response(pageOfBills);
         }else{
             return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
