@@ -15,7 +15,7 @@ import java.net.URI;
 
 @Slf4j
 @RestController
-@RequestMapping("/fee")
+@RequestMapping("/fees")
 public class FeeController {
 
     FeeService feeService;
