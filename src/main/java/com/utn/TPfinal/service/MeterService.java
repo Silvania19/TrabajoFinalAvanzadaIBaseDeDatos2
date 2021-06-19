@@ -9,6 +9,8 @@ import com.utn.TPfinal.repository.MeterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.ConstraintViolationException;
+
 @Service
 
 public class MeterService {
@@ -52,11 +54,11 @@ public class MeterService {
 
     }
 
-    public void deleteMeter(String serialNumber) throws MeterWithMeasurings {
+    public void deleteMeter(String serialNumber) throws ConstraintViolationException{
            try{
                meterDao.deleteBySerialNumber(serialNumber);
-              }catch (Exception e){
-               throw  new MeterWithMeasurings("Este meter tiene measurings");
+              }catch (ConstraintViolationException e){
+               throw  new  ConstraintViolationException();
            }
 
     }

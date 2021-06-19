@@ -49,7 +49,7 @@ public class AddressController {
     }
 
     // devolver response
-    /*@PutMapping("/{id}/client/{idClient}")
+   /* @PutMapping("/{id}/client/{idClient}")
     public void addClientToAddress(@PathVariable Integer id, @PathVariable Integer idClient){
         addressService.addClientToAddress(id, idClient);
     }*/
