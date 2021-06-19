@@ -16,7 +16,7 @@ import java.net.URI;
 
 
 @RestController
-@RequestMapping("/meter")
+@RequestMapping("/meters")
 public class MeterController {
 
     MeterService meterService;
@@ -52,7 +52,8 @@ public class MeterController {
             return ResponseEntity.ok().build();
         }
        catch (Exception e){
-            e.printStackTrace(); return ResponseEntity.notFound().build();
+            e.printStackTrace();
+            return ResponseEntity.notFound().build();
        }
 
     }
