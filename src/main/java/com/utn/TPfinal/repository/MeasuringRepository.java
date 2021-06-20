@@ -2,6 +2,8 @@ package com.utn.TPfinal.repository;
 
 import com.utn.TPfinal.domain.Measuring;
 
+import com.utn.TPfinal.domain.consumptions;
+import com.utn.TPfinal.domain.dto.ConsumptionDto;
 import com.utn.TPfinal.projections.MeasuringDtoQuery;
 import com.utn.TPfinal.projections.Consumption;
 import org.springframework.data.domain.Page;
@@ -35,7 +37,7 @@ public interface MeasuringRepository extends JpaRepository<Measuring, Integer> {
            "INNER JOIN clients AS c ON c.id = a.id_client\n" +
            "WHERE c.id = :id  AND mea.date BETWEEN :beginDate AND :lastDate\n" +
            "GROUP BY(c.id);", nativeQuery = true)
-   Consumption consumption(Integer id, Date beginDate, Date lastDate);
+   consumptions consumption(Integer id, Date beginDate, Date lastDate);
 
    /* backoffice 6) Consulta de mediciones de un domicilio por rango de fechas */
 

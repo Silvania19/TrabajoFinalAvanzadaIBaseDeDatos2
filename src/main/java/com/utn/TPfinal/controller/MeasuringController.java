@@ -3,6 +3,10 @@ package com.utn.TPfinal.controller;
 import com.utn.TPfinal.domain.Measuring;
 import com.utn.TPfinal.domain.Meter;
 import com.utn.TPfinal.domain.dto.MeasuringDto;
+<<<<<<< HEAD
+=======
+
+>>>>>>> cc95102e93cc1f0ad658d842e02e7ac372265144
 import com.utn.TPfinal.service.MeasuringService;
 import com.utn.TPfinal.service.MeterService;
 import com.utn.TPfinal.util.ResponseEntityList;
@@ -40,17 +44,21 @@ public class MeasuringController {
         return newMeasuring;
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> cc95102e93cc1f0ad658d842e02e7ac372265144
     /**BACKOFFICE**/
 
     /*6) Consulta de mediciones de un domicilio por rango de fechas*/
     @PreAuthorize(value = "hasAnyAuthority('BACKOFFICE')")
-    @GetMapping("/{idMeasuring}")
-    public ResponseEntity measuringsRangeDateAndAddress(@PathVariable Integer idMeasuring,
+    @GetMapping("/address/{idAddress}")
+    public ResponseEntity measuringsRangeDateAndAddress(@PathVariable Integer idAddress,
                                                        @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date beginDate,
                                                        @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date endDate,
                                                        Pageable pageable){
-
-        Page pageMeasuring = measuringService.measuringRangeDateByAddress(idMeasuring, beginDate, endDate, pageable);
+      /*si el address no existe no foud, o no existe. No no content*/
+        Page pageMeasuring = measuringService.measuringRangeDateByAddress(idAddress, beginDate, endDate, pageable);
 
         return ResponseEntityList.response(pageMeasuring);
     }

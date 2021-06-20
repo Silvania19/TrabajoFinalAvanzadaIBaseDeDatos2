@@ -34,8 +34,7 @@ public interface BillRepository extends JpaRepository<Bill, Integer> {
     @Query(value= "SELECT * FROM addresses a\n" +
             "INNER JOIN clients c ON c.id = a.id_client\n" +
             "INNER JOIN bills b ON b.id_client = c.id\n" +
-            "WHERE b.pay = FALSE AND c.id = :idClient AND a.id_address = :idAddress AND b.id_address = a.id_address\n" +
-            "GROUP BY b.id_bill;", nativeQuery = true)
+            "WHERE b.pay = FALSE AND c.id = :idClient AND  b.id_address = :idAddress GROUP BY b.id_bill" , nativeQuery = true)
     Page<Bill>findUnpaidBillsByClientIdAndAddressId(Integer idClient, Integer idAddress, Pageable pageable);
 
 }

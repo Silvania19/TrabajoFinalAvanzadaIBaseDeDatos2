@@ -1,6 +1,8 @@
 package com.utn.TPfinal.service;
 
 import com.utn.TPfinal.domain.Measuring;
+import com.utn.TPfinal.domain.consumptions;
+import com.utn.TPfinal.domain.dto.ConsumptionDto;
 import com.utn.TPfinal.projections.MeasuringDtoQuery;
 import com.utn.TPfinal.projections.Consumption;
 import com.utn.TPfinal.repository.MeasuringRepository;
@@ -29,10 +31,9 @@ public class MeasuringService {
         return measuringRepository.findMeasuringsByRangeOfDatesAndClient(idClient, beginDate, endDate, pageable);
     }
 
-    public Consumption consumption(Integer id, Date beginDate, Date lastDate) {
+    public consumptions consumption(Integer id, Date beginDate, Date lastDate) {
         return  measuringRepository.consumption(id, beginDate, lastDate);
-    }/*poner en el test los metodos de la interfaz*/
-
+    }
     public Page<MeasuringDtoQuery> measuringRangeDateByAddress(Integer idAddress, Date beginDate, Date endDate, Pageable pageable) {
         return measuringRepository.getMeasuringByAddressAndRangeDate(idAddress, beginDate, endDate, pageable);
     }

@@ -22,12 +22,18 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         List<String> errors = new ArrayList<>();
 
         for (ConstraintViolation violation : ex.getConstraintViolations()) {
+<<<<<<< HEAD
             errors.add(violation.getRootBeanClass().getName() + " " + violation.getMessage());
         }
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(),errors);
+=======
+        errors.add(violation.getRootBeanClass().getName() + " " + violation.getMessage());
+        }
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
+>>>>>>> cc95102e93cc1f0ad658d842e02e7ac372265144
 
         return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getHttpStatus());
-    }
+        }
 
 
     @ExceptionHandler({FeeException.class})
@@ -35,21 +41,15 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         List<String> errors = new ArrayList<>();
 
 
+<<<<<<< HEAD
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "error", errors);
+=======
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
+>>>>>>> cc95102e93cc1f0ad658d842e02e7ac372265144
 
         return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getHttpStatus());
     }
-    /*@ExceptionHandler({FeeException.class})
-    public ResponseEntity<Object> feeError(FeeException ex, WebRequest request) {
 
-        List<String> errors = new ArrayList<>();
-
-        errors.add(ex.getMessage());
-
-        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
-
-        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getHttpStatus());
-    }*/
     @ExceptionHandler({MeterException.class})
     public ResponseEntity<Object> meterError(FeeException ex, WebRequest request) {
         List<String> errors = new ArrayList<>();
@@ -60,9 +60,14 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getHttpStatus());
     }
 
+<<<<<<< HEAD
     @ExceptionHandler({MeterWithMeasurings.class})
     public ResponseEntity<Object> meterMeasuringError(MeterWithMeasurings ex, WebRequest request) {
         List<String> errors = new ArrayList<>();
+=======
+    @ExceptionHandler({MeterWithMeasuringsException.class})
+    public ResponseEntity<Object> meterMeasuringError(MeterWithMeasuringsException ex, WebRequest request) {
+>>>>>>> cc95102e93cc1f0ad658d842e02e7ac372265144
 
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "error en meter, con measurings", errors);
 
