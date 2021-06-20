@@ -3,10 +3,6 @@ package com.utn.TPfinal.controller;
 import com.utn.TPfinal.domain.Measuring;
 import com.utn.TPfinal.domain.Meter;
 import com.utn.TPfinal.domain.dto.MeasuringDto;
-<<<<<<< HEAD
-=======
-
->>>>>>> cc95102e93cc1f0ad658d842e02e7ac372265144
 import com.utn.TPfinal.service.MeasuringService;
 import com.utn.TPfinal.service.MeterService;
 import com.utn.TPfinal.util.ResponseEntityList;
@@ -43,11 +39,6 @@ public class MeasuringController {
        // URI location = EntityURLBuilder.buildURL("fee", newMeasuring.getIdMeasuring());
         return newMeasuring;
     }
-
-<<<<<<< HEAD
-=======
-
->>>>>>> cc95102e93cc1f0ad658d842e02e7ac372265144
     /**BACKOFFICE**/
 
     /*6) Consulta de mediciones de un domicilio por rango de fechas*/

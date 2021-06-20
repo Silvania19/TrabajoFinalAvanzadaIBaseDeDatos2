@@ -54,16 +54,8 @@ public class MeterService {
 
     }
 
-<<<<<<< HEAD
-    public void deleteMeter(String serialNumber) throws ConstraintViolationException{
-           try{
-               meterDao.deleteBySerialNumber(serialNumber);
-              }catch (ConstraintViolationException e){
-               throw  new  ConstraintViolationException();
-           }
-=======
+
     public void deleteMeter(String serialNumber) throws MeterException,  MeterWithMeasuringsException  {
->>>>>>> cc95102e93cc1f0ad658d842e02e7ac372265144
 
      try {
          Meter meter = meterDao.findBySerialNumber(serialNumber);
