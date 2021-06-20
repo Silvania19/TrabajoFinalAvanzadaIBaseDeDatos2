@@ -25,7 +25,7 @@ public class MeasuringService {
         return measuringRepository.save(measuring);
     }
 
-    public Page<Measuring> findMeasuringsByRangeOfDatesAndClient(Integer idClient, Date beginDate, Date endDate, Pageable pageable) {
+    public Page<MeasuringDtoQuery> findMeasuringsByRangeOfDatesAndClient(Integer idClient, Date beginDate, Date endDate, Pageable pageable) {
         return measuringRepository.findMeasuringsByRangeOfDatesAndClient(idClient, beginDate, endDate, pageable);
     }
 

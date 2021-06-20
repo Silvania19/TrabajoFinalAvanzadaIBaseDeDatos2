@@ -185,7 +185,7 @@ SET GLOBAL event_scheduler = ON;
 
 /* Me crea el evento que sera automatico, le especifico el nombre, y a partir desde cuando y cada cuanto*/
 CREATE EVENT EGenerateBills
-ON SCHEDULE EVERY 1 MINUTE STARTS NOW()
+ON SCHEDULE EVERY 1 minute STARTS NOW()
 DO CALL GenerateBills();
 
 /* para eliminar un evento*/

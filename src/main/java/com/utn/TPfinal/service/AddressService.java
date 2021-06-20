@@ -19,7 +19,7 @@ public class AddressService {
         this.addressRepository = addressRepository;
     }
 
-    public Address newAddress(Address address) throws FeeException {
+    public Address newAddress(Address address) throws AddressException {
 
             return addressRepository.save(address);
     }
