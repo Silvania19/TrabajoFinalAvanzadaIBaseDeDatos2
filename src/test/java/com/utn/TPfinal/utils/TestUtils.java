@@ -4,6 +4,7 @@ import com.utn.TPfinal.domain.*;
 import com.utn.TPfinal.domain.dto.RequestLoginDto;
 import com.utn.TPfinal.domain.dto.ResponseLoginDto;
 import com.utn.TPfinal.domain.dto.UserDto;
+import com.utn.TPfinal.projections.MeasuringDtoQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
@@ -132,6 +133,7 @@ public class TestUtils {
                 .build();
         return measuring;
     }
+
     public static Page<Measuring> aPageMeasuring() {
         return new PageImpl<>(List.of(newMeasuring()));
     }
@@ -141,4 +143,27 @@ public class TestUtils {
 
         }
     }*/
-}
+    public  static MeasuringDtoQuery aMeasuringQueryDto(){
+        MeasuringDtoQuery measuringDtoQuery=new MeasuringDtoQuery() {
+            @Override
+            public float getValue() {
+                return 10;
+            }
+
+            @Override
+            public Date getDate() {
+                return null;
+            }
+
+            @Override
+            public double getPriceMeasuring() {
+                return 100;
+            }
+        };
+        return measuringDtoQuery;
+        }
+    public static Page<MeasuringDtoQuery> aMeasuringDtoQueries() {
+        return new PageImpl<>(List.of(aMeasuringQueryDto()));
+    }
+    }
+
