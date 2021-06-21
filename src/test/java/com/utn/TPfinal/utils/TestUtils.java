@@ -22,11 +22,10 @@ public class TestUtils {
       return LocalDateTime.of(2021, 06, 04, 00, 01);
     }
 
-    public static Date aDate2() throws ParseException{
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        return simpleDateFormat.parse("03-27-2020");
-    }
+    public static LocalDateTime aDate2()  {
 
+        return LocalDateTime.of(2021, 06, 04, 00, 01);
+    }
    public static Fee aFee(){
        Fee fee= Fee.builder()
                .idFee(1)

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public interface ClientRepository extends JpaRepository<Client, Integer> {
             "\tGROUP BY (c.id)\n" +
             "\tORDER BY SUM(me.value) DESC\n" +
             "\tLIMIT 10;", nativeQuery = true )
-    List<Client> tenMoreConsumers(Date beginDate, Date endDate);
+    List<Client> tenMoreConsumers(LocalDateTime beginDate, LocalDateTime endDate);
 }
 /*"SELECT info.name_client, SUM(consuption)\n" +
            "FROM (\n" +

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Service
@@ -24,14 +25,14 @@ public class MeasuringService {
         return measuringRepository.save(measuring);
     }
 
-    public Page<Measuring> findMeasuringsByRangeOfDatesAndClient(Integer idClient, Date beginDate, Date endDate, Pageable pageable) {
+    public Page<Measuring> findMeasuringsByRangeOfDatesAndClient(Integer idClient, LocalDateTime beginDate, LocalDateTime endDate, Pageable pageable) {
         return measuringRepository.findMeasuringsByRangeOfDatesAndClient(idClient, beginDate, endDate, pageable);
     }
 
-    public consumptions consumption(Integer id, Date beginDate, Date lastDate) {
+    public consumptions consumption(Integer id, LocalDateTime beginDate, LocalDateTime lastDate) {
         return  measuringRepository.consumption(id, beginDate, lastDate);
     }
-    public Page<Measuring> measuringRangeDateByAddress(Integer idAddress, Date beginDate, Date endDate, Pageable pageable) {
+    public Page<Measuring> measuringRangeDateByAddress(Integer idAddress, LocalDateTime beginDate, LocalDateTime endDate, Pageable pageable) {
         return measuringRepository.getMeasuringByAddressAndRangeDate(idAddress, beginDate, endDate, pageable);
     }
 }

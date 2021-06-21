@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public interface BillRepository extends JpaRepository<Bill, Integer> {
 
     @Query(value = "SELECT u FROM Bill u WHERE (u.client.id = :idClient AND u.firstMeasurement BETWEEN :firstDate AND :lastDate) AND " +
             "(u.lastMeasurement BETWEEN :firstDate AND :lastDate)")
-    Page<Bill> findAllBillsByUserAndDateBetween(Integer idClient, Date firstDate, Date lastDate, Pageable pageable);
+    Page<Bill> findAllBillsByUserAndDateBetween(Integer idClient, LocalDateTime firstDate, LocalDateTime lastDate, Pageable pageable);
 
      @Query( value= "SELECT * FROM  bills  WHERE  id_client = :idClient and pay=false" , nativeQuery = true)
     List<Bill> findByClientIdNotPay(Integer idClient);

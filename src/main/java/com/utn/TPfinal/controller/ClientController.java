@@ -22,6 +22,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,8 +54,8 @@ public class ClientController {
     @GetMapping("{idClient}/bills")
     public ResponseEntity<List<Bill>>getBillsByRangeOfDatesByUser(@PathVariable Integer idClient,
                                                                   Authentication authentication,
-                                                                  @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date beginDate,
-                                                                  @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date endDate,
+                                                                  @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy HH:mm:ss") LocalDateTime beginDate,
+                                                                  @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy HH:mm:ss") LocalDateTime endDate,
                                                                   Pageable pageable){
         UserDto client = modelMapper.map(authentication.getPrincipal(), UserDto.class);
         if(client != null && idClient == client.getId()){
@@ -91,8 +92,8 @@ public class ClientController {
     @GetMapping("{idClient}/consumption")
     public ResponseEntity consumptionRangeDateKwMoney(@PathVariable Integer idClient,
                                                       Authentication authentication,
-                                                      @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date beginDate,
-                                                      @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date endDate) {
+                                                      @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") LocalDateTime beginDate,
+                                                      @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") LocalDateTime endDate) {
         UserDto userDto= modelMapper.map(authentication.getPrincipal(), UserDto.class);
         consumptions consumption= measuringService.consumption(userDto.getId(), beginDate, endDate);
         if(/*consumption.getPriceTotal() != null && consumption.getTotalKwh() != null*/ consumption!= null && idClient == userDto.getId()){
@@ -108,8 +109,8 @@ public class ClientController {
     @GetMapping("{idClient}/measurings")
     public ResponseEntity<List<Measuring>>getMeasuringsByRangeOfDates(@PathVariable Integer idClient,
                                                                       Authentication authentication,
-                                                                      @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date beginDate,
-                                                                      @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date endDate,
+                                                                      @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") LocalDateTime beginDate,
+                                                                      @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") LocalDateTime endDate,
                                                                       Pageable pageable){
         UserDto client = modelMapper.map(authentication.getPrincipal(), UserDto.class);
         if(client != null && idClient == client.getId()) {
@@ -137,8 +138,8 @@ public class ClientController {
     @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
     @GetMapping("moreConsumers")
     public ResponseEntity<List<UserDto>> moreConsumersOfDateRange(
-            @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date beginDate,
-            @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") Date endDate){
+            @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") LocalDateTime beginDate,
+            @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDateTime endDate){
 
         List<UserDto> userList = clientService.tenMoreConsumers(beginDate, endDate).
                 stream().map(o -> modelMapper.map(o, UserDto.class)).collect(Collectors.toList());

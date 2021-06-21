@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @RestController
@@ -46,8 +47,8 @@ public class MeasuringController {
     @PreAuthorize(value = "hasAnyAuthority('BACKOFFICE')")
     @GetMapping("/address/{idAddress}")
     public ResponseEntity measuringsRangeDateAndAddress(@PathVariable Integer idAddress,
-                                                       @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date beginDate,
-                                                       @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date endDate,
+                                                       @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") LocalDateTime beginDate,
+                                                       @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") LocalDateTime endDate,
                                                        Pageable pageable){
       /*si el address no existe no foud, o no existe. No no content*/
         Page pageMeasuring = measuringService.measuringRangeDateByAddress(idAddress, beginDate, endDate, pageable);

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.Access;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class BillService {
         this.billRepository = billRepository;
     }
 
-    public Page<Bill> getBillsByUserAndDateBetween(Integer idClient, Date beginDate, Date endDate, Pageable pageable) {
+    public Page<Bill> getBillsByUserAndDateBetween(Integer idClient, LocalDateTime beginDate, LocalDateTime endDate, Pageable pageable) {
         return billRepository.findAllBillsByUserAndDateBetween(idClient, beginDate, endDate, pageable);
     }
 
