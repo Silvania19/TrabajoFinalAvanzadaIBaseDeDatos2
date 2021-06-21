@@ -3,11 +3,13 @@ package com.utn.TPfinal.service;
 import com.utn.TPfinal.domain.*;
 import com.utn.TPfinal.exception.FeeException;
 import com.utn.TPfinal.exception.MeterException;
-import com.utn.TPfinal.exception.MeterWithMeasurings;
+import com.utn.TPfinal.exception.MeterWithMeasuringsException;
 import com.utn.TPfinal.exception.NotFoundException;
 import com.utn.TPfinal.repository.MeterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.validation.ConstraintViolationException;
 
 @Service
 
@@ -21,19 +23,17 @@ public class MeterService {
         this.meterDao=meterRepository;
     }
 
-    public Meter add(Meter meter) {
+    public Meter add(Meter meter) throws MeterException {
         try {
             if (meterDao.findBySerialNumber(meter.getSerialNumber()) == null) {
                 return meterDao.save(meter);
             }
             else {
-                throw new FeeException("Error en agregar. Datos no correctos");
+                throw new MeterException("Error en agregar. Datos no correctos");
             }
         }catch (Exception e){
-            throw  new MeterException("Error al cargar revisa la direccion");
+            throw  new MeterException("Error al cargar, revisa la direccion");
         }
-
-
     }
 
     public Meter getSerialNumber(String serialNumber) {
@@ -47,18 +47,24 @@ public class MeterService {
             Meter meterActual=meterDao.save(meterOld);
             return meterActual;
         } else {
-            throw new NotFoundException("incorrecto");
+            throw new MeterException("incorrecto");
         }
 
     }
 
-    public void deleteMeter(String serialNumber) throws MeterWithMeasurings {
-           try{
-               meterDao.deleteBySerialNumber(serialNumber);
-              }catch (Exception e){
-               throw  new MeterWithMeasurings("Este meter tiene measurings");
-           }
 
+    public void deleteMeter(String serialNumber) throws MeterException,  MeterWithMeasuringsException  {
+
+     try {
+         Meter meter = meterDao.findBySerialNumber(serialNumber);
+         if (meter != null) {
+             meterDao.deleteBySerialNumber(serialNumber);
+         } else {
+             throw new MeterException("error");
+         }
+      }catch (Throwable t){
+         throw new MeterWithMeasuringsException("error");
+      }
     }
 
     public Meter findBySerialNumberAndPasswordMeter(String serialNumber, String password) {

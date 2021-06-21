@@ -44,13 +44,13 @@ public class MeasuringController {
 
     /*6) Consulta de mediciones de un domicilio por rango de fechas*/
     @PreAuthorize(value = "hasAnyAuthority('BACKOFFICE')")
-    @GetMapping("/{idMeasuring}")
-    public ResponseEntity measuringsRangeDateAndAddress(@PathVariable Integer idMeasuring,
+    @GetMapping("/address/{idAddress}")
+    public ResponseEntity measuringsRangeDateAndAddress(@PathVariable Integer idAddress,
                                                        @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date beginDate,
                                                        @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date endDate,
                                                        Pageable pageable){
-
-        Page pageMeasuring = measuringService.measuringRangeDateByAddress(idMeasuring, beginDate, endDate, pageable);
+      /*si el address no existe no foud, o no existe. No no content*/
+        Page pageMeasuring = measuringService.measuringRangeDateByAddress(idAddress, beginDate, endDate, pageable);
 
         return ResponseEntityList.response(pageMeasuring);
     }

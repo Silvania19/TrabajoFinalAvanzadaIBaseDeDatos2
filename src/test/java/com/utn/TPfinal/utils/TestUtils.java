@@ -4,6 +4,7 @@ import com.utn.TPfinal.domain.*;
 import com.utn.TPfinal.domain.dto.RequestLoginDto;
 import com.utn.TPfinal.domain.dto.ResponseLoginDto;
 import com.utn.TPfinal.domain.dto.UserDto;
+import com.utn.TPfinal.projections.MeasuringDtoQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
@@ -54,19 +55,29 @@ public class TestUtils {
                 .serialNumber("12345")
                 .passwordMeter("123")
                 .fee(aFee())
-                .address(aAdrress())
+                .address(aAddress())
                 //.model(aModel())
                 .build();
         return  meter;
     }
-    public  static Address aAdrress(){
+    /*public  static Address aAdrress(){
         Address address= Address.builder()
                 .idAddress(1)
                 .nameAddress("address1")
                 .numberAddress("1234")
                 .build();
         return  address;
+    }*/
+
+    public static Address aAddress(){
+        Address address= Address.builder()
+                .idAddress(1)
+                //.nameAddress("nameAddress")
+                .client(aClient())
+                .build();
+        return  address;
     }
+
     public static Model aModel(){
     Model model = Model.builder()
             .idModel(1)
@@ -132,6 +143,7 @@ public class TestUtils {
                 .build();
         return measuring;
     }
+
     public static Page<Measuring> aPageMeasuring() {
         return new PageImpl<>(List.of(newMeasuring()));
     }
@@ -141,4 +153,27 @@ public class TestUtils {
 
         }
     }*/
-}
+    public  static MeasuringDtoQuery aMeasuringQueryDto(){
+        MeasuringDtoQuery measuringDtoQuery=new MeasuringDtoQuery() {
+            @Override
+            public float getValue() {
+                return 10;
+            }
+
+            @Override
+            public Date getDate() {
+                return null;
+            }
+
+            @Override
+            public double getPriceMeasuring() {
+                return 100;
+            }
+        };
+        return measuringDtoQuery;
+        }
+    public static Page<MeasuringDtoQuery> aMeasuringDtoQueries() {
+        return new PageImpl<>(List.of(aMeasuringQueryDto()));
+    }
+    }
+

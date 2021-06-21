@@ -3,7 +3,8 @@ package com.utn.TPfinal.controller;
 
 import com.utn.TPfinal.domain.Meter;
 import com.utn.TPfinal.exception.FeeException;
-import com.utn.TPfinal.exception.MeterWithMeasurings;
+import com.utn.TPfinal.exception.MeterException;
+import com.utn.TPfinal.exception.MeterWithMeasuringsException;
 import com.utn.TPfinal.service.MeterService;
 import com.utn.TPfinal.util.EntityURLBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class MeterController {
 
     @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
     @PostMapping
-    public ResponseEntity addMeter(@RequestBody Meter meter) throws FeeException {
+    public ResponseEntity addMeter(@RequestBody Meter meter) throws MeterException {
         Meter newMeter= meterService.add(meter);
         URI location= EntityURLBuilder.buildURLString("meter", newMeter.getSerialNumber());
         return ResponseEntity.created(location).build();
@@ -45,16 +46,9 @@ public class MeterController {
     @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
     @DeleteMapping("/{serialNumber}")
     @Transactional
-    public ResponseEntity deleteMeter(@PathVariable String serialNumber) throws MeterWithMeasurings
+    public ResponseEntity deleteMeter(@PathVariable String serialNumber) throws MeterWithMeasuringsException
     {
-        try {
             meterService.deleteMeter(serialNumber);
             return ResponseEntity.ok().build();
-        }
-       catch (Exception e){
-            e.printStackTrace();
-            return ResponseEntity.notFound().build();
-       }
-
     }
 }

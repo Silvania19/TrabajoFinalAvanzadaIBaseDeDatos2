@@ -20,7 +20,6 @@ public class AddressService {
     }
 
     public Address newAddress(Address address) throws AddressException {
-
             return addressRepository.save(address);
     }
 

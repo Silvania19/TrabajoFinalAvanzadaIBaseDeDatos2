@@ -33,10 +33,6 @@ import java.util.List;
             List<Client> userList= clientRepository.tenMoreConsumers(beginDate, endDate);
             return  userList;
         }
-        public Client getByID(Integer id) {
-            return clientRepository.findById(id)
-                    .orElseThrow(() -> new NotFoundException("No se encontro"));
-        }
 
     }
 
