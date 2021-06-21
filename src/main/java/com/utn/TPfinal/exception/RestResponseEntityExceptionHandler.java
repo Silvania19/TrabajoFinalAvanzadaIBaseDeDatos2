@@ -61,4 +61,12 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getHttpStatus());
     }
 
+    @ExceptionHandler({MeterExitsException.class})
+    public ResponseEntity<Object> meterExitsException(NotFoundException ex, WebRequest request) {
+
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getLocalizedMessage());
+
+        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getHttpStatus());
+    }
+
 }

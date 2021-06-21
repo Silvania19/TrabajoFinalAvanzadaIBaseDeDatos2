@@ -33,4 +33,8 @@ public class Bill {
     @JoinColumn(name="id_client", nullable = false)
     private Client client;
 
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="id_address", nullable = false)
+    private Address address;
 }

@@ -81,6 +81,8 @@
 					<excludes>
 						<!-- Exclude full package from test coverage -->
 						<exclude>**/*com/utn/TPfinal/domain/**</exclude>
+						<exclude>**/*com/utn/TPfinal/exception/**</exclude>
+						<exclude>**/*com/utn/TPfinal/filter/**</exclude>
 					</excludes>
 				</configuration>
 

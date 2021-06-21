@@ -1,6 +1,7 @@
 package com.utn.TPfinal.controller;
 
 import com.utn.TPfinal.domain.Meter;
+import com.utn.TPfinal.exception.MeterExitsException;
 import com.utn.TPfinal.service.MeterService;
 import com.utn.TPfinal.util.EntityURLBuilder;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,14 +35,19 @@ public class MeterControllerTest {
         //given
         MockHttpServletRequest request = new MockHttpServletRequest();
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
-        Meter meter = aMeter();
-        when(meterService.add(meter)).thenReturn(meter);
-        //when
-        ResponseEntity response = meterController.addMeter(meter);
-        //then
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(EntityURLBuilder.buildURLString(ENTITY, meter.getSerialNumber()),
-                response.getHeaders().getLocation());
+       try {
+           Meter meter = aMeter();
+           when(meterService.add(meter)).thenReturn(meter);
+           //when
+           ResponseEntity response = meterController.addMeter(meter);
+           //then
+           assertEquals(HttpStatus.CREATED, response.getStatusCode());
+           assertEquals(EntityURLBuilder.buildURLString(ENTITY, meter.getSerialNumber()),
+                   response.getHeaders().getLocation());
+       }catch (MeterExitsException meterExitsException){
+
+       }
+
     }
 
     @Test

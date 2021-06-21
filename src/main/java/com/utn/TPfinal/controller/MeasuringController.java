@@ -38,7 +38,7 @@ public class MeasuringController {
         measuring.setMeter(meter);
         Measuring newMeasuring= measuringService.add(measuring);
        // URI location = EntityURLBuilder.buildURL("fee", newMeasuring.getIdMeasuring());
-        return newMeasuring;
+          return newMeasuring;
     }
 
 

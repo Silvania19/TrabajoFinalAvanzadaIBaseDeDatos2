@@ -1,5 +1,6 @@
 package com.utn.TPfinal.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,11 +23,12 @@ public class Measuring{
     private Date date;
     private double priceMeasuring;
     // fk with bill
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="id_bill", nullable = false)
     private Bill bill;
     //fk with meter
-
+   @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="serial_number", nullable = false)
     private Meter meter;

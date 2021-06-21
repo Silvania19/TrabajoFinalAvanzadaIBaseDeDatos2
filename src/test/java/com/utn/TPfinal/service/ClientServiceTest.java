@@ -6,8 +6,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.jpa.repository.Query;
 
-import static com.utn.TPfinal.utils.TestUtils.aClient2;
-import static com.utn.TPfinal.utils.TestUtils.newMeasuring;
+import java.text.ParseException;
+import java.util.List;
+
+import static com.utn.TPfinal.utils.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -36,6 +38,11 @@ public class ClientServiceTest {
         assertEquals(client.getName(), name);
         assertEquals(client.getPassword(), password);
     }
-
+    @Test
+    public void tenMoreConsumersOk() throws ParseException {
+        when(clientRepository.tenMoreConsumers(aDate1(), aDate2())).thenReturn(aListUser());
+        List<Client> clients= clientService.tenMoreConsumers(aDate1(), aDate2());
+        assertEquals(clients, aListUser());
+    }
 
 }

@@ -1,10 +1,7 @@
 package com.utn.TPfinal.service;
 
 import com.utn.TPfinal.domain.*;
-import com.utn.TPfinal.exception.FeeException;
-import com.utn.TPfinal.exception.MeterException;
-import com.utn.TPfinal.exception.MeterWithMeasuringsException;
-import com.utn.TPfinal.exception.NotFoundException;
+import com.utn.TPfinal.exception.*;
 import com.utn.TPfinal.repository.MeterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 public class MeterService {
 
-    @Autowired
     MeterRepository meterDao;
 
     @Autowired
@@ -21,24 +17,24 @@ public class MeterService {
         this.meterDao=meterRepository;
     }
 
-    public Meter add(Meter meter) throws MeterException {
+    public Meter add(Meter meter) throws MeterExitsException {
         try {
             if (meterDao.findBySerialNumber(meter.getSerialNumber()) == null) {
                 return meterDao.save(meter);
             }
             else {
-                throw new MeterException("Error en agregar. Datos no correctos");
+                throw new MeterExitsException("Error en agregar. Datos no correctos");
             }
         }catch (Exception e){
-            throw  new MeterException("Error al cargar revisa la direccion");
+            throw  new MeterException("El serial, number ya existe");
         }
 
 
     }
 
-    public Meter getSerialNumber(String serialNumber) {
+   /* public Meter getSerialNumber(String serialNumber) {
         return meterDao.findBySerialNumber(serialNumber);
-    }
+    }*/
 
     public Meter updateMeter(String serialNumber, Meter meter) {
         Meter meterOld=meterDao.findBySerialNumber(serialNumber);

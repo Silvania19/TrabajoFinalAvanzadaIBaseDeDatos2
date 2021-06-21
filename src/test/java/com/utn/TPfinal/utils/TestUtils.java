@@ -1,10 +1,10 @@
 package com.utn.TPfinal.utils;
 
 import com.utn.TPfinal.domain.*;
+import com.utn.TPfinal.domain.dto.MeasuringDto;
 import com.utn.TPfinal.domain.dto.RequestLoginDto;
 import com.utn.TPfinal.domain.dto.ResponseLoginDto;
 import com.utn.TPfinal.domain.dto.UserDto;
-import com.utn.TPfinal.projections.MeasuringDtoQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
@@ -41,14 +41,29 @@ public class TestUtils {
         return client;
     }
 
+    public static List<UserDto> aListUserDto(){
+        return List.of(aUserDto());
+    }
+    public static List<Client> aListUser(){
+        return List.of(aClient());
+    }
     public static Bill aBill() {
        Bill bill= Bill.builder()
                .idBill(1)
                .amount(100.00)
                .pay(false)
                .client(aClient())
+               .address(aAddress())
                .build();
        return bill;
+    }
+
+    public static Address aAddress(){
+        Address address= Address.builder()
+                .idAddress(1)
+                .client(aClient())
+                .build();
+        return  address;
     }
     public static Meter aMeter(){
         Meter meter= Meter.builder()
@@ -103,8 +118,7 @@ public class TestUtils {
     public  static UserDto aUserDto(){
         UserDto userDto= UserDto.builder()
                         .id(1)
-                        .lastname("ortega")
-                        .name("silvania")
+                        .name("carlos")
                         .build();
         return  userDto;
     }
@@ -138,32 +152,18 @@ public class TestUtils {
         return new PageImpl<>(List.of(newMeasuring()));
     }
 
-   /* public static Consumption newConsumption(){
-        Consumption consumption= new () {
-
-        }
-    }*/
-    public  static MeasuringDtoQuery aMeasuringQueryDto(){
-        MeasuringDtoQuery measuringDtoQuery=new MeasuringDtoQuery() {
-            @Override
-            public float getValue() {
-                return 10;
-            }
-
-            @Override
-            public Date getDate() {
-                return null;
-            }
-
-            @Override
-            public double getPriceMeasuring() {
-                return 100;
-            }
-        };
-        return measuringDtoQuery;
-        }
-    public static Page<MeasuringDtoQuery> aMeasuringDtoQueries() {
-        return new PageImpl<>(List.of(aMeasuringQueryDto()));
+    public static List<Measuring> aListMeasuring(){
+        List<Measuring> measurings= List.of(newMeasuring());
+        return measurings;
     }
+
+    public static MeasuringDto aMeasuringDto(){
+        MeasuringDto measuringDto= MeasuringDto.builder()
+                .serialNumber("11111")
+                .password("1234")
+                .value(10).build();
+        return  measuringDto;
+    }
+
     }
 

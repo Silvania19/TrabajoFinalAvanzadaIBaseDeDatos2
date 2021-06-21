@@ -2,6 +2,7 @@ package com.utn.TPfinal.controller;
 
 import com.utn.TPfinal.domain.Bill;
 import com.utn.TPfinal.domain.Client;
+import com.utn.TPfinal.domain.Measuring;
 import com.utn.TPfinal.domain.dto.UserDto;
 import com.utn.TPfinal.service.BillService;
 import com.utn.TPfinal.service.ClientService;
@@ -23,13 +24,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static com.utn.TPfinal.utils.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyListOf;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class ClientControllerTest {
 
@@ -156,7 +157,7 @@ public class ClientControllerTest {
 
         ResponseEntity response= clientController.billsNotPay(idClient, authentication);
 
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
 
 
     }
@@ -170,22 +171,49 @@ public class ClientControllerTest {
 
     */
 
-    @Test
+   @Test
     public void getMeasuringsByRangesOfDatesOK() throws ParseException {
 
         //GIVEN
         Pageable pageable = PageRequest.of(1, 10);
         Authentication authentication= mock(Authentication.class);
+        Page<Measuring> mockedPage = mock(Page.class);
         when(modelMapper.map(authentication.getPrincipal(), UserDto.class)).thenReturn(aUserDto());
         when(measuringService.findMeasuringsByRangeOfDatesAndClient(aUserDto().getId(), aDate1(), aDate2(), pageable))
-                .thenReturn(aMeasuringDtoQueries());
+                .thenReturn(aPageMeasuring());
+       when(mockedPage.getContent()).thenReturn(aListMeasuring());
 
         //WHEN
-        ResponseEntity responseEntity = clientController.getMeasuringsByRangeOfDates(aUserDto().getId(),
+        ResponseEntity<List<Measuring>> responseEntity = clientController.getMeasuringsByRangeOfDates(aUserDto().getId(),
                                                          authentication, aDate1(), aDate2(), pageable);
         //THEN
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(aMeasuringDtoQueries(), responseEntity.getBody());
+        assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
+        assertEquals(responseEntity.getBody(), aListMeasuring());
     }
 
+   @Test
+    public void getUnpaidBillsByClientAndAddressOK(){
+       Integer idAddress=1;
+       Integer idClient=1;
+       Pageable pageable = PageRequest.of(1, 10);
+       List<Bill> bills= List.of(aBill());
+       when(billService.getUnpaidBillsByClientIdAndAddressId(idClient, idAddress, pageable))
+               .thenReturn(aPageBills());
+
+       ResponseEntity responseEntity= clientController.getUnpaidBillsByClientAndAddress(idClient, idAddress, pageable);
+
+       assertEquals(responseEntity.getBody(), bills);
+       assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
+   }
+   /*@Test
+   public void moreConsumersOfDateRange() throws ParseException {
+
+       when(clientService.tenMoreConsumers(aDate1(), aDate2()))/*.stream().map(o-> modelMapper.map(o, UserDto.class)))
+               .thenReturn(aListUser());
+
+        ResponseEntity responseEntity= clientController.moreConsumersOfDateRange(aDate1(), aDate2());
+
+        assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
+        assertEquals(responseEntity.getBody(), aListUserDto());
+   }*/
 }
