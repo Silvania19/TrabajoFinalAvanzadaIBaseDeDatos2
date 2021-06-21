@@ -3,6 +3,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.utn.TPfinal.domain.Client;
 import com.utn.TPfinal.domain.Employee;
 import com.utn.TPfinal.domain.TypeUser;
+import com.utn.TPfinal.domain.User;
 import com.utn.TPfinal.domain.dto.RequestLoginDto;
 import com.utn.TPfinal.domain.dto.ResponseLoginDto;
 import com.utn.TPfinal.domain.dto.UserDto;
@@ -103,10 +104,10 @@ public class UserController {
     }
 
 
-    @PreAuthorize(value = "hasAuthority('CLIENT')")
+    @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
     @PostMapping
-    public void addUser(@RequestBody Client user) {
-        clientService.add(user);
+    public void addUser(@RequestBody User user) {
+        clientService.add((Client) user);
     }
 
 }

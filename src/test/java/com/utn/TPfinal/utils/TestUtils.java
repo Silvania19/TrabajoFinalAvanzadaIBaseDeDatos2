@@ -10,14 +10,16 @@ import org.springframework.data.domain.PageImpl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
 public class TestUtils {
 
-    public static Date aDate1() throws ParseException {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        return simpleDateFormat.parse("03-26-2020");
+    public static LocalDateTime aDate1()  {
+
+      return LocalDateTime.of(2021, 06, 04, 00, 01);
     }
 
     public static Date aDate2() throws ParseException{
@@ -57,32 +59,26 @@ public class TestUtils {
                .build();
        return bill;
     }
-
-    public static Address aAddress(){
-        Address address= Address.builder()
-                .idAddress(1)
-                .client(aClient())
-                .build();
-        return  address;
-    }
     public static Meter aMeter(){
         Meter meter= Meter.builder()
                 .serialNumber("12345")
                 .passwordMeter("123")
                 .fee(aFee())
-                .address(aAdrress())
+                .address(aAddress())
                 //.model(aModel())
                 .build();
         return  meter;
     }
-    public  static Address aAdrress(){
+
+    public static Address aAddress(){
         Address address= Address.builder()
                 .idAddress(1)
-                .nameAddress("address1")
-                .numberAddress("1234")
+                //.nameAddress("nameAddress")
+                .client(aClient())
                 .build();
         return  address;
     }
+
     public static Model aModel(){
     Model model = Model.builder()
             .idModel(1)

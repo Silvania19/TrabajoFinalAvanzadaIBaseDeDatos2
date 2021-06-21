@@ -1,6 +1,7 @@
 package com.utn.TPfinal.service;
 
 import com.utn.TPfinal.domain.Fee;
+import com.utn.TPfinal.exception.AddressException;
 import com.utn.TPfinal.exception.FeeException;
 
 import com.utn.TPfinal.repository.FeeRepository;
@@ -22,8 +23,8 @@ public class FeeServiceTest {
     }
     @Test
     public void addHappyPath(){
-        //given
 
+        //given
         Fee fee= aFee();
         when(feeRepository.existsById(fee.getIdFee())).thenReturn(false);
         when(feeRepository.save(fee)).thenReturn(fee);
@@ -81,6 +82,7 @@ public class FeeServiceTest {
             when(feeRepository.save(nfee)).thenReturn(nfee);
             //when
             Fee feeN= feeService.updateFee(aFee().getIdFee(), nfee);
+
         }catch (FeeException fe){
 
         }
@@ -96,6 +98,7 @@ public class FeeServiceTest {
 
         verify(feeRepository, times(1)).delete(fee);
      }
+
     @Test
     public void deleteFeeExceptionTest(){
         Fee fee= aFee();

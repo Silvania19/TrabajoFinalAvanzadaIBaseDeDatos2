@@ -6,6 +6,8 @@ import com.utn.TPfinal.repository.MeterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.ConstraintViolationException;
+
 @Service
 
 public class MeterService {
@@ -26,10 +28,10 @@ public class MeterService {
                 throw new MeterExitsException("Error en agregar. Datos no correctos");
             }
         }catch (Exception e){
+
             throw  new MeterException("El serial, number ya existe");
+
         }
-
-
     }
 
    /* public Meter getSerialNumber(String serialNumber) {
@@ -47,6 +49,7 @@ public class MeterService {
         }
 
     }
+
 
     public void deleteMeter(String serialNumber) throws MeterException,  MeterWithMeasuringsException  {
 

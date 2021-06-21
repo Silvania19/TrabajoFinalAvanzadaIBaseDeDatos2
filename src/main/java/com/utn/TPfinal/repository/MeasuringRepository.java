@@ -37,7 +37,8 @@ public interface MeasuringRepository extends JpaRepository<Measuring, Integer> {
 
    /* backoffice 6) Consulta de mediciones de un domicilio por rango de fechas */
 
-@Query(value = "SELECT * FROM measurings `mea`\n" +
+
+    @Query(value = "SELECT * FROM measurings `mea`\n" +
         "INNER JOIN meters met ON mea.serial_number = met.serial_number\n" +
         "INNER JOIN addresses a ON met.id_address = a.id_address\n" +
         "WHERE a.id_address = :idAddress and mea.date between :beginDate and :endDate", nativeQuery = true)

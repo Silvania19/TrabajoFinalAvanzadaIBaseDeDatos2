@@ -3,7 +3,6 @@ package com.utn.TPfinal.controller;
 import com.utn.TPfinal.domain.Measuring;
 import com.utn.TPfinal.domain.Meter;
 import com.utn.TPfinal.domain.dto.MeasuringDto;
-
 import com.utn.TPfinal.service.MeasuringService;
 import com.utn.TPfinal.service.MeterService;
 import com.utn.TPfinal.util.ResponseEntityList;
@@ -40,7 +39,6 @@ public class MeasuringController {
        // URI location = EntityURLBuilder.buildURL("fee", newMeasuring.getIdMeasuring());
           return newMeasuring;
     }
-
 
     /**BACKOFFICE**/
 

@@ -147,7 +147,7 @@ public class ClientControllerTest {
 
 
     }
-    @Test
+    /*@Test
     public void billsNotPayNotFound() {
         Integer idClient=1;
         Authentication authentication= mock(Authentication.class);
@@ -160,7 +160,7 @@ public class ClientControllerTest {
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
 
 
-    }
+    }*/
    /* @Test
     public  void consumptionRangeDateKwMoneyOK() throws ParseException {
        Authentication authentication=  mock(Authentication.class);
@@ -187,8 +187,10 @@ public class ClientControllerTest {
         ResponseEntity<List<Measuring>> responseEntity = clientController.getMeasuringsByRangeOfDates(aUserDto().getId(),
                                                          authentication, aDate1(), aDate2(), pageable);
         //THEN
+
         assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
         assertEquals(responseEntity.getBody(), aListMeasuring());
+
     }
 
    @Test

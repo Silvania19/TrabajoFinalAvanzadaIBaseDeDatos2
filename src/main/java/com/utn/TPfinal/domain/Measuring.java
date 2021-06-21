@@ -1,5 +1,6 @@
 package com.utn.TPfinal.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -20,7 +22,9 @@ public class Measuring{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idMeasuring;
     private float value;
-    private Date date;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime date;
     private double priceMeasuring;
     // fk with bill
     @JsonIgnore
