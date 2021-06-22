@@ -20,18 +20,18 @@ public class MeterService {
     }
 
     public Meter add(Meter meter) throws MeterExitsException {
-        try {
+        //try {
             if (meterDao.findBySerialNumber(meter.getSerialNumber()) == null) {
                 return meterDao.save(meter);
             }
             else {
-                throw new MeterExitsException("Error en agregar. Datos no correctos");
+                throw new MeterExitsException("Error en agregar. El me");
             }
-        }catch (Exception e){
+        /*}catch (Exception e){
 
             throw  new MeterException("El serial, number ya existe");
 
-        }
+        }*/
     }
 
    /* public Meter getSerialNumber(String serialNumber) {

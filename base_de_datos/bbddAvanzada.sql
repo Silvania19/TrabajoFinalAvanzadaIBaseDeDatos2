@@ -67,12 +67,14 @@ CREATE TABLE addresses(
 CREATE TABLE bills(
                       id_bill INT AUTO_INCREMENT,
                       amount FLOAT,
+                      total_kwh FLOAT,
                       pay BOOLEAN,
+                      date_create DATETIME,
+                      expiration DATETIME,
                       first_measurement DATETIME,
                       last_measurement DATETIME,
                       id_client INT,
                       id_address INT,
-
                       CONSTRAINT pk_id_bill PRIMARY KEY (id_bill),
                       CONSTRAINT fk_id_client_bill FOREIGN KEY (id_client) REFERENCES clients(id),
                       CONSTRAINT fk_id_address_bill FOREIGN KEY (id_address) REFERENCES addresses(id_address)
@@ -102,8 +104,38 @@ CREATE TABLE measurings(
                            price_measuring DOUBLE,
                            CONSTRAINT pk_id_measuring PRIMARY KEY (id_measuring),
                            CONSTRAINT fk_id_bill FOREIGN KEY (id_bill) REFERENCES bills(id_bill),
-                           CONSTRAINT fk_serial_number FOREIGN KEY (serial_number) REFERENCES meters(serial_number)
+                           CONSTRAINT fk_serial_number FOREIGN KEY (serial_number) REFERENCES meters(serial_number)ON DELETE CASCADE
 );
+
+/* 1) Generar las estructuras necesarias para dar soporte a 4 sistemas diferentes :
+a) BACKOFFICE, que permitirá el manejo de clientes, medidores y tarifas.
+b) CLIENTES, que permitirá consultas de mediciones y facturación.
+c) MEDIDORES,, que será el sistema que enviará la información de
+mediciones a la base de datos.
+d) FACTURACIÓN , proceso automático de facturación.
+ */
+
+/*a) BACKOFFICE, que permitirá el manejo de clientes, medidores y tarifas.*/
+CREATE USER 'backoffice'@'localhost' IDENTIFIED BY '1234';
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON clients TO 'backoffice'@'localhost';
+GRANT SELECT, INSERT, UPDATE, DELETE ON meters TO 'backoffice'@'localhost';
+GRANT SELECT, INSERT, UPDATE, DELETE ON fees TO 'backoffice'@'localhost';
+
+/*b) CLIENTES, que permitirá consultas de mediciones y facturación.*/
+CREATE USER 'clients'@'localhost' IDENTIFIED BY '1234';
+GRANT SELECT ON measurings TO 'clients'@'localhost';
+GRANT SELECT ON bills TO 'clients'@'localhost';
+
+/*c) MEDIDORES,, que será el sistema que enviará la información de
+mediciones a la base de datos.*/
+CREATE USER 'meters'@'localhost' IDENTIFIED BY '1234';
+GRANT INSERT ON measurings TO 'meters'@'localhost';
+
+/*d)FACTURACIÓN , proceso automático de facturación*/
+
+CREATE USER 'bills'@'localhost' IDENTIFIED BY '1234';
+GRANT EXECUTE ON PROCEDURE GenerateBills TO 'bills'@'localhost';
 
 
 /*2) La facturación se realizará por un proceso automático en la base de datos. Se
@@ -340,4 +372,36 @@ END WHILE;
 CLOSE cur_adjustment;
 
 END;//
+
+ END;//
+
+/*4) Generar las estructuras necesarias para dar soporte a las consultas de mediciones
+por fecha y por usuario , debido a que tenemos restricción de que estas no pueden demorar
+más de dos segundos y tenemos previsto que tendremos 500.000.000 de mediciones en el
+sistema en el mediano plazo. */
+
+/* INDICES  */
+
+CREATE INDEX idx_measurings_serial_number_date
+ON measurings (serial_number, `date`)
+USING BTREE;
+
+DELIMITER//
+CREATE PROCEDURE findMeasuringsIndex(IN beginDate DATE, IN endDate DATE, IN idClient INT)
+BEGIN
+SELECT c.name, met.serial_number, mea.date, mea.value, mea.price_measuring
+FROM measurings AS mea
+         INNER JOIN meters AS met ON mea.serial_number= met.serial_number
+         INNER JOIN addresses AS ad ON ad.id_address = met.id_address
+         INNER JOIN clients AS c ON c.id = ad.id_client
+WHERE c.id=idClient AND mea.date BETWEEN beginDate AND endDate;
+END;//
+
+CALL findMeasuringsIndex('2019-06-06', '2025-06-06', 3);
+
+EXPLAIN EXTENDED SELECT * FROM measurings AS mea
+                                       INNER JOIN meters AS met ON mea.serial_number= met.serial_number
+                                       INNER JOIN addresses AS ad ON ad.id_address = met.id_address
+                                       INNER JOIN clients AS c ON c.id = ad.id_client
+                 WHERE c.id=3 AND mea.date BETWEEN '2019-06-06' AND '2025-06-06';
 

@@ -1,14 +1,14 @@
 package com.utn.TPfinal.service;
 
 import com.utn.TPfinal.domain.Meter;
+import com.utn.TPfinal.exception.MeterException;
 import com.utn.TPfinal.exception.MeterExitsException;
 import com.utn.TPfinal.exception.MeterWithMeasuringsException;
 import com.utn.TPfinal.repository.MeterRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static com.utn.TPfinal.utils.TestUtils.aMeter;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class MeterServiceTest {
@@ -47,7 +47,6 @@ public class MeterServiceTest {
         }catch (MeterExitsException me){
 
         }
-
     }
 
     @Test
@@ -60,6 +59,18 @@ public class MeterServiceTest {
         //then
         assertEquals(meter, aMeter());
     }
+
+    @Test
+    public  void updateMeterException(){
+        //given
+        when(meterRepository.findBySerialNumber(aMeter().getSerialNumber())).thenReturn(null);
+        when(meterRepository.save(aMeter())).thenReturn(aMeter());
+
+        assertThrows(MeterException.class, () -> {
+            meterService.updateMeter("1234", aMeter());
+        });
+    }
+
     @Test
     public void deleteMeterOk(){
         when(meterRepository.findBySerialNumber(aMeter().getSerialNumber())).thenReturn(aMeter());
@@ -70,16 +81,16 @@ public class MeterServiceTest {
             e.printStackTrace();
         }
     }
-   /* @Test
+   @Test
     public void deleteMeterException(){
         when(meterRepository.findBySerialNumber(aMeter().getSerialNumber())).thenReturn(null);
         try {
             meterService.deleteMeter(aMeter().getSerialNumber());
             verify(meterRepository, times(1)).deleteBySerialNumber(aMeter().getSerialNumber());
         } catch (MeterWithMeasuringsException e) {
-           fail();
+
         }
-    }*/
+    }
     @Test
     public void findBySerialNumberAndPasswordMeter(){
         when(meterRepository.findBySerialNumberAndPasswordMeter(aMeter().getSerialNumber(),

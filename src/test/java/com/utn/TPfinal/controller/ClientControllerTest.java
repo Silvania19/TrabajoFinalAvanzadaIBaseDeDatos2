@@ -146,8 +146,19 @@ public class ClientControllerTest {
         ResponseEntity response= clientController.billsNotPay(idClient,authentication);
 
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+    }
 
+    @Test
+    public void billsNotPayUnauthorized(){
+        Integer idClient=3;
+        Authentication authentication= mock(Authentication.class);
+        List<Bill> bills= new ArrayList<>();
+        when(modelMapper.map(authentication.getPrincipal(), Client.class)).thenReturn(aClient2());
+        when(billService.getBillsByIdClientNotPay(aClient2().getId())).thenReturn(bills);
 
+        ResponseEntity response = clientController.billsNotPay(idClient,authentication);
+
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
     /*@Test
     public void billsNotPayNotFound() {
@@ -198,6 +209,31 @@ public class ClientControllerTest {
 
     }
 
+    @Test
+    public void getMeasuringsByRangesOfDatesUnauthorize() {
+
+        //GIVEN
+        Pageable pageable = PageRequest.of(1, 10);
+        Date beginDate = mock(Date.class);
+        Date endDate = mock(Date.class);
+        Authentication authentication= mock(Authentication.class);
+        Page<Measuring> mockedPage = mock(Page.class);
+
+        when(modelMapper.map(authentication.getPrincipal(), UserDto.class)).thenReturn(aUserDto());
+        when(measuringService.findMeasuringsByRangeOfDatesAndClient(aUserDto().getId(), beginDate, endDate, pageable))
+                .thenReturn(aPageMeasuring());
+        when(mockedPage.getContent()).thenReturn(aListMeasuring());
+
+        //WHEN
+        ResponseEntity<List<Measuring>> responseEntity = clientController.getMeasuringsByRangeOfDates(4,
+                authentication, beginDate, endDate, pageable);
+        //THEN
+
+        assertEquals(responseEntity.getStatusCode(), HttpStatus.UNAUTHORIZED);
+        assertEquals(responseEntity.getBody(), null);
+
+    }
+
    @Test
     public void getUnpaidBillsByClientAndAddressOK(){
        Integer idAddress=1;
@@ -212,16 +248,23 @@ public class ClientControllerTest {
        assertEquals(responseEntity.getBody(), bills);
        assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
    }
-   /*@Test
+
+   @Test
    public void moreConsumersOfDateRange(){
         Date beginDate = mock(Date.class);
         Date endDate = mock(Date.class);
-       when(clientService.tenMoreConsumers(beginDate, endDate))/*.stream().map(o-> modelMapper.map(o, UserDto.class)))
-               .thenReturn(aListUser());
+       when(clientService.tenMoreConsumers(beginDate, endDate)).thenReturn(aListUser());
+       //when(modelMapper.map(aListUser(), UserDto.class)).thenReturn(aListUserDto());
+
+
+       when(modelMapper.map(any(Client.class),eq(UserDto.class))).thenReturn(aUserDto());
+
 
         ResponseEntity responseEntity= clientController.moreConsumersOfDateRange(beginDate, endDate);
 
         assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
         assertEquals(responseEntity.getBody(), aListUserDto());
-   }*/
+   }
+
+
 }
