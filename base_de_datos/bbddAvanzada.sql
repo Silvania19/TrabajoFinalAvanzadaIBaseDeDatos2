@@ -112,80 +112,158 @@ factura por medidor y debe tomar en cuenta todas las mediciones no facturadas
 para cada uno de los medidores, sin tener en cuenta su fecha. La fecha de vencimiento de
 esta factura será estipulado a 15 días.*/
 
-DROP PROCEDURE  IF EXISTS GenerateBills
+DROP PROCEDURE  IF EXISTS GenerateBills;
 DELIMITER //
 CREATE PROCEDURE GenerateBills()
 BEGIN
-      DECLARE amountR FLOAT;/*lo calculo*/
-      DECLARE first_measurementR DATETIME; /*dato que tengo que encontrar mientras agrego*/
-      DECLARE last_measurementR DATETIME; /*dato que tengo que encontrar mientras agrego*/
-      DECLARE id_clientR INT;/*dato que tengo que encontrar mientras agrego*/
-
       DECLARE vFinished INTEGER DEFAULT 0; /*variable para controlar los erorres, para cortar el cursor*/
 
       /* variables que voy a necesitar, para obtener el resto de los datos*/
       DECLARE vserial_number VARCHAR(50) ;
       DECLARE vid_address INT;
       DECLARE vid_fee INT;
-
+      DECLARE vid_client INT;
 
 
      /*declare el cursor*/
       DECLARE cur_billing CURSOR FOR
-      SELECT serial_number, id_address, id_fee
-      FROM meters;
+SELECT m.serial_number, m.id_address, m.id_fee, c.id
+FROM meters m
+         INNER JOIN addresses a ON m.id_address = a.id_address
+         INNER JOIN clients c ON a.id_client = c.id;
 
-      /* declaro un handler para maejar las execpciones dentro, con CONTINUE para que siga la ejecucion en caso de una excepcion.
-         Modifico vFinished=1*/
-      DECLARE CONTINUE HANDLER FOR NOT FOUND SET vFinished = 1;
+/* declaro un handler para maejar las execpciones dentro, con CONTINUE para que siga la ejecucion en caso de una excepcion.
+   Modifico vFinished=1*/
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET vFinished = 1;
 
+	/*comienzo una transaction, ya que una vez tomados los datos los que ingresen despues no los tendre en cuenta, de esta manera creo una unidad unica de trabajo
+	la cual no podra ser modificada por otra transaccion y se procurara la consistencia de la informacion*/
+START TRANSACTION;
 
-	    OPEN cur_billing;
-	   /*comienzo una transaction, ya que una vez tomados los datos los que ingresen despues no los tendre en cuenta, de esta manera creo una unidad unica de trabajo*/
+OPEN cur_billing;
 
-	    START TRANSACTION;
-		    FETCH cur_billing INTO vserial_number, vid_address, vid_fee;
-		    WHILE (vFinished=0) DO
+FETCH cur_billing INTO vserial_number, vid_address, vid_fee, vid_client;
 
-		        SET id_clientR= ( SELECT id_client FROM addresses
-		        WHERE  id_address = vid_address);
+WHILE (vFinished=0) DO
 
+		        CALL GenerateBill(vserial_number, vid_address, vid_fee, vid_client);
 
-			SET amountR = (SELECT SUM(VALUE) FROM measurings
-				WHERE id_bill IS NULL AND serial_number = vserial_number
-				GROUP BY serial_number)* (SELECT price_fee FROM fees WHERE id_fee = vid_fee);
+FETCH cur_billing INTO vserial_number, vid_address, vid_fee, vid_client;
+END WHILE;
+CLOSE cur_billing;
 
-			SET last_measurementR = (  SELECT MAX(DATE)
-							 FROM measurings
-							 WHERE serial_number = vserial_number AND id_bill IS NULL
-							 GROUP BY serial_number);
-		       SET first_measurementR = (  SELECT MIN(DATE)
-							 FROM measurings
-							 WHERE serial_number = vserial_number AND id_bill IS NULL
-							 GROUP BY serial_number);
-
-		        /*INSERTO LA BILL, CON PARCIALMENTE LOS DATOS*/
-		         INSERT INTO bills(amount, pay, first_measurement, last_measurement, id_client, id_address)
-		          VALUE (amountR, FALSE , first_measurementR, last_measurementR,  id_clientR, vid_address);
-
-			/*Actualizar las measuring */
-			UPDATE measurings SET id_bill = LAST_INSERT_ID()
-			WHERE serial_number = vserial_number AND id_bill IS NULL;
-
-		       FETCH cur_billing INTO vserial_number, vid_address, vid_fee;
-		    END WHILE;
-	    CLOSE cur_billing;
 /*cierro la transaccicion*/
-    COMMIT;
+COMMIT;
 END //
-SELECT * FROM fees
+
+/********************* procedure generateBill para el cursor *********************/
+
+DROP PROCEDURE  IF EXISTS GenerateBill;
+DELIMITER //
+CREATE PROCEDURE GenerateBill(IN serial_numberP VARCHAR(50), IN id_addressP INT, IN id_feeP INT, IN id_clientP INT)
+BEGIN
+        DECLARE amountR FLOAT;/*lo calculo*/
+        DECLARE total_kwhR FLOAT;/*lo calculo*/
+        DECLARE first_measurementR DATETIME; /*dato que tengo que encontrar mientras agrego*/
+        DECLARE last_measurementR DATETIME; /*dato que tengo que encontrar mientras agrego*/
+        DECLARE date_createR DATE;
+        DECLARE expirationR DATE;
+
+        SET date_createR = NOW();
+        SET expirationR =  DATE_ADD(date_createR,INTERVAL 15 DAY);
+
+
+SELECT SUM(price_measuring) INTO amountR
+FROM measurings
+WHERE serial_number = serial_numberP
+GROUP BY serial_number;
+
+SELECT SUM(VALUE) INTO total_kwhR
+FROM measurings
+WHERE serial_number = serial_numberP
+GROUP BY serial_number;
+
+SELECT MAX(DATE) INTO last_measurementR
+FROM measurings
+WHERE serial_number = serial_numberP AND id_bill IS NULL
+GROUP BY serial_number;
+SELECT MIN(DATE) INTO first_measurementR
+FROM measurings
+WHERE serial_number = serial_numberP AND id_bill IS NULL
+GROUP BY serial_number;
+
+
+INSERT INTO bills(amount, total_kwh, pay, date_create, expiration, first_measurement, last_measurement, id_client, id_address)
+    VALUE (amountR, total_kwhR, FALSE ,date_createR, expirationR, first_measurementR, last_measurementR,  id_clientP, id_addressP);
+
+/*Actualizar las measuring */
+UPDATE measurings SET id_bill = LAST_INSERT_ID()
+WHERE serial_number = serial_numberP AND id_bill IS NULL;
+END//
+
+       CALL GenerateBill("66666", 1, 1, 1);
+
+/******************************************************/
+DROP PROCEDURE  IF EXISTS GenerateBillAdjustment;
+DELIMITER //
+CREATE PROCEDURE GenerateBillAdjustment(IN serial_numberP VARCHAR(50), IN id_addressP INT, IN id_feeP INT, IN id_clientP INT)
+BEGIN
+        DECLARE amountR FLOAT;/*lo calculo*/
+        DECLARE total_kwhR FLOAT;/*lo calculo*/
+        DECLARE first_measurementR DATETIME; /*dato que tengo que encontrar mientras agrego*/
+        DECLARE last_measurementR DATETIME; /*dato que tengo que encontrar mientras agrego*/
+        DECLARE date_createR DATE;
+        DECLARE expirationR DATE;
+        DECLARE amount_bill FLOAT;
+
+        SET date_createR = NOW();
+        SET expirationR =  DATE_ADD(date_createR,INTERVAL 15 DAY);
+
+
+SELECT SUM(price_measuring) INTO amountR
+FROM measurings
+WHERE serial_number = serial_numberP
+GROUP BY serial_number;
+
+SELECT SUM(b.amount) INTO amount_bill
+FROM bills b
+WHERE b.id_address = id_addressP AND b.pay = FALSE;
+
+SET amountR = amountR - amount_bill;
+
+SELECT SUM(VALUE) INTO total_kwhR
+FROM measurings
+WHERE serial_number = serial_numberP
+GROUP BY serial_number;
+
+SELECT MAX(DATE) INTO last_measurementR
+FROM measurings
+WHERE serial_number = serial_numberP
+GROUP BY serial_number;
+SELECT MIN(DATE) INTO first_measurementR
+FROM measurings
+WHERE serial_number = serial_numberP
+GROUP BY serial_number;
+
+
+INSERT INTO bills(amount, total_kwh, pay, date_create, expiration, first_measurement, last_measurement, id_client, id_address)
+    VALUE (amountR, total_kwhR, FALSE ,date_createR, expirationR, first_measurementR, last_measurementR,  id_clientP, id_addressP);
+
+/*Actualizar las measuring */
+UPDATE measurings SET id_bill = LAST_INSERT_ID()
+WHERE serial_number = serial_numberP AND id_bill IS NULL;
+END//
+/******************************************************/
+
+
+/*              EVENTO          */
 /* despues de activar esta variable funciona*/
 
 SET GLOBAL event_scheduler = ON;
 
 /* Me crea el evento que sera automatico, le especifico el nombre, y a partir desde cuando y cada cuanto*/
 CREATE EVENT EGenerateBills
-ON SCHEDULE EVERY 1 minute STARTS NOW()
+ON SCHEDULE EVERY 1 MONTH STARTS '2021-06-01 00:00:01'
 DO CALL GenerateBills();
 
 /* para eliminar un evento*/
@@ -195,7 +273,6 @@ DROP EVENT IF EXISTS EGenerateBills;
 SHOW EVENTS;
  /* para ver lo que se esta trabajanndo*/
 
-SHOW WARNINGS
 
 /*
 3) Generar las estructuras necesarias para el cálculo de precio de cada medición y las
@@ -205,20 +282,20 @@ factura de ajuste a la nueva medición de cada una de las mediciones involucrada
 tarifa.
 
 */
-/*para fla que toca*/
- DROP TRIGGER IF EXISTS TIA_MEASURINGS_CALC_PRECIO;
- DELIMITER //
- CREATE TRIGGER TIB_MEASURINGS_CALC_PRECIO BEFORE INSERT ON measurings FOR EACH ROW
- BEGIN
-                DECLARE price FLOAT DEFAULT 0;
 
-                SELECT fe.price_fee INTO price
-                FROM fees fe
-		INNER JOIN meters met ON fe.id_fee = met.id_fee
-		WHERE met.serial_number = new.serial_number;
+DROP TRIGGER IF EXISTS TIA_MEASURINGS_CALC_PRECIO;
+DELIMITER //
+CREATE TRIGGER TIB_MEASURINGS_CALC_PRECIO BEFORE INSERT ON measurings FOR EACH ROW
+BEGIN
+    DECLARE price FLOAT DEFAULT 0;
 
-                SET new.price_measuring = price * new.value;
- END;//
+    SELECT fe.price_fee INTO price
+    FROM fees fe
+             INNER JOIN meters met ON fe.id_fee = met.id_fee
+    WHERE met.serial_number = new.serial_number;
+
+    SET new.price_measuring = price * new.value;
+END//
  /*
 3) Generar las estructuras necesarias para el cálculo de precio de cada medición y las
 inserción de la misma. Se debe tener en cuenta que una modificación en la tarifa debe
@@ -227,59 +304,40 @@ factura de ajuste a la nueva medición de cada una de las mediciones involucrada
 tarifa.
 
 */
- DROP TRIGGER IF EXISTS TIB_UPDATE_FEE;
- DELIMITER //
- CREATE TRIGGER TIB_UPDATE_FEE BEFORE UPDATE ON fees FOR EACH ROW
- BEGIN
+DROP TRIGGER IF EXISTS TIB_UPDATE_FEE;
+DELIMITER //
+CREATE TRIGGER TIB_UPDATE_FEE BEFORE UPDATE ON fees FOR EACH ROW
+BEGIN
 
-      DECLARE amountR INT;
-      DECLARE last_measurementR DATETIME;
-      DECLARE first_measurementR DATETIME;
-
-      DECLARE vid_client INT;
+    DECLARE vid_client INT;
       DECLARE vserial_number VARCHAR(50);
       DECLARE vid_address INT;
 
-       DECLARE vFinished INTEGER DEFAULT 0;
+      DECLARE vFinished INTEGER DEFAULT 0;
+
 
       DECLARE cur_adjustment CURSOR FOR
 
-      SELECT ad.id_client, met.serial_number, ad.id_address
-      FROM addresses ad
-      INNER JOIN meters met ON ad.id_address = met.id_address
-      WHERE met.id_fee = new.id_fee;
+    SELECT ad.id_client, met.serial_number, ad.id_address
+    FROM addresses ad
+             INNER JOIN meters met ON ad.id_address = met.id_address
+    WHERE met.id_fee = new.id_fee;
 
-           DECLARE CONTINUE HANDLER FOR NOT FOUND SET vFinished = 1;
-           OPEN cur_adjustment;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET vFinished = 1;
+    OPEN cur_adjustment;
 
-              FETCH cur_adjustment INTO vid_client, vserial_number, vid_address;
-              WHILE (vFinished=0) DO
+    FETCH cur_adjustment INTO vid_client, vserial_number, vid_address;
+    WHILE (vFinished=0) DO
 
-                  UPDATE measurings  SET price_measuring = VALUE * new.price_fee
-                  WHERE serial_number= vserial_number;
+    UPDATE measurings  SET price_measuring = VALUE * new.price_fee
+    WHERE serial_number= vserial_number;
 
-                   SELECT SUM(price_measuring) INTO amountR
-                   FROM measurings
-                   WHERE serial_number= vserial_number
-                   GROUP BY serial_number;
+    CALL GenerateBillAdjustment(vserial_number, vid_address, new.id_fee, vid_client);
 
-                   SELECT MAX(DATE) INTO last_measurementR
-	           FROM measurings
-		   WHERE serial_number = vserial_number
-		   GROUP BY serial_number;
+    FETCH cur_adjustment INTO vid_client, vserial_number, vid_address;
+END WHILE;
 
-		    SELECT MIN(DATE) INTO first_measurementR
-		    FROM measurings
-		    WHERE serial_number = vserial_number
-	            GROUP BY serial_number;
+CLOSE cur_adjustment;
 
+END;//
 
-		   INSERT INTO bills(amount, pay, first_measurement, last_measurement, id_client)
-		   VALUE (amountR, FALSE , first_measurementR, last_measurementR,  vid_client);
-
-		   FETCH cur_adjustment INTO vid_client, vserial_number;
-		  END WHILE;
-
-	    CLOSE cur_adjustment;
-
- END;//
