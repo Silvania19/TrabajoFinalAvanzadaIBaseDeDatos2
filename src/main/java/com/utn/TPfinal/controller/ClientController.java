@@ -3,9 +3,8 @@ package com.utn.TPfinal.controller;
 import com.utn.TPfinal.domain.Bill;
 import com.utn.TPfinal.domain.Client;
 import com.utn.TPfinal.domain.Measuring;
-import com.utn.TPfinal.domain.consumptions;
-import com.utn.TPfinal.domain.dto.ConsumptionDto;
 import com.utn.TPfinal.domain.dto.UserDto;
+import com.utn.TPfinal.projections.Consumption;
 import com.utn.TPfinal.service.BillService;
 import com.utn.TPfinal.service.ClientService;
 import com.utn.TPfinal.service.MeasuringService;
@@ -94,7 +93,7 @@ public class ClientController {
                                                       @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date beginDate,
                                                       @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date endDate) {
         UserDto userDto= modelMapper.map(authentication.getPrincipal(), UserDto.class);
-        consumptions consumption= measuringService.consumption(userDto.getId(), beginDate, endDate);
+        Consumption consumption= measuringService.consumption(userDto.getId(), beginDate, endDate);
         if(/*consumption.getPriceTotal() != null && consumption.getTotalKwh() != null*/ consumption!= null && idClient == userDto.getId()){
             return ResponseEntity.ok(consumption);
         }else {

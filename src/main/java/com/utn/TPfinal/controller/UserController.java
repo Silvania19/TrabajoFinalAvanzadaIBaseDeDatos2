@@ -98,16 +98,12 @@ public class UserController {
         } catch(Exception e) {
             return "dummy";
         }
-
-
-
     }
-
 
     @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
     @PostMapping
-    public void addUser(@RequestBody User user) {
-        clientService.add((Client) user);
+    public void addUser(@RequestBody Client user) {
+        clientService.add(user);
     }
 
 }
