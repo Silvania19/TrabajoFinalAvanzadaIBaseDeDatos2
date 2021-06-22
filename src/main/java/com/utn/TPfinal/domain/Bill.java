@@ -19,10 +19,12 @@ public class Bill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idBill;
-
     private Double amount;
+    private  Double totalKwh;
     //this variable is use to decide when the bill is pay or not pay. True=pay False=Not pay
     private  Boolean pay;
+    private Date dateCreate;
+    private Date expiration;
     // para determinar si la factura esta paga o no. Consulta de deuda (Facturas impagas)
 
     private Date firstMeasurement;
