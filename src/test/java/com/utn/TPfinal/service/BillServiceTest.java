@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.text.ParseException;
+import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -36,13 +37,14 @@ class BillServiceTest {
         //given
         Pageable pageable = PageRequest.of(1, 10);
         Integer idClient = 1;
-
+        Date beginDate = mock(Date.class);
+        Date endDate = mock(Date.class);
         //when
         when(billRepository.findAllBillsByUserAndDateBetween(any(), any(), any(), any()))
                 .thenReturn(TestUtils.aPageBills());
 
         Page<Bill> pageOfBills =
-                billService.getBillsByUserAndDateBetween(idClient, TestUtils.aDate1(), TestUtils.aDate2(), pageable);
+                billService.getBillsByUserAndDateBetween(idClient, beginDate, endDate, pageable);
 
         //then
         assertEquals(TestUtils.aPageBills(), pageOfBills);

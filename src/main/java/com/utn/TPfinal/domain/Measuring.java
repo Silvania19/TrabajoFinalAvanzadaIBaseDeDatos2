@@ -23,8 +23,8 @@ public class Measuring{
     private Integer idMeasuring;
     private float value;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime date;
+    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date date;
     private double priceMeasuring;
     // fk with bill
     @JsonIgnore

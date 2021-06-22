@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.data.jpa.repository.Query;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 import static com.utn.TPfinal.utils.TestUtils.*;
@@ -40,8 +41,10 @@ public class ClientServiceTest {
     }
     @Test
     public void tenMoreConsumersOk() throws ParseException {
-        when(clientRepository.tenMoreConsumers(aDate1(), aDate2())).thenReturn(aListUser());
-        List<Client> clients= clientService.tenMoreConsumers(aDate1(), aDate2());
+        Date beginDate = mock(Date.class);
+        Date endDate = mock(Date.class);
+        when(clientRepository.tenMoreConsumers(beginDate, endDate)).thenReturn(aListUser());
+        List<Client> clients= clientService.tenMoreConsumers(beginDate, endDate);
         assertEquals(clients, aListUser());
     }
 

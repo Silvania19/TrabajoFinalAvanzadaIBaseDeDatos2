@@ -17,15 +17,6 @@ import java.util.List;
 
 public class TestUtils {
 
-    public static LocalDateTime aDate1()  {
-
-      return LocalDateTime.of(2021, 06, 04, 00, 01);
-    }
-
-    public static Date aDate2() throws ParseException{
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        return simpleDateFormat.parse("03-27-2020");
-    }
 
    public static Fee aFee(){
        Fee fee= Fee.builder()

@@ -50,10 +50,10 @@ public class ClientControllerTest {
    }
 
     @Test
-    public void testGetBillsByRangeOfDatesOk() throws ParseException {
+    public void testGetBillsByRangeOfDatesOk(){
         //given
         Pageable pageable = PageRequest.of(1, 10);
-        List<Bill> billList2 = List.of(Bill.builder().firstMeasurement(aDate1()).lastMeasurement(aDate2()).build());
+        List<Bill> billList2 = List.of(Bill.builder().idBill(1).amount(100.0).build());
 
         Page<Bill> mockedPage = mock(Page.class);
         Date beginDate = mock(Date.class);
@@ -64,10 +64,10 @@ public class ClientControllerTest {
         when(mockedPage.getTotalElements()).thenReturn(10L);
         when(mockedPage.getTotalPages()).thenReturn(1);
         when(mockedPage.getContent()).thenReturn(billList2);
-        when(billService.getBillsByUserAndDateBetween(aUserDto().getId(), aDate1(), aDate2(), pageable)).thenReturn(mockedPage);
+        when(billService.getBillsByUserAndDateBetween(aUserDto().getId(), beginDate, endDate, pageable)).thenReturn(mockedPage);
 
         //then
-        ResponseEntity<List<Bill>> response = clientController.getBillsByRangeOfDatesByUser(aUserDto().getId(),authentication, aDate1(), aDate2(), pageable);
+        ResponseEntity<List<Bill>> response = clientController.getBillsByRangeOfDatesByUser(aUserDto().getId(),authentication,beginDate, endDate, pageable);
 
         //assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -76,19 +76,21 @@ public class ClientControllerTest {
         assertEquals(billList2, response.getBody());
     }
     @Test
-    public void testGetBillsByRangeOfDatesUnauthorized() throws ParseException {
+    public void testGetBillsByRangeOfDatesUnauthorized(){
         //given
         Pageable pageable = PageRequest.of(1, 10);
-        List<Bill> billList2 = List.of(Bill.builder().firstMeasurement(aDate1()).lastMeasurement(aDate2()).build());
+        List<Bill> billList2 = List.of(Bill.builder().idBill(1).amount(100.0).build());
 
+        Date beginDate = mock(Date.class);
+        Date endDate = mock(Date.class);
         Page<Bill> mockedPage = mock(Page.class);
         Authentication authentication = mock(Authentication.class);
 
         when(authentication.getPrincipal()).thenReturn(aUserDto());
-        when(billService.getBillsByUserAndDateBetween(aUserDto().getId(), aDate1(), aDate2(), pageable)).thenReturn(mockedPage);
+        when(billService.getBillsByUserAndDateBetween(aUserDto().getId(), beginDate, endDate, pageable)).thenReturn(mockedPage);
 
         //then
-        ResponseEntity<List<Bill>> response = clientController.getBillsByRangeOfDatesByUser(aUserDto().getId(),authentication, aDate1(), aDate2(), pageable);
+        ResponseEntity<List<Bill>> response = clientController.getBillsByRangeOfDatesByUser(aUserDto().getId(),authentication, beginDate, endDate, pageable);
 
         //assert
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
@@ -172,20 +174,23 @@ public class ClientControllerTest {
     */
 
    @Test
-    public void getMeasuringsByRangesOfDatesOK() throws ParseException {
+    public void getMeasuringsByRangesOfDatesOK() {
 
         //GIVEN
         Pageable pageable = PageRequest.of(1, 10);
+        Date beginDate = mock(Date.class);
+        Date endDate = mock(Date.class);
         Authentication authentication= mock(Authentication.class);
         Page<Measuring> mockedPage = mock(Page.class);
+
         when(modelMapper.map(authentication.getPrincipal(), UserDto.class)).thenReturn(aUserDto());
-        when(measuringService.findMeasuringsByRangeOfDatesAndClient(aUserDto().getId(), aDate1(), aDate2(), pageable))
+        when(measuringService.findMeasuringsByRangeOfDatesAndClient(aUserDto().getId(), beginDate, endDate, pageable))
                 .thenReturn(aPageMeasuring());
        when(mockedPage.getContent()).thenReturn(aListMeasuring());
 
         //WHEN
         ResponseEntity<List<Measuring>> responseEntity = clientController.getMeasuringsByRangeOfDates(aUserDto().getId(),
-                                                         authentication, aDate1(), aDate2(), pageable);
+                                                         authentication, beginDate, endDate, pageable);
         //THEN
 
         assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
@@ -208,12 +213,13 @@ public class ClientControllerTest {
        assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
    }
    /*@Test
-   public void moreConsumersOfDateRange() throws ParseException {
-
-       when(clientService.tenMoreConsumers(aDate1(), aDate2()))/*.stream().map(o-> modelMapper.map(o, UserDto.class)))
+   public void moreConsumersOfDateRange(){
+        Date beginDate = mock(Date.class);
+        Date endDate = mock(Date.class);
+       when(clientService.tenMoreConsumers(beginDate, endDate))/*.stream().map(o-> modelMapper.map(o, UserDto.class)))
                .thenReturn(aListUser());
 
-        ResponseEntity responseEntity= clientController.moreConsumersOfDateRange(aDate1(), aDate2());
+        ResponseEntity responseEntity= clientController.moreConsumersOfDateRange(beginDate, endDate);
 
         assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
         assertEquals(responseEntity.getBody(), aListUserDto());
