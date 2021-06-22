@@ -26,7 +26,7 @@ public class Measuring{
     private float value;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime date;
+    private Date date;
     private double priceMeasuring;
     // fk with bill
     @JsonIgnore

@@ -54,8 +54,8 @@ public class ClientController {
     @GetMapping("{idClient}/bills")
     public ResponseEntity<List<Bill>>getBillsByRangeOfDatesByUser(@PathVariable Integer idClient,
                                                                   Authentication authentication,
-                                                                  @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy HH:mm:ss") LocalDateTime beginDate,
-                                                                  @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy HH:mm:ss") LocalDateTime endDate,
+                                                                  @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") LocalDateTime beginDate,
+                                                                  @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") LocalDateTime endDate,
                                                                   Pageable pageable){
         UserDto client = modelMapper.map(authentication.getPrincipal(), UserDto.class);
         if(client != null && idClient == client.getId()){
