@@ -1,0 +1,184 @@
+/*Relaciones entre SQL y MongoDB
+Database -> Database
+Collection -> Table
+Document -> Row
+Field -> Column
+Value -> Value*/
+
+use Adea; //Crear y usar la base de datos
+
+//employees
+db.createCollection('employees')
+
+db.employees.insert({
+    "id" : 1,
+    "name" : "jose",
+    "lastname" : "gomez",
+    "password" : "1234"
+})
+
+//brands
+db.createCollection('brands') 
+
+db.brands.insert({ 
+    "id_brand" : 1,
+    "description" : "descripcion",
+    "models" :[
+        {
+            "id_model" : 1,
+            "description" : "descripcion1"            
+        }
+    ]
+})
+
+//models
+db.createCollection('models') 
+
+db.models.insert({ 
+    "id_model" : 1,
+    "description" : "descripcion1"
+})
+
+//fees
+db.createCollection('fees') 
+
+db.fees.insert({
+    "id_fee" : 1,
+    "type_fee" : "typeFee1",
+    "price_fee" : 500
+})
+
+//clients
+db.createCollection('clients') 
+
+db.clients.insert({ 
+    "id" : 1,
+    "name" : "jorge",
+    "lastname" : "perez",
+    "password" : "1234"
+})
+
+//addresses
+
+db.createCollection('addresses') 
+
+db.addresses.insert({ 
+    "id_address" : 1,
+    "name_address" : "nameAddress1",
+    "number_address" : "4311",
+    "clients" : [{
+        "id" : 2,
+        "name" : "oriel",
+        "lastname" : "lopez",
+        "password" : "1444"
+    }]
+})
+
+//bills
+
+db.createCollection('bills') 
+
+db.bills.insert({ 
+    "id_bill" : 1,
+    "amount" : 200.50,
+    "pay" : "FALSE",
+    "first_measurement" : new Date(2020,09,1),
+    "last_measurement" : new Date(2020,09,1),
+    "clients" : [{
+        "id" : 3,
+        "name" : "jorge",
+        "lastname" : "pliota",
+        "password" : "3322"
+    }],
+    "addresses" : [{ 
+        "id_address" : 3,
+        "name_address" : "nameAddress3",
+        "number_address" : "6598",
+    }]
+})
+
+//meters
+
+db.createCollection('meters') 
+
+db.meters.insert({     
+    "serial_number" : "serialNumber1",
+    "password_meter" : "password",
+    "addresses" : [{
+        "id_address" : 2,
+        "name_address" : "nameAddress1",
+        "number_address" : "4311",
+        "clients" : [{
+            "id" : 2,
+            "name" : "oriel",
+            "lastname" : "lopez",
+            "password" : "1444"
+        }]
+    }],
+    "models" : [{ 
+        "id_model" : 1,
+        "description" : "descripcion1"
+    }],
+    "fees" :[{
+        "id_fee" : 1,
+        "type_fee" : "typeFee1",
+        "price_fee" : 500
+    }]
+ })
+
+ // measurings
+
+db.createCollection('measurings') 
+
+db.measurings.insert({ 
+    "id_measuring" : 1,
+    "value" : 200.23,
+    "date" : new Date(2020,09,1),
+    "price_measuring" : 200.20,
+    "bills" : [{ 
+        "id_bill" : 1,
+        "amount" : 200.50,
+        "pay" : "FALSE",
+        "first_measurement" : new Date(2020,09,1),
+        "last_measurement" : new Date(2020,09,1),
+        "clients" : [{
+            "id" : 3,
+            "name" : "jorge",
+            "lastname" : "pliota",
+            "password" : "3322"
+        }],
+        "addresses" : [{ 
+            "id_address" : 3,
+            "name_address" : "nameAddress3",
+            "number_address" : "6598",
+        }]
+    }],
+    "meters" : [{     
+        "serial_number" : "serialNumber1",
+        "password_meter" : "password",
+        "addresses" : [{
+            "id_address" : 2,
+            "name_address" : "nameAddress1",
+            "number_address" : "4311",
+            "clients" : [{
+                "id" : 2,
+                "name" : "oriel",
+                "lastname" : "lopez",
+                "password" : "1444"
+            }]
+        }],
+        "models" : [{ 
+            "id_model" : 1,
+            "description" : "descripcion1"
+        }],
+        "fees" :[{
+            "id_fee" : 1,
+            "type_fee" : "typeFee1",
+            "price_fee" : 500
+        }]
+     }]    
+ })
+
+
+
+
