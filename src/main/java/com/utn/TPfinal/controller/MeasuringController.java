@@ -52,7 +52,7 @@ public class MeasuringController {
       /*si el address no existe no foud, o no existe. No no content*/
         Page pageMeasuring = measuringService.measuringRangeDateByAddress(idAddress, beginDate, endDate, pageable);
 
-        return ResponseEntityList.response(pageMeasuring);
+        return ResponseEntityList.responsePage(pageMeasuring);
     }
 
 }

@@ -25,18 +25,9 @@ public class MeterService {
                 return meterDao.save(meter);
             }
             else {
-                throw new MeterExitsException("Error en agregar. El me");
+                throw new MeterExitsException("Error en agregar el meter");
             }
-        /*}catch (Exception e){
-
-            throw  new MeterException("El serial, number ya existe");
-
-        }*/
     }
-
-   /* public Meter getSerialNumber(String serialNumber) {
-        return meterDao.findBySerialNumber(serialNumber);
-    }*/
 
     public Meter updateMeter(String serialNumber, Meter meter) {
         Meter meterOld=meterDao.findBySerialNumber(serialNumber);

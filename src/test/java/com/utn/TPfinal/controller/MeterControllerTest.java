@@ -17,6 +17,7 @@ import org.springframework.web.servlet.function.EntityResponse;
 
 import static com.utn.TPfinal.utils.TestUtils.aMeter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 public class MeterControllerTest {
@@ -45,7 +46,7 @@ public class MeterControllerTest {
            assertEquals(EntityURLBuilder.buildURLString(ENTITY, meter.getSerialNumber()),
                    response.getHeaders().getLocation());
        }catch (MeterExitsException meterExitsException){
-
+            fail();
        }
 
     }

@@ -38,16 +38,6 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getHttpStatus());
     }
 
-    @ExceptionHandler({MeterException.class})
-    public ResponseEntity<Object> meterError(FeeException ex, WebRequest request) {
-        List<String> errors = new ArrayList<>();
-
-
-        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
-
-        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getHttpStatus());
-    }
-
 
         @ExceptionHandler({MeterWithMeasuringsException.class})
         public ResponseEntity<Object> meterMeasuringError (MeterWithMeasuringsException ex, WebRequest request){
@@ -69,7 +59,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
 
     @ExceptionHandler({MeterExitsException.class})
-    public ResponseEntity<Object> meterExitsException(NotFoundException ex, WebRequest request) {
+    public ResponseEntity<Object> meterExitsException(MeterExitsException ex, WebRequest request) {
         List<String> errors = new ArrayList<>();
 
         ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getLocalizedMessage(), errors);

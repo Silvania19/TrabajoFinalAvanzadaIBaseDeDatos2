@@ -25,6 +25,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.utn.TPfinal.util.ResponseEntityList.responseList;
+
 @RestController
 @RequestMapping("/clients")
 public class ClientController {
@@ -58,7 +60,7 @@ public class ClientController {
         UserDto client = modelMapper.map(authentication.getPrincipal(), UserDto.class);
         if(client != null && idClient == client.getId()){
             Page pageOfBills = billService.getBillsByUserAndDateBetween(client.getId(), beginDate, endDate, pageable);
-            return ResponseEntityList.response(pageOfBills);
+            return ResponseEntityList.responsePage(pageOfBills);
         }else{
             return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -75,9 +77,8 @@ public class ClientController {
         //en el caso de que el client=null. no found, y en el otro unauthorized
         if (client != null && idClient == client.getId()) {
             List<Bill> bills = billService.getBillsByIdClientNotPay(client.getId());
-            HttpStatus httpStatus = bills.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK;
-            return ResponseEntity.status(httpStatus).body(bills);
 
+            return responseList(bills);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -94,10 +95,10 @@ public class ClientController {
                                                       @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date endDate) {
         UserDto userDto= modelMapper.map(authentication.getPrincipal(), UserDto.class);
         Consumption consumption= measuringService.consumption(userDto.getId(), beginDate, endDate);
-        if(/*consumption.getPriceTotal() != null && consumption.getTotalKwh() != null*/ consumption!= null && idClient == userDto.getId()){
+        if(consumption!= null && idClient == userDto.getId()){
             return ResponseEntity.ok(consumption);
         }else {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 
@@ -113,10 +114,10 @@ public class ClientController {
         UserDto client = modelMapper.map(authentication.getPrincipal(), UserDto.class);
         if(client != null && idClient == client.getId()) {
             Page pageOfMeasurings = measuringService.findMeasuringsByRangeOfDatesAndClient(client.getId(), beginDate, endDate, pageable);
-            return ResponseEntityList.response(pageOfMeasurings);
+            return ResponseEntityList.responsePage(pageOfMeasurings);
         }else{
             return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        } // si el cliente es igual a null no deberia traer un conflict ?
     }
 
     /**Backoffice **/
@@ -129,20 +130,19 @@ public class ClientController {
                                                                       Pageable pageable){
         Page pageOfBills = billService.getUnpaidBillsByClientIdAndAddressId(idClient, idAddress, pageable);
         // en caso de no encontrar o bien la direccion, o el cliente un no found,(hoy devuelve no content)
-        return ResponseEntityList.response(pageOfBills);
+        return ResponseEntityList.responsePage(pageOfBills);
     }
 
    //5) Consulta 10 clientes más consumidores en un rango de fechas
     @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
     @GetMapping("moreConsumers")
-    public ResponseEntity<List<UserDto>> moreConsumersOfDateRange(
-            @RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date beginDate,
-            @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") Date endDate){
+    public ResponseEntity<List<UserDto>> moreConsumersOfDateRange(@RequestParam @DateTimeFormat(pattern="dd-MM-yyyy") Date beginDate,
+                                                                  @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") Date endDate){
 
         List<UserDto> userList = clientService.tenMoreConsumers(beginDate, endDate).
                 stream().map(o -> modelMapper.map(o, UserDto.class)).collect(Collectors.toList());
 
-        return userList.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(userList);
+        return ResponseEntityList.responseList(userList);
     }
 
 }
