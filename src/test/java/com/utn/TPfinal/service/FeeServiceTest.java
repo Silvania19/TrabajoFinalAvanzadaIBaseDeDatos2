@@ -8,6 +8,8 @@ import com.utn.TPfinal.repository.FeeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.Optional;
+
+import static com.utn.TPfinal.utils.Constants.ONE_INVOCATION;
 import static com.utn.TPfinal.utils.TestUtils.aFee;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -96,7 +98,7 @@ public class FeeServiceTest {
         // then
         feeService.deleteFee(fee.getIdFee());
 
-        verify(feeRepository, times(1)).delete(fee);
+        verify(feeRepository, times(ONE_INVOCATION)).delete(fee);
      }
 
     @Test
@@ -107,7 +109,7 @@ public class FeeServiceTest {
             // then
             feeService.deleteFee(fee.getIdFee());
 
-            verify(feeRepository, times(1)).delete(fee);
+            verify(feeRepository, times(ONE_INVOCATION)).delete(fee);
 
         }catch (FeeException e){
 

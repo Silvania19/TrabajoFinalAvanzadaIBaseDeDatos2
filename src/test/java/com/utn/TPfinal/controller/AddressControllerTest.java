@@ -11,6 +11,8 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import static com.utn.TPfinal.utils.Constants.NUMBER_OF_ID_ONE;
+import static com.utn.TPfinal.utils.Constants.ONE_INVOCATION;
 import static com.utn.TPfinal.utils.TestUtils.aAddress;
 import static com.utn.TPfinal.utils.TestUtils.aFee;
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,6 +24,7 @@ class AddressControllerTest {
     AddressService addressService;
 
     AddressController addressController;
+    final String ENTITY_NAME = "address";
 
     @BeforeEach
     void setUp() {
@@ -43,7 +46,7 @@ class AddressControllerTest {
 
         //then
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(EntityURLBuilder.buildURL("address", aAddress().getIdAddress()),
+        assertEquals(EntityURLBuilder.buildURL(ENTITY_NAME, aAddress().getIdAddress()),
                 response.getHeaders().getLocation());
     }
 
@@ -53,14 +56,14 @@ class AddressControllerTest {
         MockHttpServletRequest request = new MockHttpServletRequest();
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
 
-        when(addressService.updateAddress(1, aAddress())).thenReturn(aAddress());
+        when(addressService.updateAddress(NUMBER_OF_ID_ONE, aAddress())).thenReturn(aAddress());
 
         //when
-        ResponseEntity response = addressController.updateAddress(1, aAddress());
+        ResponseEntity response = addressController.updateAddress(NUMBER_OF_ID_ONE, aAddress());
 
         //then
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(EntityURLBuilder.buildURL("address", aAddress().getIdAddress()),
+        assertEquals(EntityURLBuilder.buildURL(ENTITY_NAME, aAddress().getIdAddress()),
                 response.getBody());
 
     }
@@ -68,6 +71,6 @@ class AddressControllerTest {
     @Test
     void deleteAddressHapptyPathTest() {
         ResponseEntity response=  addressController.deleteAddress(aAddress().getIdAddress());
-        verify(addressService, times(1)).deleteAddress(aAddress().getIdAddress());
+        verify(addressService, times(ONE_INVOCATION)).deleteAddress(aAddress().getIdAddress());
     }
 }

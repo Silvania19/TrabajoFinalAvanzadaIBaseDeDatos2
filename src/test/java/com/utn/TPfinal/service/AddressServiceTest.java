@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
+import static com.utn.TPfinal.utils.Constants.ONE_INVOCATION;
 import static com.utn.TPfinal.utils.TestUtils.aAddress;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -82,7 +83,7 @@ class AddressServiceTest {
         //when
         addressService.deleteAddress(address.getIdAddress());
 
-        verify(addressRepository, times(1)).delete(address);
+        verify(addressRepository, times(ONE_INVOCATION)).delete(address);
     }
 
     @Test
@@ -95,7 +96,7 @@ class AddressServiceTest {
             //when
             addressService.deleteAddress(5);
 
-            verify(addressRepository, times(1)).delete(aAddress());
+            verify(addressRepository, times(ONE_INVOCATION)).delete(aAddress());
 
         }catch(AddressException e){
 

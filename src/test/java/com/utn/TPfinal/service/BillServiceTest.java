@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import java.text.ParseException;
 import java.util.Date;
 
+import static com.utn.TPfinal.utils.Constants.NUMBER_OF_ID_ONE;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -22,8 +23,6 @@ class BillServiceTest {
     private BillService billService;
 
     private BillRepository billRepository;
-
-    //private static List<Bill> BILL_LIST =  List.of(Bill.builder().firstMeasurement("03-26-2020").lastMeasurement("03-27-2020").build());
 
     @BeforeEach
     public void setUp() {
@@ -36,7 +35,7 @@ class BillServiceTest {
 
         //given
         Pageable pageable = PageRequest.of(1, 10);
-        Integer idClient = 1;
+        Integer idClient = NUMBER_OF_ID_ONE;
         Date beginDate = mock(Date.class);
         Date endDate = mock(Date.class);
         //when

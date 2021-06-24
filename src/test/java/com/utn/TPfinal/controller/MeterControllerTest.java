@@ -23,7 +23,7 @@ import static org.mockito.Mockito.*;
 public class MeterControllerTest {
     MeterService meterService;
     MeterController meterController;
-    final String ENTITY = "meter";
+    final String ENTITY_NAME = "meter";
 
     @BeforeEach
     public void setUp() {
@@ -43,7 +43,7 @@ public class MeterControllerTest {
            ResponseEntity response = meterController.addMeter(meter);
            //then
            assertEquals(HttpStatus.CREATED, response.getStatusCode());
-           assertEquals(EntityURLBuilder.buildURLString(ENTITY, meter.getSerialNumber()),
+           assertEquals(EntityURLBuilder.buildURLString(ENTITY_NAME, meter.getSerialNumber()),
                    response.getHeaders().getLocation());
        }catch (MeterExitsException meterExitsException){
             fail();
@@ -64,7 +64,7 @@ public class MeterControllerTest {
         //then
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(EntityURLBuilder.buildURLString(ENTITY, meter.getSerialNumber()),
+        assertEquals(EntityURLBuilder.buildURLString(ENTITY_NAME, meter.getSerialNumber()),
                 response.getBody());
     }
 

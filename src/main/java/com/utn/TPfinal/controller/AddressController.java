@@ -46,10 +46,7 @@ public class AddressController {
     public ResponseEntity deleteAddress(@PathVariable Integer id)
     {
         addressService.deleteAddress(id);
-
-        return ResponseEntity.ok().build();
-        //return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        // devuelvo no content porque:El request se ha procesado correctamente, pero no devuelve ningún contenido.
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     // devolver response

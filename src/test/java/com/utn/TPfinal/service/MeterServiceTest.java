@@ -7,6 +7,8 @@ import com.utn.TPfinal.exception.MeterWithMeasuringsException;
 import com.utn.TPfinal.repository.MeterRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static com.utn.TPfinal.utils.Constants.ONE_INVOCATION;
 import static com.utn.TPfinal.utils.TestUtils.aMeter;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -76,21 +78,23 @@ public class MeterServiceTest {
         when(meterRepository.findBySerialNumber(aMeter().getSerialNumber())).thenReturn(aMeter());
         try {
             meterService.deleteMeter(aMeter().getSerialNumber());
-            verify(meterRepository, times(1)).deleteBySerialNumber(aMeter().getSerialNumber());
+            verify(meterRepository, times(ONE_INVOCATION)).deleteBySerialNumber(aMeter().getSerialNumber());
         } catch (MeterWithMeasuringsException e) {
             e.printStackTrace();
         }
     }
+
    @Test
     public void deleteMeterException(){
         when(meterRepository.findBySerialNumber(aMeter().getSerialNumber())).thenReturn(null);
         try {
             meterService.deleteMeter(aMeter().getSerialNumber());
-            verify(meterRepository, times(1)).deleteBySerialNumber(aMeter().getSerialNumber());
+            verify(meterRepository, times(ONE_INVOCATION)).deleteBySerialNumber(aMeter().getSerialNumber());
         } catch (MeterWithMeasuringsException e) {
 
         }
     }
+
     @Test
     public void findBySerialNumberAndPasswordMeter(){
         when(meterRepository.findBySerialNumberAndPasswordMeter(aMeter().getSerialNumber(),

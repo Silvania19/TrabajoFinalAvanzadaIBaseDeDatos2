@@ -7,6 +7,7 @@ import com.utn.TPfinal.domain.dto.UserDto;
 import com.utn.TPfinal.service.BillService;
 import com.utn.TPfinal.service.ClientService;
 import com.utn.TPfinal.service.MeasuringService;
+import com.utn.TPfinal.utils.Constants;
 import com.utn.TPfinal.utils.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static com.utn.TPfinal.utils.Constants.*;
 import static com.utn.TPfinal.utils.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -52,8 +54,8 @@ public class ClientControllerTest {
     @Test
     public void testGetBillsByRangeOfDatesOk(){
         //given
-        Pageable pageable = PageRequest.of(1, 10);
-        List<Bill> billList2 = List.of(Bill.builder().idBill(1).amount(100.0).build());
+        Pageable pageable = PageRequest.of(PAGE_ONE, SIZE_TEN);
+        List<Bill> billList2 = List.of(Bill.builder().idBill(NUMBER_OF_ID_ONE).amount(100.0).build());
 
         Page<Bill> mockedPage = mock(Page.class);
         Date beginDate = mock(Date.class);
@@ -78,8 +80,8 @@ public class ClientControllerTest {
     @Test
     public void testGetBillsByRangeOfDatesUnauthorized(){
         //given
-        Pageable pageable = PageRequest.of(1, 10);
-        List<Bill> billList2 = List.of(Bill.builder().idBill(1).amount(100.0).build());
+        Pageable pageable = PageRequest.of(PAGE_ONE, SIZE_TEN);
+        List<Bill> billList2 = List.of(Bill.builder().idBill(NUMBER_OF_ID_ONE).amount(100.0).build());
 
         Date beginDate = mock(Date.class);
         Date endDate = mock(Date.class);
@@ -101,7 +103,7 @@ public class ClientControllerTest {
 
         //given
         Pageable pageable = PageRequest.of(50, 10);
-        Integer idClient = 1;
+        Integer idClient = NUMBER_OF_ID_ONE;
 
         Page<Bill> mockedPage = mock(Page.class);
         Date beginDate = mock(Date.class);
@@ -188,7 +190,7 @@ public class ClientControllerTest {
     public void getMeasuringsByRangesOfDatesOK() {
 
         //GIVEN
-        Pageable pageable = PageRequest.of(1, 10);
+        Pageable pageable = PageRequest.of(PAGE_ONE, SIZE_TEN);
         Date beginDate = mock(Date.class);
         Date endDate = mock(Date.class);
         Authentication authentication= mock(Authentication.class);
@@ -213,7 +215,7 @@ public class ClientControllerTest {
     public void getMeasuringsByRangesOfDatesUnauthorize() {
 
         //GIVEN
-        Pageable pageable = PageRequest.of(1, 10);
+        Pageable pageable = PageRequest.of(PAGE_ONE, SIZE_TEN);
         Date beginDate = mock(Date.class);
         Date endDate = mock(Date.class);
         Authentication authentication= mock(Authentication.class);
@@ -238,7 +240,7 @@ public class ClientControllerTest {
     public void getUnpaidBillsByClientAndAddressOK(){
        Integer idAddress=1;
        Integer idClient=1;
-       Pageable pageable = PageRequest.of(1, 10);
+       Pageable pageable = PageRequest.of(PAGE_ONE, SIZE_TEN);
        List<Bill> bills= List.of(aBill());
        when(billService.getUnpaidBillsByClientIdAndAddressId(idClient, idAddress, pageable))
                .thenReturn(aPageBills());

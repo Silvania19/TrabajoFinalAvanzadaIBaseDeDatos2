@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import static com.utn.TPfinal.utils.Constants.ONE_INVOCATION;
 import static com.utn.TPfinal.utils.TestUtils.aFee;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -23,7 +24,7 @@ public class FeeControllerTest {
     @Mock
     FeeService feeService;
     FeeController feeController;
-    final String ENTITY= "fee";
+    final String ENTITY_NAME= "fee";
     @BeforeEach
     public void setUp() {
         initMocks(this);
@@ -40,7 +41,7 @@ public class FeeControllerTest {
          ResponseEntity response = feeController.addFee(fee);
        //then
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(EntityURLBuilder.buildURL(ENTITY, fee.getIdFee()),
+        assertEquals(EntityURLBuilder.buildURL(ENTITY_NAME, fee.getIdFee()),
                       response.getHeaders().getLocation());
     }
     @Test
@@ -55,13 +56,13 @@ public class FeeControllerTest {
         ResponseEntity response= feeController.updateFee(id, fee);
         //then
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(EntityURLBuilder.buildURL(ENTITY, fee.getIdFee()),
+        assertEquals(EntityURLBuilder.buildURL(ENTITY_NAME, fee.getIdFee()),
                      response.getBody());
     }
     @Test
     public  void deleteFeeHappyTest(){
         ResponseEntity response=  feeController.deleteFee(aFee().getIdFee());
-        verify(feeService, times(1)).deleteFee(aFee().getIdFee());
+        verify(feeService, times(ONE_INVOCATION)).deleteFee(aFee().getIdFee());
     }
 
 
