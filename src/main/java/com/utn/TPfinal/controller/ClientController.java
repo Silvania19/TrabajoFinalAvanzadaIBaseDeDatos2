@@ -44,7 +44,6 @@ public class ClientController {
         this.measuringService = measuringService;
     }
 
-
     /*@PreAuthorize(value= "hasAuthority('BACKOFFICE') or authentication.principal.id.equals(#id)")*/
     /**Client Api**/
 

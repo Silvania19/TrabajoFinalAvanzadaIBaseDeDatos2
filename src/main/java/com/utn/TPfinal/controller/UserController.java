@@ -2,8 +2,6 @@ package com.utn.TPfinal.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.utn.TPfinal.domain.Client;
 import com.utn.TPfinal.domain.Employee;
-import com.utn.TPfinal.domain.TypeUser;
-import com.utn.TPfinal.domain.User;
 import com.utn.TPfinal.domain.dto.RequestLoginDto;
 import com.utn.TPfinal.domain.dto.ResponseLoginDto;
 import com.utn.TPfinal.domain.dto.UserDto;
@@ -15,7 +13,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -54,7 +51,7 @@ public class UserController {
         Client client = clientService.findByNameAndPassword(requestLoginDto.getName(), requestLoginDto.getPassword());
         if (client!=null){
             UserDto userDto = modelMapper.map(client, UserDto.class);
-            return ResponseEntity.ok(ResponseLoginDto.builder().token(this.generateToken(userDto, client.typeUser())).build());
+            return ResponseEntity.ok(ResponseLoginDto.builder().token(this.generateToken(userDto, "client")).build());
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -66,16 +63,16 @@ public class UserController {
         Employee employee = employeeService.findByNameAndPassword(requestLoginDto.getName(), requestLoginDto.getPassword());
         if (employee!=null){
             UserDto userDto = modelMapper.map(employee, UserDto.class);
-            return ResponseEntity.ok(ResponseLoginDto.builder().token(this.generateToken(userDto, employee.typeUser())).build());
+            return ResponseEntity.ok(ResponseLoginDto.builder().token(this.generateToken(userDto, "employee")).build());
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 
-    private String generateToken(UserDto userDto, TypeUser typeUser) {
+    private String generateToken(UserDto userDto, String typeUser) {
         String authority;
 
-        if(typeUser.getDescription().equals("client"))
+        if(typeUser.equals("client"))
         {
             authority="CLIENT";
         }
@@ -99,11 +96,14 @@ public class UserController {
             return "dummy";
         }
     }
-
-    @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
-    @PostMapping
-    public void addUser(@RequestBody Client user) {
+    @PreAuthorize(value = "hasAuthority('CLIENT')")
+    @PostMapping("client")
+    public void addClient(@RequestBody Client user) {
         clientService.add(user);
     }
 
+    @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
+    @PostMapping("employee")
+    public void addEmployee(@RequestBody Employee user) {employeeService.add(user);
+    }
 }

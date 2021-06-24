@@ -13,6 +13,7 @@ import java.text.ParseException;
 import java.util.Date;
 
 import static com.utn.TPfinal.utils.Constants.NUMBER_OF_ID_ONE;
+import static com.utn.TPfinal.utils.TestUtils.aPageable;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -34,7 +35,6 @@ class BillServiceTest {
     public void getBillsByUserAndDateBetweenTest() throws ParseException {
 
         //given
-        Pageable pageable = PageRequest.of(1, 10);
         Integer idClient = NUMBER_OF_ID_ONE;
         Date beginDate = mock(Date.class);
         Date endDate = mock(Date.class);
@@ -43,7 +43,7 @@ class BillServiceTest {
                 .thenReturn(TestUtils.aPageBills());
 
         Page<Bill> pageOfBills =
-                billService.getBillsByUserAndDateBetween(idClient, beginDate, endDate, pageable);
+                billService.getBillsByUserAndDateBetween(idClient, beginDate, endDate, aPageable());
 
         //then
         assertEquals(TestUtils.aPageBills(), pageOfBills);

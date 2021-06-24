@@ -7,31 +7,22 @@ import com.utn.TPfinal.domain.dto.UserDto;
 import com.utn.TPfinal.service.BillService;
 import com.utn.TPfinal.service.ClientService;
 import com.utn.TPfinal.service.MeasuringService;
-import com.utn.TPfinal.utils.Constants;
-import com.utn.TPfinal.utils.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Stream;
 
-import static com.utn.TPfinal.utils.Constants.*;
+import static com.utn.TPfinal.utils.Constants.NUMBER_OF_ID_ONE;
 import static com.utn.TPfinal.utils.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyListOf;
 import static org.mockito.Mockito.*;
 
 public class ClientControllerTest {
@@ -54,9 +45,7 @@ public class ClientControllerTest {
     @Test
     public void testGetBillsByRangeOfDatesOk(){
         //given
-        Pageable pageable = PageRequest.of(PAGE_ONE, SIZE_TEN);
         List<Bill> billList2 = List.of(Bill.builder().idBill(NUMBER_OF_ID_ONE).amount(100.0).build());
-
         Page<Bill> mockedPage = mock(Page.class);
         Date beginDate = mock(Date.class);
         Date endDate = mock(Date.class);
@@ -66,10 +55,10 @@ public class ClientControllerTest {
         when(mockedPage.getTotalElements()).thenReturn(10L);
         when(mockedPage.getTotalPages()).thenReturn(1);
         when(mockedPage.getContent()).thenReturn(billList2);
-        when(billService.getBillsByUserAndDateBetween(aUserDto().getId(), beginDate, endDate, pageable)).thenReturn(mockedPage);
+        when(billService.getBillsByUserAndDateBetween(aUserDto().getId(), beginDate, endDate, aPageable())).thenReturn(mockedPage);
 
         //then
-        ResponseEntity<List<Bill>> response = clientController.getBillsByRangeOfDatesByUser(aUserDto().getId(),authentication,beginDate, endDate, pageable);
+        ResponseEntity<List<Bill>> response = clientController.getBillsByRangeOfDatesByUser(aUserDto().getId(),authentication,beginDate, endDate, aPageable());
 
         //assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -77,22 +66,21 @@ public class ClientControllerTest {
         assertEquals(1, Integer.parseInt(response.getHeaders().get("X-Total-Pages").get(0)));
         assertEquals(billList2, response.getBody());
     }
+
     @Test
     public void testGetBillsByRangeOfDatesUnauthorized(){
         //given
-        Pageable pageable = PageRequest.of(PAGE_ONE, SIZE_TEN);
         List<Bill> billList2 = List.of(Bill.builder().idBill(NUMBER_OF_ID_ONE).amount(100.0).build());
-
         Date beginDate = mock(Date.class);
         Date endDate = mock(Date.class);
         Page<Bill> mockedPage = mock(Page.class);
         Authentication authentication = mock(Authentication.class);
 
         when(authentication.getPrincipal()).thenReturn(aUserDto());
-        when(billService.getBillsByUserAndDateBetween(aUserDto().getId(), beginDate, endDate, pageable)).thenReturn(mockedPage);
+        when(billService.getBillsByUserAndDateBetween(aUserDto().getId(), beginDate, endDate, aPageable())).thenReturn(mockedPage);
 
         //then
-        ResponseEntity<List<Bill>> response = clientController.getBillsByRangeOfDatesByUser(aUserDto().getId(),authentication, beginDate, endDate, pageable);
+        ResponseEntity<List<Bill>> response = clientController.getBillsByRangeOfDatesByUser(aUserDto().getId(),authentication, beginDate, endDate, aPageable());
 
         //assert
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
@@ -102,9 +90,7 @@ public class ClientControllerTest {
     public void testGetBillsByRangeOfDatesNoContent(){
 
         //given
-        Pageable pageable = PageRequest.of(50, 10);
         Integer idClient = NUMBER_OF_ID_ONE;
-
         Page<Bill> mockedPage = mock(Page.class);
         Date beginDate = mock(Date.class);
         Date endDate = mock(Date.class);
@@ -112,10 +98,10 @@ public class ClientControllerTest {
 
         when(modelMapper.map(authentication.getPrincipal(), UserDto.class)).thenReturn(aUserDto());
         when(mockedPage.getContent()).thenReturn(Collections.emptyList());
-        when(billService.getBillsByUserAndDateBetween(idClient, beginDate, endDate, pageable)).thenReturn(mockedPage);
+        when(billService.getBillsByUserAndDateBetween(idClient, beginDate, endDate, aPageable())).thenReturn(mockedPage);
 
         //then
-        ResponseEntity<List<Bill>> response = clientController.getBillsByRangeOfDatesByUser(aUserDto().getId(),authentication, beginDate, endDate, pageable);
+        ResponseEntity<List<Bill>> response = clientController.getBillsByRangeOfDatesByUser(aUserDto().getId(),authentication, beginDate, endDate, aPageable());
 
         //assert
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
@@ -162,20 +148,7 @@ public class ClientControllerTest {
 
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
-    /*@Test
-    public void billsNotPayNotFound() {
-        Integer idClient=1;
-        Authentication authentication= mock(Authentication.class);
-        List<Bill> bills= new ArrayList<>();
-        when(modelMapper.map(authentication.getPrincipal(), Client.class)).thenReturn(null);
-        when(billService.getBillsByIdClientNotPay(aClient2().getId())).thenReturn(bills);
 
-        ResponseEntity response= clientController.billsNotPay(idClient, authentication);
-
-        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
-
-
-    }*/
    /* @Test
     public  void consumptionRangeDateKwMoneyOK() throws ParseException {
        Authentication authentication=  mock(Authentication.class);
@@ -190,20 +163,19 @@ public class ClientControllerTest {
     public void getMeasuringsByRangesOfDatesOK() {
 
         //GIVEN
-        Pageable pageable = PageRequest.of(PAGE_ONE, SIZE_TEN);
         Date beginDate = mock(Date.class);
         Date endDate = mock(Date.class);
         Authentication authentication= mock(Authentication.class);
         Page<Measuring> mockedPage = mock(Page.class);
 
         when(modelMapper.map(authentication.getPrincipal(), UserDto.class)).thenReturn(aUserDto());
-        when(measuringService.findMeasuringsByRangeOfDatesAndClient(aUserDto().getId(), beginDate, endDate, pageable))
+        when(measuringService.findMeasuringsByRangeOfDatesAndClient(aUserDto().getId(), beginDate, endDate, aPageable()))
                 .thenReturn(aPageMeasuring());
        when(mockedPage.getContent()).thenReturn(aListMeasuring());
 
         //WHEN
         ResponseEntity<List<Measuring>> responseEntity = clientController.getMeasuringsByRangeOfDates(aUserDto().getId(),
-                                                         authentication, beginDate, endDate, pageable);
+                                                         authentication, beginDate, endDate, aPageable());
         //THEN
 
         assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
@@ -215,20 +187,19 @@ public class ClientControllerTest {
     public void getMeasuringsByRangesOfDatesUnauthorize() {
 
         //GIVEN
-        Pageable pageable = PageRequest.of(PAGE_ONE, SIZE_TEN);
         Date beginDate = mock(Date.class);
         Date endDate = mock(Date.class);
         Authentication authentication= mock(Authentication.class);
         Page<Measuring> mockedPage = mock(Page.class);
 
         when(modelMapper.map(authentication.getPrincipal(), UserDto.class)).thenReturn(aUserDto());
-        when(measuringService.findMeasuringsByRangeOfDatesAndClient(aUserDto().getId(), beginDate, endDate, pageable))
+        when(measuringService.findMeasuringsByRangeOfDatesAndClient(aUserDto().getId(), beginDate, endDate, aPageable()))
                 .thenReturn(aPageMeasuring());
         when(mockedPage.getContent()).thenReturn(aListMeasuring());
 
         //WHEN
         ResponseEntity<List<Measuring>> responseEntity = clientController.getMeasuringsByRangeOfDates(4,
-                authentication, beginDate, endDate, pageable);
+                authentication, beginDate, endDate, aPageable());
         //THEN
 
         assertEquals(responseEntity.getStatusCode(), HttpStatus.UNAUTHORIZED);
@@ -240,12 +211,11 @@ public class ClientControllerTest {
     public void getUnpaidBillsByClientAndAddressOK(){
        Integer idAddress=1;
        Integer idClient=1;
-       Pageable pageable = PageRequest.of(PAGE_ONE, SIZE_TEN);
        List<Bill> bills= List.of(aBill());
-       when(billService.getUnpaidBillsByClientIdAndAddressId(idClient, idAddress, pageable))
+       when(billService.getUnpaidBillsByClientIdAndAddressId(idClient, idAddress, aPageable()))
                .thenReturn(aPageBills());
 
-       ResponseEntity responseEntity= clientController.getUnpaidBillsByClientAndAddress(idClient, idAddress, pageable);
+       ResponseEntity responseEntity= clientController.getUnpaidBillsByClientAndAddress(idClient, idAddress, aPageable());
 
        assertEquals(responseEntity.getBody(), bills);
        assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);

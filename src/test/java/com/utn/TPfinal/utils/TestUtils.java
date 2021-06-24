@@ -7,17 +7,22 @@ import com.utn.TPfinal.domain.dto.ResponseLoginDto;
 import com.utn.TPfinal.domain.dto.UserDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
+
 import java.util.List;
+
+import static com.utn.TPfinal.utils.Constants.PAGE_ONE;
+import static com.utn.TPfinal.utils.Constants.SIZE_TEN;
 
 public class TestUtils {
 
+    public static Pageable aPageable(){
 
+      Pageable pageable = PageRequest.of(PAGE_ONE, SIZE_TEN);
+     return pageable;
+    }
 
    public static Fee aFee(){
        Fee fee= Fee.builder()

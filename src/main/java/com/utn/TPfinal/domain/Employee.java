@@ -14,9 +14,5 @@ import javax.persistence.Table;
 @Table(name="employees")
 public class Employee extends User{
 
-    @Override
-    public TypeUser typeUser() {
-        return TypeUser.EMPLOYEE;
-    }
 
 }
