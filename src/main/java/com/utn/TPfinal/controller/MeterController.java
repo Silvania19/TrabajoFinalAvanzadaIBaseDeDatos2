@@ -8,6 +8,7 @@ import com.utn.TPfinal.exception.MeterWithMeasuringsException;
 import com.utn.TPfinal.service.MeterService;
 import com.utn.TPfinal.util.EntityURLBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -49,6 +50,6 @@ public class MeterController {
     public ResponseEntity deleteMeter(@PathVariable String serialNumber) throws MeterWithMeasuringsException
     {
             meterService.deleteMeter(serialNumber);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -55,7 +55,7 @@ public class FeeController {
     public ResponseEntity deleteFee(@PathVariable Integer id)
     {
          feeService.deleteFee(id);
-         return ResponseEntity.status(HttpStatus.OK).build();
+         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 
