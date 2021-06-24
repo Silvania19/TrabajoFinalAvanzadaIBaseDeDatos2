@@ -1,5 +1,6 @@
 package com.utn.TPfinal.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,11 +24,15 @@ public class Bill {
     private  Double totalKwh;
     //this variable is use to decide when the bill is pay or not pay. True=pay False=Not pay
     private  Boolean pay;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date dateCreate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date expiration;
     // para determinar si la factura esta paga o no. Consulta de deuda (Facturas impagas)
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date firstMeasurement;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastMeasurement;
 
     @JsonIgnore

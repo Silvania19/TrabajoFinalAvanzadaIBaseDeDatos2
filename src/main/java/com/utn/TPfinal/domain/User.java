@@ -31,7 +31,7 @@ public abstract class User {
     private Integer id;
     private String name;
     private String lastname;
-    @JsonIgnore
+    //@JsonIgnore
     private String password;
     @AccessType(AccessType.Type.PROPERTY)
     public abstract TypeUser typeUser();
