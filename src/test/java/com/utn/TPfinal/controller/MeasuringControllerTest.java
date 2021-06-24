@@ -50,16 +50,16 @@ public class MeasuringControllerTest {
     }
     @Test
     public void measuringsRangeDateAndAddressOK(){
-        Pageable pageable = PageRequest.of(1, 10);
+
         Page<Measuring> mockedPage = mock(Page.class);
         Date beginDate = mock(Date.class);
         Date endDate = mock(Date.class);
-        when(measuringService.measuringRangeDateByAddress(aAddress().getIdAddress(), beginDate, endDate, pageable))
+        when(measuringService.measuringRangeDateByAddress(aAddress().getIdAddress(), beginDate, endDate, aPageable()))
                 .thenReturn(aPageMeasuring());
         when(mockedPage.getContent()).thenReturn(aListMeasuring());
 
         ResponseEntity responseEntity= measuringController.measuringsRangeDateAndAddress(aAddress().getIdAddress(),
-                beginDate, endDate, pageable);
+                beginDate, endDate, aPageable());
 
         assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
         assertEquals(responseEntity.getBody(), aListMeasuring());

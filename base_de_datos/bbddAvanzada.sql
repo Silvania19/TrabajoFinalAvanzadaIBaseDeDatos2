@@ -13,7 +13,7 @@ measurement - medida
 
 CREATE DATABASE adea;
 USE adea;
-DROP DATABASE adea;
+
 
 CREATE TABLE employees(
                           id INT AUTO_INCREMENT,

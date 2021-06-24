@@ -2,9 +2,8 @@ package com.utn.TPfinal.controller;
 
 
 import com.utn.TPfinal.domain.Meter;
-import com.utn.TPfinal.exception.FeeException;
-import com.utn.TPfinal.exception.MeterException;
-import com.utn.TPfinal.exception.MeterExitsException;
+import com.utn.TPfinal.exception.MeterNotExistsException;
+import com.utn.TPfinal.exception.MeterExistsException;
 import com.utn.TPfinal.exception.MeterWithMeasuringsException;
 import com.utn.TPfinal.service.MeterService;
 import com.utn.TPfinal.util.EntityURLBuilder;
@@ -30,7 +29,7 @@ public class MeterController {
 
     @PreAuthorize(value = "hasAuthority('BACKOFFICE')")
     @PostMapping
-    public ResponseEntity addMeter(@RequestBody Meter meter) throws MeterException, MeterExitsException {
+    public ResponseEntity addMeter(@RequestBody Meter meter) throws MeterNotExistsException, MeterExistsException {
         Meter newMeter= meterService.add(meter);
         URI location= EntityURLBuilder.buildURLString("meter", newMeter.getSerialNumber());
         return ResponseEntity.created(location).build();

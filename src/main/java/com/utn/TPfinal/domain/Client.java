@@ -22,8 +22,5 @@ public class Client extends User{
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
     List<Address> addresses;
 
-    @Override
-    public TypeUser typeUser() {
-        return TypeUser.CLIENT;
-    }
+
 }

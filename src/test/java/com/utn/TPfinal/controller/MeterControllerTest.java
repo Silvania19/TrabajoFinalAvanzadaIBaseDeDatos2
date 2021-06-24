@@ -1,19 +1,17 @@
 package com.utn.TPfinal.controller;
 
 import com.utn.TPfinal.domain.Meter;
-import com.utn.TPfinal.exception.MeterExitsException;
+import com.utn.TPfinal.exception.MeterExistsException;
 import com.utn.TPfinal.service.MeterService;
 import com.utn.TPfinal.util.EntityURLBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.servlet.function.EntityResponse;
 
 import static com.utn.TPfinal.utils.TestUtils.aMeter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -45,7 +43,7 @@ public class MeterControllerTest {
            assertEquals(HttpStatus.CREATED, response.getStatusCode());
            assertEquals(EntityURLBuilder.buildURLString(ENTITY, meter.getSerialNumber()),
                    response.getHeaders().getLocation());
-       }catch (MeterExitsException meterExitsException){
+       }catch (MeterExistsException meterExitsException){
             fail();
        }
 

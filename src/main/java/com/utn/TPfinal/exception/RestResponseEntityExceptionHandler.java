@@ -17,54 +17,52 @@ import java.util.List;
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({ConstraintViolationException.class})
-    public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex, WebRequest request) {
+    public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex) {
 
-        List<String> errors = new ArrayList<>();
-
-        for (ConstraintViolation violation : ex.getConstraintViolations()) {
-            errors.add(violation.getRootBeanClass().getName() + " " + violation.getMessage());
-        }
-        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
 
         return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getHttpStatus());
     }
 
 
     @ExceptionHandler({FeeException.class})
-    public ResponseEntity<Object> feeError(FeeException ex, WebRequest request) {
-        List<String> errors = new ArrayList<>();
+    public ResponseEntity<Object> feeError(FeeException ex) {
 
-        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "error", errors);
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
         return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getHttpStatus());
     }
 
 
         @ExceptionHandler({MeterWithMeasuringsException.class})
-        public ResponseEntity<Object> meterMeasuringError (MeterWithMeasuringsException ex, WebRequest request){
+        public ResponseEntity<Object> meterMeasuringError (MeterWithMeasuringsException ex){
 
-            List<String> errors = new ArrayList<>();
-            ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "error en meter, con measurings", errors);
+            ApiError apiError = new ApiError(HttpStatus.CONFLICT, ex.getLocalizedMessage());
 
             return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getHttpStatus());
         }
 
         @ExceptionHandler({NotFoundException.class})
-        public ResponseEntity<Object> BadRequestException (NotFoundException ex, WebRequest request){
-            List<String> errors = new ArrayList<>();
+        public ResponseEntity<Object> BadRequestException (NotFoundException ex){
 
-            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getLocalizedMessage(), errors);
+            ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getLocalizedMessage());
 
             return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getHttpStatus());
         }
 
 
-    @ExceptionHandler({MeterExitsException.class})
-    public ResponseEntity<Object> meterExitsException(MeterExitsException ex, WebRequest request) {
-        List<String> errors = new ArrayList<>();
+    @ExceptionHandler({MeterExistsException.class})
+    public ResponseEntity<Object> meterExitsException(MeterExistsException ex) {
 
-        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getLocalizedMessage(), errors);
+        ApiError apiError = new ApiError(HttpStatus.CONFLICT, ex.getLocalizedMessage());
 
         return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getHttpStatus());
     }
 
+    @ExceptionHandler({MeterNotExistsException.class})
+    public ResponseEntity<Object> meterNotExitsException(MeterNotExistsException ex) {
+
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getLocalizedMessage());
+
+        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getHttpStatus());
+    }
 }

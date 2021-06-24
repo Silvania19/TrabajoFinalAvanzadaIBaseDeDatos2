@@ -1,8 +1,8 @@
 package com.utn.TPfinal.service;
 
 import com.utn.TPfinal.domain.Meter;
-import com.utn.TPfinal.exception.MeterException;
-import com.utn.TPfinal.exception.MeterExitsException;
+import com.utn.TPfinal.exception.MeterNotExistsException;
+import com.utn.TPfinal.exception.MeterExistsException;
 import com.utn.TPfinal.exception.MeterWithMeasuringsException;
 import com.utn.TPfinal.repository.MeterRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +29,7 @@ public class MeterServiceTest {
             Meter meter1= meterService.add(aMeter());
             //WHEN
             assertEquals(meter1, aMeter());
-        }catch (MeterExitsException me){
+        }catch (MeterExistsException me){
 
         }
 
@@ -44,7 +44,7 @@ public class MeterServiceTest {
             Meter meter1= meterService.add(aMeter());
             //WHEN
             assertEquals(meter1, aMeter());
-        }catch (MeterExitsException me){
+        }catch (MeterExistsException me){
 
         }
     }
@@ -66,7 +66,7 @@ public class MeterServiceTest {
         when(meterRepository.findBySerialNumber(aMeter().getSerialNumber())).thenReturn(null);
         when(meterRepository.save(aMeter())).thenReturn(aMeter());
 
-        assertThrows(MeterException.class, () -> {
+        assertThrows(MeterNotExistsException.class, () -> {
             meterService.updateMeter("1234", aMeter());
         });
     }

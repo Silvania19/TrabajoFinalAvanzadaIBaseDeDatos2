@@ -6,8 +6,6 @@ import com.utn.TPfinal.repository.MeterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.validation.ConstraintViolationException;
-
 @Service
 
 public class MeterService {
@@ -19,13 +17,13 @@ public class MeterService {
         this.meterDao=meterRepository;
     }
 
-    public Meter add(Meter meter) throws MeterExitsException {
-        //try {
+    public Meter add(Meter meter) throws MeterExistsException {
+
             if (meterDao.findBySerialNumber(meter.getSerialNumber()) == null) {
                 return meterDao.save(meter);
             }
             else {
-                throw new MeterExitsException("Error en agregar el meter");
+                throw new MeterExistsException("Error en agregar el meter");
             }
     }
 
@@ -36,23 +34,23 @@ public class MeterService {
             Meter meterActual=meterDao.save(meterOld);
             return meterActual;
         } else {
-            throw new MeterException("incorrecto");
+            throw new MeterNotExistsException("Error en actualizar datos");
         }
 
     }
 
 
-    public void deleteMeter(String serialNumber) throws MeterException,  MeterWithMeasuringsException  {
+    public void deleteMeter(String serialNumber) throws MeterNotExistsException,  MeterWithMeasuringsException  {
 
      try {
          Meter meter = meterDao.findBySerialNumber(serialNumber);
          if (meter != null) {
              meterDao.deleteBySerialNumber(serialNumber);
          } else {
-             throw new MeterException("error");
+             throw new MeterNotExistsException("Error en eliminar meter");
          }
       }catch (Throwable t){
-         throw new MeterWithMeasuringsException("error");
+         throw new MeterWithMeasuringsException("Error en eliminar meter");
       }
     }
 

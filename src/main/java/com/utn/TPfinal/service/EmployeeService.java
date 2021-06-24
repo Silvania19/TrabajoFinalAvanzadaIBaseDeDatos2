@@ -16,4 +16,8 @@ public class EmployeeService {
     public Employee findByNameAndPassword(String name, String password) {
         return employeeRepository.findByNameAndPassword(name, password);
     }
+
+    public void add(Employee user) {
+      employeeRepository.save(user);
+    }
 }
