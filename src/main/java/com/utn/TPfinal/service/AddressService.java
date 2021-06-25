@@ -23,18 +23,6 @@ public class AddressService {
             return addressRepository.save(address);
     }
 
-    /*public Address addClientToAddress(Integer id, Integer idClient) throws AddressException {
-        Address addressSearch = getByID(id);
-        Optional<Address>
-        if (addressRepository.existsById(addressSearch.getIdAddress())) {
-            User client = clientService.getByID(idClient); // nullpointerexception en client
-            addressSearch.setClient((Client)client);
-            return addressRepository.save(addressSearch);
-        } else {
-            throw new AddressException("Error en addClientToAddress");
-        }
-    }*/
-
     public Address updateAddress(Integer id, Address address) throws AddressException {
 
         Optional<Address> addressOld = addressRepository.findById(id);

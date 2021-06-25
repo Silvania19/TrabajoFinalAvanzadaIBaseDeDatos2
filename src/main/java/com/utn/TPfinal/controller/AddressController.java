@@ -48,10 +48,4 @@ public class AddressController {
         addressService.deleteAddress(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
-    // devolver response
-   /* @PutMapping("/{id}/client/{idClient}")
-    public void addClientToAddress(@PathVariable Integer id, @PathVariable Integer idClient){
-        addressService.addClientToAddress(id, idClient);
-    }*/
 }
