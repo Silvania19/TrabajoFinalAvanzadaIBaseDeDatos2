@@ -2,6 +2,7 @@ package com.utn.TPfinal.controller;
 
 import com.utn.TPfinal.domain.Meter;
 import com.utn.TPfinal.exception.MeterExistsException;
+import com.utn.TPfinal.exception.MeterWithMeasuringsException;
 import com.utn.TPfinal.service.MeterService;
 import com.utn.TPfinal.util.EntityURLBuilder;
 import org.junit.jupiter.api.BeforeEach;
@@ -66,11 +67,16 @@ public class MeterControllerTest {
                 response.getBody());
     }
 
-   /* @Test
+    @Test
     public void deleteMeter() {
+      try {
+          ResponseEntity response= meterController.deleteMeter(aMeter().getSerialNumber());
+          verify(meterService, times(1)).deleteMeter(aMeter().getSerialNumber());
+      } catch (MeterWithMeasuringsException e){
+          fail();
+      }
 
-        ResponseEntity response= meterController.deleteMeter(aMeter().getSerialNumber());
-        verify(meterService, times(1)).deleteMeter(aMeter().getSerialNumber());
 
-    }*/
+    }
+
 }

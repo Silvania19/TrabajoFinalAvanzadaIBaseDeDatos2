@@ -28,7 +28,7 @@ public class FeeService {
             Fee feeAct=feeDao.save(feeOld.get());
             return feeAct;
         } else {
-            throw new FeeException("Error, el id no existe");
+            throw new FeeException("Error al actualizar");
         }
 
     }
@@ -38,7 +38,7 @@ public class FeeService {
         if (dfee.isPresent()){
             feeDao.delete(dfee.get());
         } else {
-            throw new FeeException("Error, el id no existe");
+            throw new FeeException("Error al eliminar");
         }
     }
 }

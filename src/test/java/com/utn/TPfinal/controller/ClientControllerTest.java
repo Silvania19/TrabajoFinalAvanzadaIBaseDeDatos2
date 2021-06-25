@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 import static com.utn.TPfinal.utils.Constants.NUMBER_OF_ID_ONE;
+import static com.utn.TPfinal.utils.Constants.SIZE_TEN;
 import static com.utn.TPfinal.utils.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -150,7 +151,7 @@ public class ClientControllerTest {
     }
 
    /* @Test
-    public  void consumptionRangeDateKwMoneyOK() throws ParseException {
+    public  void consumptionRangeDateKwMoneyOK() {
        Authentication authentication=  mock(Authentication.class);
 
        when(modelMapper.map(authentication.getPrincipal(), UserDto.class)).thenReturn(aUserDto());
@@ -226,8 +227,6 @@ public class ClientControllerTest {
         Date beginDate = mock(Date.class);
         Date endDate = mock(Date.class);
        when(clientService.tenMoreConsumers(beginDate, endDate)).thenReturn(aListUser());
-       //when(modelMapper.map(aListUser(), UserDto.class)).thenReturn(aListUserDto());
-
 
        when(modelMapper.map(any(Client.class),eq(UserDto.class))).thenReturn(aUserDto());
 

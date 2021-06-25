@@ -116,7 +116,7 @@ public class ClientController {
             return ResponseEntityList.responsePage(pageOfMeasurings);
         }else{
             return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        } // si el cliente es igual a null no deberia traer un conflict ?
+        }
     }
 
     /**Backoffice **/

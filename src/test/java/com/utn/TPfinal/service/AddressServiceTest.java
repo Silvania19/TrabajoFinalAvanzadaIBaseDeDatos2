@@ -75,7 +75,6 @@ class AddressServiceTest {
 
     @Test
     public void deleteAddressHappyPathTest(){
-
         //given
         Address address = aAddress();
         when(addressRepository.findById(address.getIdAddress())).thenReturn(Optional.of(address));
@@ -84,6 +83,7 @@ class AddressServiceTest {
         addressService.deleteAddress(address.getIdAddress());
 
         verify(addressRepository, times(ONE_INVOCATION)).delete(address);
+
     }
 
     @Test
